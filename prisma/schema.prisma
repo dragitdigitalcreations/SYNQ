@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Application models
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String
+  password       String?
+  role           String    @default("CREATOR") // CREATOR or BUSINESS
+  avatar         String?
+  location       String?
+  bio            String?
+  verified       Boolean   @default(false)
+  emailVerified  DateTime?
+  image          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  accounts        Account[]
+  sessions        Session[]
+  creatorProfile  CreatorProfile?
+  businessProfile BusinessProfile?
+  sentMessages    Message[]       @relation("sender")
+  receivedMessages Message[]      @relation("receiver")
+}
+
+model CreatorProfile {
+  id                 String  @id @default(cuid())
+  userId             String  @unique
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentVerticals   String  @default("[]") // JSON array
+  contentFormats     String  @default("[]") // JSON array
+  minBudget          Float?
+  availability       String  @default("OPEN") // OPEN, SELECTIVE, UNAVAILABLE
+  excludedCategories String  @default("[]") // JSON array
+  socialLinks        String? // JSON object
+  rateCard           String? // JSON object
+  followers          Int?
+  engagementRate     Float?
+  responseTime       Int?    // hours avg
+  onTimeRate         Float?
+  repeatRate         Float?
+  regionBenchmark    String? // JSON object
+  portfolioItems     String  @default("[]") // JSON array of URLs
+  completedCollabs   Int     @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  collaborations Collaboration[]
+}
+
+model BusinessProfile {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName String
+  website     String?
+  industry    String
+  companySize String  @default("STARTUP") // SOLO, STARTUP, SMB, ENTERPRISE
+  logo        String?
+  gstVerified Boolean @default(false)
+  targetDemo  String? // JSON object
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id              String   @id @default(cuid())
+  businessId      String
+  business        BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name            String
+  description     String
+  objective       String
+  status          String   @default("DRAFT") // DRAFT, ACTIVE, PAUSED, COMPLETED
+  budget          Float
+  startDate       DateTime
+  endDate         DateTime
+  targetVerticals String   @default("[]") // JSON array
+  targetRegions   String   @default("[]") // JSON array
+  targetAgeRange  String?  // JSON object
+  targetGender    String?
+  languages       String   @default("[]") // JSON array
+  usageRights     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  deliverables   Deliverable[]
+  collaborations Collaboration[]
+}
+
+model Deliverable {
+  id            String  @id @default(cuid())
+  campaignId    String
+  campaign      Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contentType   String  // REEL, YOUTUBE_VIDEO, STORY, POST, BLOG, PHOTOGRAPHY
+  quantity      Int     @default(1)
+  platform      String  // INSTAGRAM, YOUTUBE, TIKTOK, BLOG
+  description   String?
+  revisionLimit Int     @default(2)
+  usageRights   Boolean @default(false)
+  price         Float?
+  createdAt     DateTime @default(now())
+}
+
+model Collaboration {
+  id              String   @id @default(cuid())
+  campaignId      String
+  campaign        Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creatorId       String
+  creator         CreatorProfile @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  status          String   @default("INVITED") // INVITED, ACCEPTED, BRIEFING, IN_PROGRESS, REVIEW, COMPLETED, DECLINED
+  scopeCard       String?  // JSON object
+  scopeSignedAt   DateTime?
+  matchScore      Float?
+  matchReason     String?
+  currentRevision Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  files          CollabFile[]
+  feedback       Feedback[]
+  payment        Payment?
+  timelineEvents TimelineEvent[]
+}
+
+model CollabFile {
+  id              String   @id @default(cuid())
+  collaborationId String
+  collaboration   Collaboration @relation(fields: [collaborationId], references: [id], onDelete: Cascade)
+  name            String
+  url             String
+  type            String   // BRIEF, MOOD_BOARD, DRAFT, FINAL
+  uploadedBy      String   // userId
+  version         Int      @default(1)
+  createdAt       DateTime @default(now())
+}
+
+model Feedback {
+  id              String   @id @default(cuid())
+  collaborationId String
+  collaboration   Collaboration @relation(fields: [collaborationId], references: [id], onDelete: Cascade)
+  deliverableId   String?
+  authorId        String
+  content         String
+  revisionNumber  Int
+  status          String   @default("PENDING") // PENDING, APPROVED, CHANGES_REQUESTED
+  createdAt       DateTime @default(now())
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  collaborationId String   @unique
+  collaboration   Collaboration @relation(fields: [collaborationId], references: [id], onDelete: Cascade)
+  amount          Float
+  status          String   @default("ESCROW") // ESCROW, PARTIAL_RELEASE, RELEASED, DISPUTED
+  milestones      String?  // JSON array
+  releasedAt      DateTime?
+  createdAt       DateTime @default(now())
+}
+
+model TimelineEvent {
+  id              String   @id @default(cuid())
+  collaborationId String
+  collaboration   Collaboration @relation(fields: [collaborationId], references: [id], onDelete: Cascade)
+  type            String   // INVITED, ACCEPTED, BRIEF_SENT, DRAFT_SUBMITTED, FEEDBACK, REVISION, APPROVED, PUBLISHED, PAYMENT_RELEASED
+  description     String
+  actorId         String?
+  createdAt       DateTime @default(now())
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  sender      User     @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId  String
+  receiver    User     @relation("receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  content     String
+  messageType String   @default("TEXT") // TEXT, FILE, SCOPE_CARD, PAYMENT_NOTIFICATION, SYSTEM
+  read        Boolean  @default(false)
+  flagged     Boolean  @default(false) // anti-disintermediation flag
+  createdAt   DateTime @default(now())
+}
