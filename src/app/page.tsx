@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
 import { useRef, useState, useEffect } from "react";
 
-/* ─── Count-up animation ─── */
+/* ─── Count-up ─── */
 function useCountUp(target: number, inView: boolean, duration = 1800) {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -41,6 +41,11 @@ const fu = (delay = 0) => ({
 /* ─── Unsplash helper ─── */
 const img = (id: string, w = 300, h = 300) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
+
+/* ─── Skeleton loading block ─── */
+function Sk({ className }: { className: string }) {
+  return <div className={`rounded-lg bg-surface-elevated/70 animate-pulse ${className}`} />;
+}
 
 /* ─── Creator profiles ─── */
 const creators = [
@@ -136,7 +141,7 @@ function Navbar() {
           </button>
           <Link href="/login" className="hidden md:block text-[13px] text-text-secondary hover:text-text-primary transition-colors px-2">Sign in</Link>
           <Link href="/register">
-            <Button size="sm" className="glow-accent text-[13px] h-9 px-4 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
+            <Button size="sm" className="glow-accent text-[13px] h-9 px-4 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
               Get Started <ArrowRight className="h-3.5 w-3.5 ml-1" />
             </Button>
           </Link>
@@ -147,7 +152,7 @@ function Navbar() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   HERO — High-conviction, specific, emotional
+   HERO — Final copy pass: specific, outcome-driven, no buzzwords
 ═══════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef(null);
@@ -176,39 +181,32 @@ function HeroSection() {
 
       <div className="relative max-w-6xl mx-auto px-6 py-16 w-full">
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-center">
-
-          {/* LEFT — Value proposition */}
           <div>
-            {/* Emotional hook — the pain, instantly recognized */}
             <motion.div {...fu(0)}>
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/[0.08] border border-accent/[0.15] px-3.5 py-1.5 text-[12px] font-medium text-accent mb-8">
                 <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-                2,400+ deals closed — zero DM chaos
+                2,400+ deals closed — average payment in 24h
               </div>
             </motion.div>
 
-            {/* Headline: specific, plain language, high contrast */}
+            {/* ── FINAL HERO COPY: specific, plain, benefit-first ── */}
             <motion.h1
               {...fu(0.07)}
               className="text-[46px] sm:text-[58px] lg:text-[64px] font-bold tracking-[-0.03em] leading-[1.04] text-text-primary"
             >
-              The workspace{" "}
+              Brief, contract,{" "}
               <br className="hidden sm:block" />
-              influencer deals{" "}
+              deliver, pay —{" "}
               <br className="hidden sm:block" />
               <span className="bg-gradient-to-r from-accent to-[#00B8D9] bg-clip-text text-transparent">
-                have always needed.
+                one workspace.
               </span>
             </motion.h1>
 
-            {/* Subheadline: who + what problem + what they gain */}
-            <motion.p
-              {...fu(0.15)}
-              className="mt-6 text-[17px] text-text-secondary leading-[1.72] max-w-[430px]"
-            >
-              Brief creators, sign contracts, deliver work, and release payments —
-              all in one place. Not scattered across{" "}
-              <span className="text-text-primary font-medium">DMs, Google Drive links, and bank transfers.</span>
+            <motion.p {...fu(0.15)} className="mt-6 text-[17px] text-text-secondary leading-[1.72] max-w-[440px]">
+              Brands send a brief. Creators accept, sign a contract, and deliver.
+              Payments release automatically on approval.{" "}
+              <span className="text-text-primary font-medium">No DMs. No spreadsheets. No chasing.</span>
             </motion.p>
 
             <motion.div {...fu(0.23)} className="flex flex-col sm:flex-row items-start gap-3 mt-10">
@@ -231,7 +229,7 @@ function HeroSection() {
             </motion.div>
           </div>
 
-          {/* RIGHT — Real SYNQ workspace */}
+          {/* Workspace preview */}
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -251,9 +249,7 @@ function HeroSection() {
                       <button
                         key={tab.label}
                         onClick={() => setActiveTab(i)}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-medium transition-all duration-200 ${
-                          activeTab === i ? "bg-surface text-accent shadow-sm" : "text-text-secondary hover:text-text-primary"
-                        }`}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-medium transition-all duration-200 ${activeTab === i ? "bg-surface text-accent shadow-sm" : "text-text-secondary hover:text-text-primary"}`}
                       >
                         <tab.icon className="h-3 w-3" /> {tab.label}
                       </button>
@@ -307,7 +303,6 @@ function HeroSection() {
                       </div>
                     </motion.div>
                   )}
-
                   {activeTab === 1 && (
                     <motion.div key="cont" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>
                       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -339,7 +334,6 @@ function HeroSection() {
                       </div>
                     </motion.div>
                   )}
-
                   {activeTab === 2 && (
                     <motion.div key="pay" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>
                       <div className="flex items-center justify-between mb-4">
@@ -372,7 +366,7 @@ function HeroSection() {
 
               <div className="flex justify-center gap-1.5 pb-3">
                 {tabs.map((_, i) => (
-                  <button key={i} onClick={() => setActiveTab(i)} className={`h-1 rounded-full transition-all duration-300 ${activeTab === i ? "w-6 bg-accent" : "w-1.5 bg-border hover:bg-border/70"}`} />
+                  <button key={i} onClick={() => setActiveTab(i)} className={`h-1 rounded-full transition-all duration-300 ${activeTab === i ? "w-6 bg-accent" : "w-1.5 bg-border"}`} />
                 ))}
               </div>
             </div>
@@ -470,7 +464,7 @@ function ProblemSection() {
     { icon: AlertTriangle, text: "Revision #4. Which version was the approved one?", sub: "Feedback buried in email threads" },
   ];
 
-  const synq = [
+  const synqItems = [
     { icon: CheckCheck, text: "Brief delivered. Creator accepted in 2h.", sub: "AI match score: 94%" },
     { icon: Lock, text: "₹54,000 locked in escrow on contract sign", sub: "Auto-released on approval" },
     { icon: FileText, text: "Scope locked. 3 Reels, 2 Stories, 2 revisions.", sub: "E-signed contract, immutable" },
@@ -489,31 +483,19 @@ function ProblemSection() {
             <span className="text-text-secondary">the same story.</span>
           </h2>
           <p className="mt-4 text-[16px] text-text-secondary max-w-lg mx-auto">
-            Brands and creators lose time, money, and trust every day because
-            collaborations happen across DMs, screenshots, and spreadsheets.
+            Brands and creators lose time, money, and trust because collaborations happen across DMs, screenshots, and spreadsheets.
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-error/15 bg-error/[0.03] p-6"
-          >
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }} className="rounded-2xl border border-error/15 bg-error/[0.03] p-6">
             <div className="flex items-center gap-2 mb-5">
               <div className="h-2 w-2 rounded-full bg-error" />
               <p className="text-[12px] font-semibold text-error uppercase tracking-wider">Without SYNQ</p>
             </div>
             <div className="space-y-3">
               {chaos.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.1 + i * 0.07 }}
-                  className="flex items-start gap-3 rounded-xl bg-error/[0.04] border border-error/[0.08] p-3"
-                >
+                <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.1 + i * 0.07 }} className="flex items-start gap-3 rounded-xl bg-error/[0.04] border border-error/[0.08] p-3">
                   <div className="h-7 w-7 rounded-lg bg-error/[0.08] flex items-center justify-center shrink-0 mt-0.5">
                     <item.icon className="h-3.5 w-3.5 text-error/70" />
                   </div>
@@ -526,25 +508,14 @@ function ProblemSection() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl border border-accent/15 bg-accent/[0.03] p-6"
-          >
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }} className="rounded-2xl border border-accent/15 bg-accent/[0.03] p-6">
             <div className="flex items-center gap-2 mb-5">
               <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
               <p className="text-[12px] font-semibold text-accent uppercase tracking-wider">With SYNQ</p>
             </div>
             <div className="space-y-3">
-              {synq.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.2 + i * 0.07 }}
-                  className="flex items-start gap-3 rounded-xl bg-accent/[0.04] border border-accent/[0.08] p-3"
-                >
+              {synqItems.map((item, i) => (
+                <motion.div key={i} initial={{ opacity: 0, x: 10 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2 + i * 0.07 }} className="flex items-start gap-3 rounded-xl bg-accent/[0.04] border border-accent/[0.08] p-3">
                   <div className="h-7 w-7 rounded-lg bg-accent/[0.1] flex items-center justify-center shrink-0 mt-0.5">
                     <item.icon className="h-3.5 w-3.5 text-accent" />
                   </div>
@@ -563,8 +534,520 @@ function ProblemSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   DIFFERENTIATION — "Built for this. Not adapted."
-   Answers: Why SYNQ over DMs / other platforms?
+   LIVE DEMO — Interactive simulated dashboard
+   Creator and Brand views. Skeleton loading. Real states.
+═══════════════════════════════════════════════════════ */
+function LiveDemoSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [role, setRole] = useState<"creator" | "brand">("creator");
+  const [nav, setNav] = useState("dashboard");
+  const [loading, setLoading] = useState(false);
+
+  const switchRole = (r: "creator" | "brand") => {
+    if (r === role) return;
+    setLoading(true);
+    setTimeout(() => { setRole(r); setNav("dashboard"); setLoading(false); }, 700);
+  };
+
+  const switchNav = (n: string) => {
+    if (n === nav) return;
+    setLoading(true);
+    setTimeout(() => { setNav(n); setLoading(false); }, 350);
+  };
+
+  /* ── Creator data ── */
+  const creatorStats = [
+    { label: "Earned this month", value: "₹54,000", badge: "+₹12K today", up: true },
+    { label: "Active deals", value: "3", badge: "1 needs action", up: null },
+    { label: "Avg engagement", value: "4.8%", badge: "+0.6% vs last mo.", up: true },
+    { label: "On-time rate", value: "100%", badge: "38 collabs done", up: true },
+  ];
+  const creatorDeals = [
+    { brand: "Bloom Skincare", campaign: "Spring Glow", status: "Reel #2 in review", badge: "Action needed", badgeC: "bg-warning/10 text-warning border border-warning/20", pay: "₹12,000", days: "2 days left", urgent: true },
+    { brand: "TrailCo Outdoors", campaign: "Summer Launch", status: "Brief accepted · Day 3", badge: "Active", badgeC: "bg-success/10 text-success border border-success/20", pay: "₹18,000", days: "8 days left", urgent: false },
+    { brand: "NutriPro India", campaign: "Wellness Series", status: "Awaiting your signature", badge: "Sign contract", badgeC: "bg-accent/10 text-accent border border-accent/20", pay: "₹9,500", days: "Pending", urgent: false },
+  ];
+  const creatorActivity = [
+    { icon: IndianRupee, text: "₹12,000 released", detail: "Reel #1 · Bloom Skincare", time: "2m ago", c: "text-success bg-success/[0.08]" },
+    { icon: MessageSquare, text: "Feedback on Reel #2", detail: "\"Love the energy, reduce caption\"", time: "18m ago", c: "text-accent bg-accent/[0.08]" },
+    { icon: FileText, text: "New brief received", detail: "EcoWear · Fashion · ₹22K budget", time: "1h ago", c: "text-[#00B8D9] bg-[#00B8D9]/[0.08]" },
+    { icon: CheckCheck, text: "Contract signed", detail: "NutriPro India campaign", time: "2h ago", c: "text-success bg-success/[0.08]" },
+  ];
+
+  /* ── Brand data ── */
+  const brandStats = [
+    { label: "Active campaigns", value: "4", badge: "2 need review", up: null },
+    { label: "Budget in escrow", value: "₹1.08L", badge: "Protected", up: null },
+    { label: "Creator responses", value: "12", badge: "Last 48h", up: true },
+    { label: "Avg delivery time", value: "4.2 days", badge: "vs 9.3 industry", up: true },
+  ];
+  const brandCampaigns = [
+    { creator: "Priya Sharma", handle: "@priyacreates", campaign: "Spring Glow", status: "Reel #2 waiting review", badge: "Review now", badgeC: "bg-warning/10 text-warning border border-warning/20", budget: "₹54,000", match: "94%", urgent: true, avatar: creators[0].avatar },
+    { creator: "Marcus Chen", handle: "@marcustech", campaign: "Tech Week Series", status: "Contract pending sign", badge: "Pending", badgeC: "bg-accent/10 text-accent border border-accent/20", budget: "₹72,000", match: "91%", urgent: false, avatar: creators[1].avatar },
+    { creator: "Arjun Nair", handle: "@arjunwanders", campaign: "Summer Launch", status: "Brief accepted · Active", badge: "On track", badgeC: "bg-success/10 text-success border border-success/20", budget: "₹38,000", match: "88%", urgent: false, avatar: creators[3].avatar },
+  ];
+  const brandActivity = [
+    { icon: Camera, text: "Reel #2 submitted", detail: "Priya Sharma · Spring Glow", time: "Just now", c: "text-accent bg-accent/[0.08]" },
+    { icon: CheckCheck, text: "Reel #1 approved", detail: "₹12K auto-released to Priya", time: "2h ago", c: "text-success bg-success/[0.08]" },
+    { icon: Send, text: "Brief accepted", detail: "Arjun Nair · Summer Launch", time: "3h ago", c: "text-[#00B8D9] bg-[#00B8D9]/[0.08]" },
+    { icon: User, text: "New creator matched", detail: "EcoWear brief · 3 creators shortlisted", time: "5h ago", c: "text-accent bg-accent/[0.08]" },
+  ];
+
+  /* ── Bar chart data (CSS-only) ── */
+  const chartBars = role === "creator"
+    ? [{ m: "Jan", v: 38, label: "₹38K" }, { m: "Feb", v: 52, label: "₹52K" }, { m: "Mar", v: 61, label: "₹61K" }, { m: "Apr", v: 54, label: "₹54K" }]
+    : [{ m: "Jan", v: 44, label: "₹44K" }, { m: "Feb", v: 68, label: "₹68K" }, { m: "Mar", v: 92, label: "₹92K" }, { m: "Apr", v: 108, label: "₹1.08L" }];
+  const chartMax = Math.max(...chartBars.map(b => b.v));
+
+  /* ── Messages ── */
+  const messages = [
+    { name: "Bloom Skincare", avatar: "BS", last: "Great work on Reel #1! For Reel #2 — reduce text in caption and add the product in frame by 0:08.", time: "2m", unread: 2 },
+    { name: "TrailCo Outdoors", avatar: "TC", last: "Hey! Brief has been sent. Let us know if you have questions before signing.", time: "3h", unread: 0 },
+    { name: "NutriPro India", avatar: "NP", last: "Contract is ready for your signature. Escrow will be funded within 1h of signing.", time: "1d", unread: 1 },
+  ];
+
+  const navItems: { id: string; label: string; icon: React.ElementType; dot?: boolean }[] = [
+    { id: "dashboard", label: "Dashboard", icon: BarChart3 },
+    { id: "deals", label: role === "creator" ? "My Deals" : "Campaigns", icon: Briefcase, dot: role === "creator" ? true : true },
+    { id: "analytics", label: "Analytics", icon: TrendingUp },
+    { id: "messages", label: "Messages", icon: MessageSquare, dot: true },
+  ];
+
+  const stats = role === "creator" ? creatorStats : brandStats;
+  const deals = role === "creator" ? creatorDeals : brandCampaigns;
+  const activity = role === "creator" ? creatorActivity : brandActivity;
+
+  return (
+    <section ref={ref} id="demo" className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.02] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-accent/[0.04] blur-[120px] pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto px-6 relative">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 rounded-full bg-accent/[0.08] border border-accent/[0.12] px-3.5 py-1.5 text-[12px] font-medium text-accent mb-5">
+            <Play className="h-3 w-3" /> Interactive demo
+          </div>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
+            The real SYNQ dashboard.
+          </h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-lg mx-auto">
+            See exactly what you and your collaborator see. Switch roles below.
+          </p>
+        </motion.div>
+
+        {/* Role toggle */}
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="flex justify-center mb-8">
+          <div className="inline-flex rounded-xl bg-surface-elevated/60 border border-border/40 p-1 gap-1">
+            <button
+              onClick={() => switchRole("creator")}
+              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${role === "creator" ? "bg-surface shadow text-accent border border-accent/15" : "text-text-secondary hover:text-text-primary"}`}
+            >
+              <Camera className="h-3.5 w-3.5" /> Creator View
+            </button>
+            <button
+              onClick={() => switchRole("brand")}
+              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${role === "brand" ? "bg-surface shadow text-[#00B8D9] border border-[#00B8D9]/15" : "text-text-secondary hover:text-text-primary"}`}
+            >
+              <Briefcase className="h-3.5 w-3.5" /> Brand View
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Dashboard window */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.15, duration: 0.6 }}
+          className="rounded-2xl bg-surface border border-border/50 shadow-2xl overflow-hidden"
+        >
+          {/* Browser chrome */}
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-border/40 bg-surface-elevated/50">
+            <div className="flex gap-1.5">
+              <div className="h-2.5 w-2.5 rounded-full bg-error/50" />
+              <div className="h-2.5 w-2.5 rounded-full bg-warning/50" />
+              <div className="h-2.5 w-2.5 rounded-full bg-success/50" />
+            </div>
+            <div className="flex-1 flex justify-center">
+              <div className="flex items-center gap-2 rounded-lg bg-surface-elevated/70 px-3 py-1.5 text-[11px] text-text-secondary">
+                <div className="h-1.5 w-1.5 rounded-full bg-success" />
+                app.synq.io/dashboard
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <img src={role === "creator" ? creators[0].avatar : creators[1].avatar} alt="" className="h-6 w-6 rounded-full object-cover border border-border/50" />
+              <span className="text-[11px] text-text-secondary hidden sm:block">{role === "creator" ? "Priya Sharma" : "Bloom Skincare"}</span>
+            </div>
+          </div>
+
+          {/* App body */}
+          <div className="flex min-h-[520px]">
+            {/* Sidebar nav */}
+            <div className="w-44 border-r border-border/40 bg-surface-elevated/20 p-3 hidden sm:block shrink-0">
+              <div className="space-y-0.5">
+                {navItems.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => switchNav(item.id)}
+                    className={`w-full flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-xl text-[12px] font-medium transition-all duration-200 ${nav === item.id ? "bg-accent/[0.08] text-accent" : "text-text-secondary hover:text-text-primary hover:bg-surface-elevated/60"}`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <item.icon className="h-3.5 w-3.5" />
+                      {item.label}
+                    </div>
+                    {item.dot && item.id !== nav && <div className="h-1.5 w-1.5 rounded-full bg-accent" />}
+                  </button>
+                ))}
+              </div>
+
+              {/* Sidebar footer — collab count */}
+              <div className="mt-4 pt-4 border-t border-border/30">
+                <div className="rounded-xl bg-accent/[0.06] border border-accent/[0.1] p-3">
+                  <p className="text-[10px] font-semibold text-accent mb-1">{role === "creator" ? "This month" : "Active budget"}</p>
+                  <p className="text-[16px] font-bold text-text-primary">{role === "creator" ? "₹54,000" : "₹1.08L"}</p>
+                  <p className="text-[9px] text-text-secondary mt-0.5">{role === "creator" ? "earned across 3 deals" : "across 4 campaigns"}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Main content */}
+            <div className="flex-1 overflow-hidden">
+              <AnimatePresence mode="wait">
+                {loading ? (
+                  /* ── Skeleton loading state ── */
+                  <motion.div key="skel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="p-5">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                      {[0,1,2,3].map(i => (
+                        <div key={i} className="rounded-xl border border-border/25 p-3">
+                          <Sk className="h-3 w-16 mb-2" />
+                          <Sk className="h-6 w-12 mb-1" />
+                          <Sk className="h-2.5 w-20" />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="space-y-3">
+                      {[0,1,2].map(i => (
+                        <div key={i} className="rounded-xl border border-border/25 p-4 flex items-center gap-3">
+                          <Sk className="h-9 w-9 rounded-full shrink-0" />
+                          <div className="flex-1">
+                            <Sk className="h-3 w-32 mb-2" />
+                            <Sk className="h-2.5 w-48" />
+                          </div>
+                          <Sk className="h-6 w-16 rounded-full" />
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ) : nav === "dashboard" ? (
+                  /* ── Dashboard view ── */
+                  <motion.div key={`dash-${role}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="p-5">
+                    {/* Stats row */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                      {stats.map((s, i) => (
+                        <motion.div
+                          key={s.label}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.06 }}
+                          className="rounded-xl border border-border/30 bg-surface-elevated/30 p-3 hover:border-accent/20 transition-colors"
+                        >
+                          <p className="text-[10px] text-text-secondary mb-1 font-medium">{s.label}</p>
+                          <p className="text-[20px] font-bold text-text-primary leading-none mb-1">{s.value}</p>
+                          <p className={`text-[9px] font-medium ${s.up === true ? "text-success" : s.up === false ? "text-error" : "text-text-secondary"}`}>
+                            {s.up === true ? "↑ " : s.up === false ? "↓ " : ""}{s.badge}
+                          </p>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Active deals / campaigns */}
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
+                        {role === "creator" ? "Active Deals" : "Live Campaigns"}
+                      </p>
+                      <button className="text-[11px] text-accent hover:underline">View all</button>
+                    </div>
+                    <div className="space-y-2.5">
+                      {role === "creator"
+                        ? creatorDeals.map((deal, i) => (
+                          <motion.div
+                            key={deal.brand}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 + i * 0.07 }}
+                            className={`rounded-xl border p-3.5 flex items-center gap-3 hover:shadow-sm transition-all duration-200 ${deal.urgent ? "border-warning/20 bg-warning/[0.02]" : "border-border/30 bg-surface"}`}
+                          >
+                            <div className="h-8 w-8 rounded-lg bg-accent/[0.08] flex items-center justify-center text-[11px] font-bold text-accent shrink-0">
+                              {deal.brand.charAt(0)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[12px] font-semibold text-text-primary">{deal.brand}</p>
+                              <p className="text-[10px] text-text-secondary">{deal.status}</p>
+                            </div>
+                            <div className="text-right shrink-0">
+                              <span className={`inline-block rounded-full px-2 py-0.5 text-[9px] font-semibold ${deal.badgeC} mb-1`}>{deal.badge}</span>
+                              <p className="text-[10px] text-text-secondary flex items-center gap-1 justify-end">
+                                <Clock className="h-2.5 w-2.5" /> {deal.days}
+                              </p>
+                            </div>
+                            <p className="text-[11px] font-bold text-text-primary shrink-0 hidden sm:block">{deal.pay}</p>
+                          </motion.div>
+                        ))
+                        : brandCampaigns.map((c, i) => (
+                          <motion.div
+                            key={c.creator}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 + i * 0.07 }}
+                            className={`rounded-xl border p-3.5 flex items-center gap-3 hover:shadow-sm transition-all duration-200 ${c.urgent ? "border-warning/20 bg-warning/[0.02]" : "border-border/30 bg-surface"}`}
+                          >
+                            <img src={c.avatar} alt="" className="h-8 w-8 rounded-full object-cover shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[12px] font-semibold text-text-primary">{c.creator} <span className="font-normal text-text-secondary">{c.handle}</span></p>
+                              <p className="text-[10px] text-text-secondary">{c.status}</p>
+                            </div>
+                            <div className="text-right shrink-0">
+                              <span className={`inline-block rounded-full px-2 py-0.5 text-[9px] font-semibold ${c.badgeC} mb-1`}>{c.badge}</span>
+                              <p className="text-[10px] text-text-secondary">Match {c.match}</p>
+                            </div>
+                            <p className="text-[11px] font-bold text-text-primary shrink-0 hidden sm:block">{c.budget}</p>
+                          </motion.div>
+                        ))
+                      }
+                    </div>
+                  </motion.div>
+                ) : nav === "deals" ? (
+                  /* ── Deals / Campaigns full list ── */
+                  <motion.div key={`deals-${role}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-[13px] font-semibold text-text-primary">{role === "creator" ? "My Active Deals" : "All Campaigns"}</p>
+                      <Button size="sm" className="glow-accent h-8 text-[11px] px-3 gap-1.5">
+                        {role === "creator" ? <><Send className="h-3 w-3" /> Find Brands</> : <><Sparkles className="h-3 w-3" /> New Campaign</>}
+                      </Button>
+                    </div>
+                    <div className="space-y-3">
+                      {(role === "creator" ? creatorDeals : brandCampaigns).map((item, i) => {
+                        const d = item as typeof creatorDeals[0];
+                        const b = item as typeof brandCampaigns[0];
+                        return (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.08 }}
+                            className="rounded-xl border border-border/40 bg-surface p-4 hover:border-accent/20 hover:shadow-sm transition-all duration-200 cursor-pointer"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-start gap-3">
+                                {role === "brand"
+                                  ? <img src={b.avatar} alt="" className="h-9 w-9 rounded-full object-cover shrink-0 mt-0.5" />
+                                  : <div className="h-9 w-9 rounded-lg bg-accent/[0.08] flex items-center justify-center text-[12px] font-bold text-accent shrink-0 mt-0.5">{d.brand?.charAt(0)}</div>
+                                }
+                                <div>
+                                  <p className="text-[13px] font-semibold text-text-primary">
+                                    {role === "creator" ? d.brand : `${b.creator} — ${b.campaign}`}
+                                  </p>
+                                  <p className="text-[11px] text-text-secondary mt-0.5">
+                                    {role === "creator" ? d.campaign : b.handle}
+                                  </p>
+                                  <p className="text-[11px] text-text-secondary mt-1">
+                                    {role === "creator" ? d.status : b.status}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <span className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-semibold ${role === "creator" ? d.badgeC : b.badgeC}`}>
+                                  {role === "creator" ? d.badge : b.badge}
+                                </span>
+                                <p className="text-[13px] font-bold text-text-primary mt-1.5">
+                                  {role === "creator" ? d.pay : b.budget}
+                                </p>
+                                <p className="text-[10px] text-text-secondary flex items-center gap-1 justify-end mt-0.5">
+                                  <Clock className="h-2.5 w-2.5" />
+                                  {role === "creator" ? d.days : `Match ${b.match}`}
+                                </p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                ) : nav === "analytics" ? (
+                  /* ── Analytics view ── */
+                  <motion.div key={`analytics-${role}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="p-5">
+                    <p className="text-[13px] font-semibold text-text-primary mb-5">
+                      {role === "creator" ? "Earnings over time" : "Campaign spend vs results"}
+                    </p>
+
+                    {/* CSS bar chart */}
+                    <div className="flex items-end gap-3 h-36 mb-2">
+                      {chartBars.map((bar, i) => (
+                        <motion.div
+                          key={bar.m}
+                          initial={{ height: 0 }}
+                          animate={{ height: `${(bar.v / chartMax) * 100}%` }}
+                          transition={{ delay: 0.1 + i * 0.08, duration: 0.5, ease: "easeOut" }}
+                          className="flex-1 rounded-t-lg relative group cursor-pointer"
+                          style={{
+                            background: i === chartBars.length - 1
+                              ? "linear-gradient(to top, #6C5CE7, #00B8D9)"
+                              : "var(--color-surface-elevated)"
+                          }}
+                        >
+                          <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface border border-border/50 rounded-lg px-2 py-0.5 text-[9px] font-semibold text-text-primary whitespace-nowrap shadow-sm">
+                            {bar.label}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                    <div className="flex gap-3 mb-6">
+                      {chartBars.map((bar, i) => (
+                        <div key={bar.m} className="flex-1 text-center">
+                          <p className={`text-[10px] font-medium ${i === chartBars.length - 1 ? "text-accent" : "text-text-secondary"}`}>{bar.m}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Key metrics */}
+                    <div className="grid grid-cols-3 gap-3">
+                      {(role === "creator"
+                        ? [
+                          { label: "Reel save rate", value: "8.2%", sub: "vs 3.1% avg", c: "text-success" },
+                          { label: "Story completion", value: "74%", sub: "vs 61% avg", c: "text-success" },
+                          { label: "Cost per engage", value: "₹2.84", sub: "per interaction", c: "text-text-primary" },
+                        ]
+                        : [
+                          { label: "Cost per engage", value: "₹2.84", sub: "vs ₹6.2 industry", c: "text-success" },
+                          { label: "Avg Reel saves", value: "8.2%", sub: "2.4× benchmark", c: "text-success" },
+                          { label: "On-time delivery", value: "100%", sub: "all 4 campaigns", c: "text-success" },
+                        ]
+                      ).map(m => (
+                        <div key={m.label} className="rounded-xl border border-border/30 bg-surface-elevated/30 p-3">
+                          <p className="text-[9px] text-text-secondary mb-1">{m.label}</p>
+                          <p className={`text-[17px] font-bold ${m.c}`}>{m.value}</p>
+                          <p className="text-[9px] text-text-secondary">{m.sub}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ) : (
+                  /* ── Messages view ── */
+                  <motion.div key={`msgs-${role}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="flex h-full">
+                    {/* Conversation list */}
+                    <div className="w-52 border-r border-border/30 p-2 space-y-1">
+                      {messages.map((msg, i) => (
+                        <motion.div
+                          key={msg.name}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.07 }}
+                          className={`rounded-xl p-3 cursor-pointer transition-all duration-200 ${i === 0 ? "bg-accent/[0.07] border border-accent/[0.12]" : "hover:bg-surface-elevated/50"}`}
+                        >
+                          <div className="flex items-start justify-between gap-1 mb-1">
+                            <div className="flex items-center gap-2">
+                              <div className="h-7 w-7 rounded-full bg-accent/[0.1] flex items-center justify-center text-[9px] font-bold text-accent shrink-0">
+                                {msg.avatar}
+                              </div>
+                              <p className="text-[11px] font-semibold text-text-primary truncate">{msg.name}</p>
+                            </div>
+                            {msg.unread > 0 && (
+                              <div className="h-4 w-4 rounded-full bg-accent flex items-center justify-center text-[8px] font-bold text-white shrink-0">
+                                {msg.unread}
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-[9px] text-text-secondary truncate leading-snug">{msg.last}</p>
+                          <p className="text-[9px] text-text-secondary/60 mt-0.5">{msg.time}</p>
+                        </motion.div>
+                      ))}
+                    </div>
+                    {/* Active conversation preview */}
+                    <div className="flex-1 flex flex-col">
+                      <div className="px-4 py-3 border-b border-border/30 flex items-center gap-2.5">
+                        <div className="h-7 w-7 rounded-full bg-accent/[0.1] flex items-center justify-center text-[9px] font-bold text-accent">BS</div>
+                        <div>
+                          <p className="text-[12px] font-semibold text-text-primary">Bloom Skincare</p>
+                          <p className="text-[9px] text-text-secondary">Spring Glow Campaign · Active</p>
+                        </div>
+                      </div>
+                      <div className="flex-1 p-4 space-y-3 overflow-hidden">
+                        <div className="flex justify-end">
+                          <div className="bg-accent/[0.08] rounded-2xl rounded-tr-sm px-3 py-2 max-w-[75%]">
+                            <p className="text-[11px] text-text-primary">Reel #1 is live! Should hit around 40K views based on my last 3 reels.</p>
+                            <p className="text-[9px] text-text-secondary mt-1">10:12 AM</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-start">
+                          <div className="bg-surface-elevated/60 border border-border/30 rounded-2xl rounded-tl-sm px-3 py-2 max-w-[75%]">
+                            <p className="text-[11px] text-text-primary">Fantastic! Reel #1 approved ✓ — ₹12,000 has been released to your account.</p>
+                            <p className="text-[9px] text-text-secondary mt-1">10:28 AM</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-start">
+                          <div className="bg-surface-elevated/60 border border-border/30 rounded-2xl rounded-tl-sm px-3 py-2 max-w-[85%]">
+                            <p className="text-[11px] text-text-primary">For Reel #2 — great energy! Two notes: reduce text overlay in caption, and show the product in frame by 0:08.</p>
+                            <p className="text-[9px] text-text-secondary mt-1">2:15 PM · Unread</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="px-4 py-2.5 border-t border-border/30">
+                        <div className="flex items-center gap-2 rounded-xl bg-surface-elevated/50 border border-border/30 px-3 py-2">
+                          <p className="text-[11px] text-text-secondary flex-1">Reply to Bloom Skincare...</p>
+                          <Send className="h-3.5 w-3.5 text-accent shrink-0" />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Activity sidebar — only on dashboard */}
+              {!loading && nav === "dashboard" && (
+                <div className="absolute right-0 top-0 bottom-0 w-52 border-l border-border/30 bg-surface-elevated/10 p-3 hidden lg:block">
+                  <p className="text-[10px] font-semibold text-text-secondary uppercase tracking-wider mb-3">Recent Activity</p>
+                  <div className="space-y-2">
+                    {activity.map((a, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: 8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 + i * 0.07 }}
+                        className="flex items-start gap-2"
+                      >
+                        <div className={`h-6 w-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${a.c}`}>
+                          <a.icon className="h-3 w-3" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-medium text-text-primary leading-snug">{a.text}</p>
+                          <p className="text-[9px] text-text-secondary truncate">{a.detail}</p>
+                          <p className="text-[9px] text-text-secondary/60">{a.time}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.5 }}
+          className="text-center mt-5 text-[13px] text-text-secondary"
+        >
+          This is what you see on day one.{" "}
+          <Link href="/register" className="text-accent hover:underline font-medium">Create your account →</Link>
+        </motion.p>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   DIFFERENTIATION TABLE
 ═══════════════════════════════════════════════════════ */
 function DifferentiationSection() {
   const ref = useRef(null);
@@ -583,7 +1066,7 @@ function DifferentiationSection() {
 
   type ColStatus = "no" | "partial" | "yes";
 
-  const cols: { label: string; sub: string; status: ColStatus[]; highlight: boolean } [] = [
+  const cols: { label: string; sub: string; status: ColStatus[]; highlight: boolean }[] = [
     {
       label: "DMs + Spreadsheets",
       sub: "How most deals work today",
@@ -621,29 +1104,15 @@ function DifferentiationSection() {
             <br />
             <span className="text-text-secondary font-medium">Not adapted from something else.</span>
           </h2>
-          <p className="mt-5 text-[16px] text-text-secondary max-w-lg mx-auto">
-            Most tools either help you find creators or manage files.
-            SYNQ handles the entire deal lifecycle — from first brief to final payment.
-          </p>
         </motion.div>
 
-        {/* Comparison table */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.15 }}
-          className="rounded-2xl overflow-hidden border border-border/50 shadow-lg"
-        >
-          {/* Column headers */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.15 }} className="rounded-2xl overflow-hidden border border-border/50 shadow-lg">
           <div className="grid grid-cols-[1.4fr_1fr_1fr_1fr] border-b border-border/40 bg-surface-elevated/40">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider">Feature</p>
             </div>
             {cols.map((col) => (
-              <div
-                key={col.label}
-                className={`px-4 py-4 text-center ${col.highlight ? "bg-accent/[0.05] border-l border-r border-accent/15" : ""}`}
-              >
+              <div key={col.label} className={`px-4 py-4 text-center ${col.highlight ? "bg-accent/[0.05] border-l border-r border-accent/15" : ""}`}>
                 <p className={`text-[12px] font-bold ${col.highlight ? "text-accent" : "text-text-primary"}`}>{col.label}</p>
                 <p className="text-[10px] text-text-secondary mt-0.5">{col.sub}</p>
                 {col.highlight && (
@@ -654,8 +1123,6 @@ function DifferentiationSection() {
               </div>
             ))}
           </div>
-
-          {/* Rows */}
           {features.map((feature, fi) => (
             <motion.div
               key={feature}
@@ -668,10 +1135,7 @@ function DifferentiationSection() {
                 <p className="text-[13px] text-text-primary">{feature}</p>
               </div>
               {cols.map((col) => (
-                <div
-                  key={col.label}
-                  className={`px-4 py-3.5 flex items-center justify-center ${col.highlight ? "bg-accent/[0.03]" : ""}`}
-                >
+                <div key={col.label} className={`px-4 py-3.5 flex items-center justify-center ${col.highlight ? "bg-accent/[0.03]" : ""}`}>
                   {statusIcon(col.status[fi], col.highlight)}
                 </div>
               ))}
@@ -679,13 +1143,8 @@ function DifferentiationSection() {
           ))}
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-          className="flex items-center justify-center gap-6 mt-6 text-[12px] text-text-secondary"
-        >
-          <span className="flex items-center gap-1.5"><Minus className="h-3.5 w-3.5 text-warning" /> Partial support</span>
+        <motion.div initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.6 }} className="flex items-center justify-center gap-6 mt-6 text-[12px] text-text-secondary">
+          <span className="flex items-center gap-1.5"><Minus className="h-3.5 w-3.5 text-warning" /> Partial</span>
           <span className="flex items-center gap-1.5"><XCircle className="h-3.5 w-3.5 text-error/40" /> Not available</span>
           <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-accent" /> Fully built in</span>
         </motion.div>
@@ -695,7 +1154,7 @@ function DifferentiationSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   HOW IT WORKS — Role-toggle 3-step with outcomes
+   HOW IT WORKS
 ═══════════════════════════════════════════════════════ */
 function HowItWorksSection() {
   const ref = useRef(null);
@@ -704,38 +1163,14 @@ function HowItWorksSection() {
 
   const flows = {
     creator: [
-      {
-        n: "01", title: "Build your creator profile",
-        desc: "Connect Instagram/YouTube. Set your rate card — Reels, Stories, YouTube. Define what you won't work with. Brands see everything upfront, no back-and-forth.",
-        outcome: "Get 3× more qualified inbound briefs",
-      },
-      {
-        n: "02", title: "Match with the right brands",
-        desc: "AI scores every opportunity on audience overlap, content alignment, and budget fit. See the brand's reliability score (98% on-time pay) before accepting anything.",
-        outcome: "94% match accuracy — no more random DMs",
-      },
-      {
-        n: "03", title: "Deliver work, get paid automatically",
-        desc: "Submit drafts in your workspace. Get structured feedback. Payment auto-releases the moment a milestone is approved. No invoice. No chasing.",
-        outcome: "Average payment within 24h of approval",
-      },
+      { n: "01", title: "Build your creator profile", desc: "Connect Instagram/YouTube. Set your rate card — Reels, Stories, YouTube. Define what you won't work with. Brands see everything upfront.", outcome: "Get 3× more qualified inbound briefs" },
+      { n: "02", title: "Match with the right brands", desc: "AI scores every opportunity on audience overlap, content fit, and budget. See the brand's reliability score before accepting.", outcome: "94% match accuracy — no more random DMs" },
+      { n: "03", title: "Deliver work, get paid automatically", desc: "Submit drafts in your workspace. Get structured feedback. Payment auto-releases the moment a milestone is approved.", outcome: "Average payment within 24h of approval" },
     ],
     brand: [
-      {
-        n: "01", title: "Set up your campaign brief",
-        desc: "Define your audience, deliverables (Reels × 3, Stories × 2), and budget. Brief goes live instantly. Creators who match your audience see it first.",
-        outcome: "First creator response within 4h average",
-      },
-      {
-        n: "02", title: "Find & invite verified creators",
-        desc: "Browse 850+ creators. Filter by niche, engagement rate, location, and past collab count. Every creator shows their on-time delivery rate — no surprises.",
-        outcome: "92% of brand-matched collabs deliver on time",
-      },
-      {
-        n: "03", title: "Review, approve, measure ROI",
-        desc: "Approve drafts with pinpoint feedback. Release milestone payments. Get analytics — save rates vs benchmarks, cost-per-engagement, and AI-powered insights.",
-        outcome: "2.4× better engagement vs industry average",
-      },
+      { n: "01", title: "Set up your campaign brief", desc: "Define your audience, deliverables, and budget. Brief goes live instantly. Creators who match your audience see it first.", outcome: "First creator response within 4h average" },
+      { n: "02", title: "Find & invite verified creators", desc: "Browse 850+ creators. Filter by niche, engagement rate, location. Every creator shows their on-time delivery rate.", outcome: "92% of brand-matched collabs deliver on time" },
+      { n: "03", title: "Review, approve, measure ROI", desc: "Approve drafts with pinpoint feedback. Release milestone payments. Get analytics — save rates, cost-per-engagement, AI insights.", outcome: "2.4× better engagement vs industry average" },
     ],
   };
 
@@ -747,24 +1182,16 @@ function HowItWorksSection() {
       <div className="max-w-6xl mx-auto px-6 relative">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-10">
           <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">How it works</p>
-          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
-            A clear path to your first collab
-          </h2>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">A clear path to your first collab</h2>
           <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">Pick your role. See exactly what happens next.</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="flex justify-center mb-12">
           <div className="inline-flex rounded-xl bg-surface-elevated/60 border border-border/40 p-1 gap-1">
-            <button
-              onClick={() => setActiveRole("creator")}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${activeRole === "creator" ? "bg-surface shadow text-accent border border-accent/15" : "text-text-secondary hover:text-text-primary"}`}
-            >
+            <button onClick={() => setActiveRole("creator")} className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${activeRole === "creator" ? "bg-surface shadow text-accent border border-accent/15" : "text-text-secondary hover:text-text-primary"}`}>
               <Camera className="h-3.5 w-3.5" /> I&apos;m a Creator
             </button>
-            <button
-              onClick={() => setActiveRole("brand")}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${activeRole === "brand" ? "bg-surface shadow text-[#00B8D9] border border-[#00B8D9]/15" : "text-text-secondary hover:text-text-primary"}`}
-            >
+            <button onClick={() => setActiveRole("brand")} className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${activeRole === "brand" ? "bg-surface shadow text-[#00B8D9] border border-[#00B8D9]/15" : "text-text-secondary hover:text-text-primary"}`}>
               <Briefcase className="h-3.5 w-3.5" /> I&apos;m a Brand
             </button>
           </div>
@@ -808,8 +1235,7 @@ function HowItWorksSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   SYNQ TIMELINE — Signature "aha moment" component
-   Shows the complete lifecycle of a real deal, live.
+   SYNQ TIMELINE — Signature activity feed
 ═══════════════════════════════════════════════════════ */
 function SYNQTimeline() {
   const ref = useRef(null);
@@ -850,23 +1276,18 @@ function SYNQTimeline() {
 
       <div className="max-w-6xl mx-auto px-6 relative">
         <div className="grid lg:grid-cols-[1fr_1.2fr] gap-16 items-start">
-
           <div className="lg:sticky lg:top-24">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}}>
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/[0.08] border border-accent/[0.12] px-3 py-1.5 text-[11px] font-semibold text-accent mb-6">
                 <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-                The aha moment
+                Signature feature
               </div>
               <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary leading-[1.1] mb-5">
-                Every deal.<br />
-                Every step.<br />
-                <span className="bg-gradient-to-r from-accent to-[#00B8D9] bg-clip-text text-transparent">
-                  One place.
-                </span>
+                Every deal.<br />Every step.<br />
+                <span className="bg-gradient-to-r from-accent to-[#00B8D9] bg-clip-text text-transparent">One place.</span>
               </h2>
               <p className="text-[16px] text-text-secondary leading-relaxed mb-8">
-                This is the SYNQ timeline — a live feed of everything happening in your collaboration.
-                Brief, contract, draft, feedback, payment. Not buried in 6 apps. Right here.
+                The SYNQ timeline tracks every milestone from first brief to final payment. Not buried in 6 apps.
               </p>
               <div className="space-y-4 mb-10">
                 {[
@@ -893,13 +1314,7 @@ function SYNQTimeline() {
             </motion.div>
           </div>
 
-          {/* Timeline feed */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.15, duration: 0.6 }}
-            className="rounded-2xl bg-surface border border-border/50 shadow-xl overflow-hidden"
-          >
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.15, duration: 0.6 }} className="rounded-2xl bg-surface border border-border/50 shadow-xl overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-border/40 bg-surface-elevated/40">
               <div className="flex items-center gap-2.5">
                 <div className="h-7 w-7 rounded-lg bg-accent/[0.1] flex items-center justify-center">
@@ -911,8 +1326,7 @@ function SYNQTimeline() {
                 </div>
               </div>
               <div className="flex items-center gap-1.5 text-[10px] font-medium text-success">
-                <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                Live
+                <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" /> Live
               </div>
             </div>
 
@@ -920,13 +1334,7 @@ function SYNQTimeline() {
               {events.map((ev, i) => {
                 const s = statusStyle[ev.status];
                 return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 12 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.2 + i * 0.08 }}
-                    className="flex gap-3 group"
-                  >
+                  <motion.div key={i} initial={{ opacity: 0, x: 12 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2 + i * 0.08 }} className="flex gap-3 group">
                     <div className="flex flex-col items-center shrink-0">
                       <div className={`h-3 w-3 rounded-full mt-3 shrink-0 transition-all duration-300 ${s.dot} ${ev.status === "live" ? "ring-2 ring-warning/30" : ""}`} />
                       {i < events.length - 1 && <div className={`w-px flex-1 my-1 ${s.line} min-h-[16px]`} />}
@@ -952,9 +1360,9 @@ function SYNQTimeline() {
             <div className="border-t border-border/30 px-5 py-3 bg-surface-elevated/20">
               <div className="flex items-center justify-between text-[10px] text-text-secondary">
                 <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-1"><span className="font-semibold text-text-primary">3</span> active collabs</span>
-                  <span className="flex items-center gap-1"><span className="font-semibold text-success">₹12K</span> paid today</span>
-                  <span className="flex items-center gap-1"><span className="font-semibold text-text-primary">4d</span> avg delivery</span>
+                  <span><span className="font-semibold text-text-primary">3</span> active collabs</span>
+                  <span><span className="font-semibold text-success">₹12K</span> paid today</span>
+                  <span><span className="font-semibold text-text-primary">4d</span> avg delivery</span>
                 </div>
                 <Link href="/register" className="text-accent hover:underline transition-colors">See yours →</Link>
               </div>
@@ -967,7 +1375,148 @@ function SYNQTimeline() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   CREATOR DISCOVERY — Real influencer cards
+   CASE STUDY — Bloom Skincare real-world story
+   Problem → Approach → Decision → Outcome
+═══════════════════════════════════════════════════════ */
+function CaseStudySection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const before = [
+    { label: "Avg campaign delivery", value: "18 days", bad: true },
+    { label: "Payment disputes", value: "3 in Q3", bad: true },
+    { label: "Scope changes post-sign", value: "67%", bad: true },
+    { label: "Cost-per-engagement", value: "₹9.20", bad: true },
+  ];
+
+  const after = [
+    { label: "Avg campaign delivery", value: "6 days", bad: false },
+    { label: "Payment disputes", value: "0", bad: false },
+    { label: "Scope changes post-sign", value: "0%", bad: false },
+    { label: "Cost-per-engagement", value: "₹2.84", bad: false },
+  ];
+
+  return (
+    <section ref={ref} className="py-24 bg-surface-elevated/15 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.02] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="mb-12">
+          <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Case study</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary max-w-2xl">
+            How Bloom Skincare turned a chaotic Q3 into their best influencer quarter.
+          </h2>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-10 mb-10">
+          {/* Left — narrative */}
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }}>
+            <div className="space-y-8">
+              {[
+                {
+                  tag: "The challenge",
+                  tagC: "text-error bg-error/[0.06] border-error/[0.12]",
+                  title: "12 campaigns. 4 creators. 3 missed deadlines.",
+                  body: "Bloom Skincare's marketing team was running influencer campaigns entirely over WhatsApp and Gmail. Briefs got lost. One creator submitted completely off-brand content because the brief was never formalized. Two payments were delayed 12+ days. Their Q3 CPE was ₹9.20 — nearly 3× industry average.",
+                },
+                {
+                  tag: "The approach",
+                  tagC: "text-accent bg-accent/[0.06] border-accent/[0.12]",
+                  title: "Moved every active deal to SYNQ in under a day.",
+                  body: "Rahul Mehta (Brand Manager) set up SYNQ in 47 minutes. Created 4 campaign briefs with deliverables, revision limits, and timelines locked. Each creator signed a scoped contract. ₹1.2L was moved to escrow across 4 active campaigns.",
+                },
+                {
+                  tag: "Key decision",
+                  tagC: "text-[#00B8D9] bg-[#00B8D9]/[0.06] border-[#00B8D9]/[0.12]",
+                  title: "Used AI creator matching instead of manual search.",
+                  body: "SYNQ's match score surfaced Priya Sharma (94% match for Bloom's audience profile) over a creator they'd previously worked with at lower engagement. That single campaign delivered 8.2% save rate — 2.6× their Q3 benchmark.",
+                },
+              ].map((block, i) => (
+                <motion.div
+                  key={block.tag}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.1 + i * 0.12 }}
+                >
+                  <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold mb-3 ${block.tagC}`}>
+                    {block.tag}
+                  </div>
+                  <h3 className="text-[16px] font-semibold text-text-primary mb-2">{block.title}</h3>
+                  <p className="text-[13px] text-text-secondary leading-relaxed">{block.body}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right — before/after metrics panel */}
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }}>
+            <div className="rounded-2xl border border-border/50 bg-surface overflow-hidden shadow-lg">
+              {/* Header */}
+              <div className="grid grid-cols-2 border-b border-border/40">
+                <div className="px-5 py-4 border-r border-border/40 bg-error/[0.03]">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <div className="h-2 w-2 rounded-full bg-error" />
+                    <p className="text-[11px] font-semibold text-error uppercase tracking-wider">Before SYNQ</p>
+                  </div>
+                  <p className="text-[10px] text-text-secondary">Q3 2024 · WhatsApp + Gmail</p>
+                </div>
+                <div className="px-5 py-4 bg-accent/[0.03]">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                    <p className="text-[11px] font-semibold text-accent uppercase tracking-wider">With SYNQ</p>
+                  </div>
+                  <p className="text-[10px] text-text-secondary">Q4 2024 · Same team, same budget</p>
+                </div>
+              </div>
+
+              {/* Metric rows */}
+              {before.map((b, i) => (
+                <motion.div
+                  key={b.label}
+                  initial={{ opacity: 0 }}
+                  animate={isInView ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.25 + i * 0.09 }}
+                  className={`grid grid-cols-2 border-b border-border/20 last:border-0 ${i % 2 === 0 ? "bg-surface" : "bg-surface-elevated/20"}`}
+                >
+                  <div className="px-5 py-3.5 border-r border-border/20">
+                    <p className="text-[10px] text-text-secondary mb-1">{b.label}</p>
+                    <p className="text-[18px] font-bold text-error">{b.value}</p>
+                  </div>
+                  <div className="px-5 py-3.5">
+                    <p className="text-[10px] text-text-secondary mb-1">{after[i].label}</p>
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-[18px] font-bold text-success">{after[i].value}</p>
+                      <motion.span
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ delay: 0.5 + i * 0.09 }}
+                        className="text-[9px] font-semibold text-success bg-success/[0.08] rounded-full px-1.5 py-0.5"
+                      >
+                        {i === 0 ? "3× faster" : i === 1 ? "−100%" : i === 2 ? "−100%" : "3.2× better"}
+                      </motion.span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Context note */}
+            <div className="mt-4 rounded-xl border border-border/30 bg-surface-elevated/30 px-4 py-3 flex items-start gap-3">
+              <User className="h-4 w-4 text-text-secondary shrink-0 mt-0.5" />
+              <p className="text-[12px] text-text-secondary leading-relaxed">
+                <span className="font-semibold text-text-primary">Rahul Mehta, Bloom Skincare — </span>
+                &ldquo;Same budget, same creators. SYNQ didn&apos;t change our spend — it changed how every deal ran. We delivered our best influencer quarter without adding headcount.&rdquo;
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   CREATOR DISCOVERY
 ═══════════════════════════════════════════════════════ */
 function CreatorSection() {
   const ref = useRef(null);
@@ -979,11 +1528,7 @@ function CreatorSection() {
   return (
     <section ref={ref} id="creators" className="py-24 bg-surface-elevated/20">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10"
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
             <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Creator Discovery</p>
             <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">Find your perfect creator</h2>
@@ -1021,7 +1566,6 @@ function CreatorSection() {
                     <span className={`text-[9px] font-semibold ${c.available ? "text-success" : "text-text-secondary"}`}>{c.available ? "Available" : "Busy"}</span>
                   </div>
                 </div>
-
                 <div className="p-4">
                   <div className="flex items-center gap-3 -mt-9 mb-3">
                     <img src={c.avatar} alt={c.name} className="h-12 w-12 rounded-xl border-2 border-surface object-cover shadow-md" />
@@ -1069,7 +1613,7 @@ function CreatorSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   DUAL AUDIENCE — Outcome-focused
+   DUAL AUDIENCE
 ═══════════════════════════════════════════════════════ */
 function DualAudienceSection() {
   const ref = useRef(null);
@@ -1080,26 +1624,15 @@ function DualAudienceSection() {
       <div className="max-w-6xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
           <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">Built for both sides of every deal</h2>
-          <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">
-            Most platforms pick a side. SYNQ fixes the problem at the source — for creators and brands equally.
-          </p>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">Most platforms pick a side. SYNQ fixes the problem for creators and brands equally.</p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="rounded-2xl bg-surface border border-accent/10 p-8 hover:border-accent/20 transition-all duration-300"
-          >
-            <div className="h-11 w-11 rounded-xl bg-accent/[0.08] flex items-center justify-center mb-6">
-              <Camera className="h-5 w-5 text-accent" />
-            </div>
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }} className="rounded-2xl bg-surface border border-accent/10 p-8 hover:border-accent/20 transition-all duration-300">
+            <div className="h-11 w-11 rounded-xl bg-accent/[0.08] flex items-center justify-center mb-6"><Camera className="h-5 w-5 text-accent" /></div>
             <div className="inline-flex items-center gap-1.5 rounded-full bg-accent/[0.06] border border-accent/[0.10] px-3 py-1 text-[11px] font-semibold text-accent mb-4">Free forever</div>
             <h3 className="text-[22px] font-bold text-text-primary mb-2">For Creators</h3>
-            <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">
-              You built your audience. You shouldn&apos;t spend 30% of your time chasing payments and managing chaotic brand DMs.
-            </p>
+            <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">You built your audience. You shouldn&apos;t spend 30% of your time chasing payments and managing chaotic brand DMs.</p>
             <ul className="space-y-4 mb-8">
               {[
                 { title: "Never chase an invoice again", desc: "Funds auto-release the moment a deliverable is approved. Average payout: 24h." },
@@ -1108,9 +1641,7 @@ function DualAudienceSection() {
                 { title: "Your content. Your analytics.", desc: "Engagement benchmarks, save rates, and format performance — all in one dashboard." },
               ].map(({ title, desc }) => (
                 <li key={title} className="flex items-start gap-3">
-                  <div className="h-5 w-5 rounded-full bg-accent/[0.08] flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 className="h-3 w-3 text-accent" />
-                  </div>
+                  <div className="h-5 w-5 rounded-full bg-accent/[0.08] flex items-center justify-center shrink-0 mt-0.5"><CheckCircle2 className="h-3 w-3 text-accent" /></div>
                   <div>
                     <p className="text-[13px] font-semibold text-text-primary">{title}</p>
                     <p className="text-[12px] text-text-secondary mt-0.5">{desc}</p>
@@ -1119,26 +1650,15 @@ function DualAudienceSection() {
               ))}
             </ul>
             <Link href="/register?role=CREATOR">
-              <Button className="w-full gap-2 glow-accent h-11 hover:scale-[1.01] active:scale-[0.99] transition-transform">
-                Join as Creator <ArrowRight className="h-4 w-4" />
-              </Button>
+              <Button className="w-full gap-2 glow-accent h-11 hover:scale-[1.01] active:scale-[0.99] transition-transform">Join as Creator <ArrowRight className="h-4 w-4" /></Button>
             </Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.08 }}
-            className="rounded-2xl bg-surface border border-[#00B8D9]/10 p-8 hover:border-[#00B8D9]/20 transition-all duration-300"
-          >
-            <div className="h-11 w-11 rounded-xl bg-[#00B8D9]/[0.08] flex items-center justify-center mb-6">
-              <Briefcase className="h-5 w-5 text-[#00B8D9]" />
-            </div>
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.08 }} className="rounded-2xl bg-surface border border-[#00B8D9]/10 p-8 hover:border-[#00B8D9]/20 transition-all duration-300">
+            <div className="h-11 w-11 rounded-xl bg-[#00B8D9]/[0.08] flex items-center justify-center mb-6"><Briefcase className="h-5 w-5 text-[#00B8D9]" /></div>
             <div className="inline-flex items-center gap-1.5 rounded-full bg-[#00B8D9]/[0.06] border border-[#00B8D9]/[0.10] px-3 py-1 text-[11px] font-semibold text-[#00B8D9] mb-4">14-day free trial</div>
             <h3 className="text-[22px] font-bold text-text-primary mb-2">For Brands</h3>
-            <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">
-              You&apos;re spending budget on influencer marketing but don&apos;t know if it&apos;s working. SYNQ makes campaigns run like a product team.
-            </p>
+            <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">You&apos;re spending budget on influencer marketing but don&apos;t know if it&apos;s working. SYNQ makes campaigns run like a product team.</p>
             <ul className="space-y-4 mb-8">
               {[
                 { title: "Find creators who actually fit", desc: "AI matches on audience overlap, not just follower count. 92% accuracy vs manual search." },
@@ -1147,9 +1667,7 @@ function DualAudienceSection() {
                 { title: "Measure real ROI", desc: "Cost-per-engagement vs category benchmarks. AI recommendations on what to do next." },
               ].map(({ title, desc }) => (
                 <li key={title} className="flex items-start gap-3">
-                  <div className="h-5 w-5 rounded-full bg-[#00B8D9]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 className="h-3 w-3 text-[#00B8D9]" />
-                  </div>
+                  <div className="h-5 w-5 rounded-full bg-[#00B8D9]/[0.08] flex items-center justify-center shrink-0 mt-0.5"><CheckCircle2 className="h-3 w-3 text-[#00B8D9]" /></div>
                   <div>
                     <p className="text-[13px] font-semibold text-text-primary">{title}</p>
                     <p className="text-[12px] text-text-secondary mt-0.5">{desc}</p>
@@ -1158,7 +1676,7 @@ function DualAudienceSection() {
               ))}
             </ul>
             <Link href="/register?role=BUSINESS">
-              <Button variant="outline" className="w-full gap-2 h-11 border-[#00B8D9]/25 hover:border-[#00B8D9]/50 hover:text-[#00B8D9] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
+              <Button variant="outline" className="w-full gap-2 h-11 border-[#00B8D9]/25 hover:border-[#00B8D9]/50 hover:text-[#00B8D9] transition-all duration-200">
                 Start Free Trial <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -1193,28 +1711,17 @@ const testimonials = [
 function SocialProofSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
     <section ref={ref} className="py-24 bg-surface-elevated/20">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
           <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Real results</p>
-          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
-            What they say after one deal on SYNQ
-          </h2>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">What they say after one deal on SYNQ</h2>
         </motion.div>
         <div className="grid md:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
-            <motion.div
-              key={t.author}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.45 }}
-              className="rounded-2xl bg-surface border border-border/50 p-6 flex flex-col gap-4 hover:shadow-md hover:border-accent/15 transition-all duration-300"
-            >
-              <div className="flex gap-0.5">
-                {[0,1,2,3,4].map(j => <Star key={j} className="h-3.5 w-3.5 fill-warning text-warning" />)}
-              </div>
+            <motion.div key={t.author} initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.1, duration: 0.45 }} className="rounded-2xl bg-surface border border-border/50 p-6 flex flex-col gap-4 hover:shadow-md hover:border-accent/15 transition-all duration-300">
+              <div className="flex gap-0.5">{[0,1,2,3,4].map(j => <Star key={j} className="h-3.5 w-3.5 fill-warning text-warning" />)}</div>
               <p className="text-[13px] text-text-secondary leading-[1.75] flex-1">&ldquo;{t.quote}&rdquo;</p>
               <div className="inline-flex items-center gap-1.5 rounded-full bg-success/[0.07] border border-success/[0.12] px-3 py-1 text-[11px] font-medium text-success w-fit">
                 <TrendingUp className="h-3 w-3" /> {t.outcome}
@@ -1236,7 +1743,6 @@ function SocialProofSection() {
 
 /* ═══════════════════════════════════════════════════════
    ONBOARDING PREVIEW — "What happens after you click"
-   Removes the fear of the unknown from the CTA decision
 ═══════════════════════════════════════════════════════ */
 function OnboardingPreviewSection() {
   const ref = useRef(null);
@@ -1245,28 +1751,20 @@ function OnboardingPreviewSection() {
 
   const steps = [
     {
-      number: "01",
-      title: "Pick your role",
-      sub: "Creator or Brand — 10 seconds",
+      number: "01", title: "Pick your role", sub: "Creator or Brand — 10 seconds",
       preview: (
         <div className="space-y-3">
           <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-4">Who are you joining as?</p>
           <div className="rounded-xl border-2 border-accent bg-accent/[0.06] p-4 flex items-center gap-3 cursor-pointer">
-            <div className="h-9 w-9 rounded-lg bg-accent/[0.12] flex items-center justify-center shrink-0">
-              <Camera className="h-4.5 w-4.5 text-accent" />
-            </div>
+            <div className="h-9 w-9 rounded-lg bg-accent/[0.12] flex items-center justify-center shrink-0"><Camera className="h-4 w-4 text-accent" /></div>
             <div>
               <p className="text-[13px] font-semibold text-text-primary">I&apos;m a Creator</p>
               <p className="text-[11px] text-text-secondary">Find brand deals · Free forever</p>
             </div>
-            <div className="ml-auto h-5 w-5 rounded-full bg-accent flex items-center justify-center shrink-0">
-              <CheckCheck className="h-3 w-3 text-white" />
-            </div>
+            <div className="ml-auto h-5 w-5 rounded-full bg-accent flex items-center justify-center shrink-0"><CheckCheck className="h-3 w-3 text-white" /></div>
           </div>
           <div className="rounded-xl border border-border/50 bg-surface p-4 flex items-center gap-3 cursor-pointer hover:border-[#00B8D9]/30 transition-colors">
-            <div className="h-9 w-9 rounded-lg bg-surface-elevated flex items-center justify-center shrink-0">
-              <Briefcase className="h-4.5 w-4.5 text-text-secondary" />
-            </div>
+            <div className="h-9 w-9 rounded-lg bg-surface-elevated flex items-center justify-center shrink-0"><Briefcase className="h-4 w-4 text-text-secondary" /></div>
             <div>
               <p className="text-[13px] font-medium text-text-primary">I&apos;m a Brand</p>
               <p className="text-[11px] text-text-secondary">Find creators · 14-day trial</p>
@@ -1276,9 +1774,7 @@ function OnboardingPreviewSection() {
       ),
     },
     {
-      number: "02",
-      title: "Build your profile",
-      sub: "Add your niche, rates, and platforms — 3 minutes",
+      number: "02", title: "Build your profile", sub: "Add your niche, rates, and platforms — 3 minutes",
       preview: (
         <div className="space-y-3">
           <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-4">Creator profile</p>
@@ -1295,9 +1791,7 @@ function OnboardingPreviewSection() {
             { label: "Reel rate", value: "₹12,000", icon: IndianRupee },
           ].map(({ label, value, icon: Icon }) => (
             <div key={label} className="flex items-center justify-between rounded-lg bg-surface-elevated/60 px-3 py-2">
-              <div className="flex items-center gap-2 text-[12px] text-text-secondary">
-                <Icon className="h-3.5 w-3.5 text-accent/60" /> {label}
-              </div>
+              <div className="flex items-center gap-2 text-[12px] text-text-secondary"><Icon className="h-3.5 w-3.5 text-accent/60" /> {label}</div>
               <span className="text-[12px] font-semibold text-text-primary">{value}</span>
             </div>
           ))}
@@ -1308,9 +1802,7 @@ function OnboardingPreviewSection() {
       ),
     },
     {
-      number: "03",
-      title: "Your first match",
-      sub: "AI finds relevant deals within minutes",
+      number: "03", title: "Your first match", sub: "AI finds relevant deals within minutes",
       preview: (
         <div className="space-y-3">
           <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-4">New brief for you</p>
@@ -1320,9 +1812,7 @@ function OnboardingPreviewSection() {
                 <p className="text-[13px] font-semibold text-text-primary">Bloom Skincare</p>
                 <p className="text-[11px] text-text-secondary">Spring Glow Campaign</p>
               </div>
-              <div className="rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold text-accent whitespace-nowrap">
-                94% match
-              </div>
+              <div className="rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-semibold text-accent whitespace-nowrap">94% match</div>
             </div>
             <div className="grid grid-cols-3 gap-2 mb-3">
               {[["₹54,000","Budget"],["3 Reels","Deliverables"],["14 days","Timeline"]].map(([v,l]) => (
@@ -1332,9 +1822,7 @@ function OnboardingPreviewSection() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] text-success mb-3">
-              <Shield className="h-3 w-3" /> Brand reliability: 98% · Responds within 2h
-            </div>
+            <div className="flex items-center gap-1.5 text-[10px] text-success mb-3"><Shield className="h-3 w-3" /> Brand reliability: 98%</div>
             <div className="flex gap-2">
               <div className="flex-1 rounded-lg bg-accent text-white text-[11px] font-semibold py-2 text-center cursor-pointer">Accept Brief</div>
               <div className="flex-1 rounded-lg bg-surface-elevated text-text-secondary text-[11px] py-2 text-center cursor-pointer">View details</div>
@@ -1352,16 +1840,11 @@ function OnboardingPreviewSection() {
       <div className="max-w-6xl mx-auto px-6 relative">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
           <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">What happens next</p>
-          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
-            Up and running in under 5 minutes.
-          </h2>
-          <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">
-            No setup calls. No onboarding meetings. Click &ldquo;Get Started,&rdquo; pick your role, and you&apos;re in.
-          </p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">Up and running in under 5 minutes.</h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">No setup calls. No onboarding meetings. Click &ldquo;Get Started,&rdquo; pick your role, and you&apos;re in.</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-12 items-start">
-          {/* Step list */}
           <div className="space-y-3">
             {steps.map((step, i) => (
               <motion.div
@@ -1370,35 +1853,21 @@ function OnboardingPreviewSection() {
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.1 + i * 0.1 }}
                 onClick={() => setActiveStep(i)}
-                className={`rounded-2xl border p-5 cursor-pointer transition-all duration-300 ${
-                  activeStep === i
-                    ? "border-accent/25 bg-accent/[0.04] shadow-md"
-                    : "border-border/50 bg-surface hover:border-accent/15 hover:shadow-sm"
-                }`}
+                className={`rounded-2xl border p-5 cursor-pointer transition-all duration-300 ${activeStep === i ? "border-accent/25 bg-accent/[0.04] shadow-md" : "border-border/50 bg-surface hover:border-accent/15 hover:shadow-sm"}`}
               >
                 <div className="flex items-start gap-4">
                   <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${activeStep === i ? "bg-accent text-white" : "bg-surface-elevated text-text-secondary"}`}>
                     <span className="text-[14px] font-bold font-mono">{step.number}</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className={`text-[15px] font-semibold mb-0.5 transition-colors ${activeStep === i ? "text-text-primary" : "text-text-secondary"}`}>
-                      {step.title}
-                    </h3>
+                    <h3 className={`text-[15px] font-semibold mb-0.5 transition-colors ${activeStep === i ? "text-text-primary" : "text-text-secondary"}`}>{step.title}</h3>
                     <p className="text-[12px] text-text-secondary">{step.sub}</p>
                   </div>
-                  {activeStep === i && (
-                    <div className="h-2 w-2 rounded-full bg-accent shrink-0 mt-2 animate-pulse" />
-                  )}
+                  {activeStep === i && <div className="h-2 w-2 rounded-full bg-accent shrink-0 mt-2 animate-pulse" />}
                 </div>
               </motion.div>
             ))}
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.5 }}
-              className="pt-2"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.5 }} className="pt-2">
               <Link href="/register">
                 <Button size="lg" className="glow-accent gap-2 h-12 px-8 text-[15px] w-full sm:w-auto hover:scale-[1.02] active:scale-[0.98] transition-transform">
                   Get Started Free <ArrowRight className="h-4 w-4" />
@@ -1408,23 +1877,9 @@ function OnboardingPreviewSection() {
             </motion.div>
           </div>
 
-          {/* Step preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2 }}
-            className="lg:sticky lg:top-24"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.2 }} className="lg:sticky lg:top-24">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={activeStep}
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                transition={{ duration: 0.3 }}
-                className="rounded-2xl bg-surface border border-border/50 shadow-xl overflow-hidden"
-              >
-                {/* Window chrome */}
+              <motion.div key={activeStep} initial={{ opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -8, scale: 0.98 }} transition={{ duration: 0.3 }} className="rounded-2xl bg-surface border border-border/50 shadow-xl overflow-hidden">
                 <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/40 bg-surface-elevated/40">
                   <div className="flex gap-1.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-error/50" />
@@ -1432,14 +1887,10 @@ function OnboardingPreviewSection() {
                     <div className="h-2.5 w-2.5 rounded-full bg-success/50" />
                   </div>
                   <div className="flex-1 flex justify-center">
-                    <div className="rounded-lg bg-surface-elevated/70 px-3 py-1 text-[10px] text-text-secondary">
-                      app.synq.io/onboarding
-                    </div>
+                    <div className="rounded-lg bg-surface-elevated/70 px-3 py-1 text-[10px] text-text-secondary">app.synq.io/onboarding</div>
                   </div>
                 </div>
-                <div className="p-6">
-                  {steps[activeStep].preview}
-                </div>
+                <div className="p-6">{steps[activeStep].preview}</div>
               </motion.div>
             </AnimatePresence>
           </motion.div>
@@ -1461,66 +1912,34 @@ function PricingSection() {
       <div className="max-w-4xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
           <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Pricing</p>
-          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
-            Free for creators. Powerful for brands.
-          </h2>
-          <p className="mt-4 text-[15px] text-text-secondary max-w-sm mx-auto">
-            We make money when brands succeed — so creators always stay free.
-          </p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">Free for creators. Powerful for brands.</h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-sm mx-auto">We make money when brands succeed — so creators always stay free.</p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -14 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.45 }}
-            className="rounded-2xl bg-surface border border-border/50 p-8 hover:shadow-md transition-all duration-300"
-          >
+          <motion.div initial={{ opacity: 0, x: -14 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.45 }} className="rounded-2xl bg-surface border border-border/50 p-8 hover:shadow-md transition-all duration-300">
             <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-widest mb-4">For Creators</p>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-[44px] font-bold text-text-primary">Free</span>
-              <span className="text-text-secondary">forever</span>
-            </div>
+            <div className="flex items-baseline gap-2 mb-2"><span className="text-[44px] font-bold text-text-primary">Free</span><span className="text-text-secondary">forever</span></div>
             <p className="text-[13px] text-text-secondary mb-6">No credit card. No hidden fees. Ever.</p>
             <ul className="space-y-3 mb-8">
               {["Unlimited brand collaborations","Scope contracts & e-signature","Escrow-protected payments","Dispute resolution (24h)","Performance analytics dashboard","Verified creator badge"].map(f => (
-                <li key={f} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
-                  <CheckCircle2 className="h-4 w-4 text-success shrink-0" /> {f}
-                </li>
+                <li key={f} className="flex items-center gap-2.5 text-[13px] text-text-secondary"><CheckCircle2 className="h-4 w-4 text-success shrink-0" /> {f}</li>
               ))}
             </ul>
-            <Link href="/register?role=CREATOR">
-              <Button variant="outline" className="w-full h-11 text-[14px] hover:border-accent/30 hover:text-accent transition-all">Get Started Free</Button>
-            </Link>
+            <Link href="/register?role=CREATOR"><Button variant="outline" className="w-full h-11 text-[14px] hover:border-accent/30 hover:text-accent transition-all">Get Started Free</Button></Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 14 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.45, delay: 0.08 }}
-            className="rounded-2xl bg-surface border-2 border-accent/25 p-8 relative hover:shadow-lg hover:border-accent/35 transition-all duration-300"
-          >
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-accent to-[#00B8D9] px-4 py-1 text-[11px] font-semibold text-white whitespace-nowrap">
-              Most Popular
-            </div>
+          <motion.div initial={{ opacity: 0, x: 14 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.45, delay: 0.08 }} className="rounded-2xl bg-surface border-2 border-accent/25 p-8 relative hover:shadow-lg hover:border-accent/35 transition-all duration-300">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-accent to-[#00B8D9] px-4 py-1 text-[11px] font-semibold text-white whitespace-nowrap">Most Popular</div>
             <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-widest mb-4">For Brands</p>
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-[44px] font-bold text-text-primary">₹3,999</span>
-              <span className="text-text-secondary">/month</span>
-            </div>
+            <div className="flex items-baseline gap-2 mb-1"><span className="text-[44px] font-bold text-text-primary">₹3,999</span><span className="text-text-secondary">/month</span></div>
             <p className="text-[12px] text-text-secondary mb-6">14-day free trial · No credit card required</p>
             <ul className="space-y-3 mb-8">
               {["Everything in Creator plan","AI creator matching (92% accuracy)","Campaign builder & management","Advanced ROI analytics & benchmarks","Creator comparison & reliability scores","Priority support & onboarding"].map(f => (
-                <li key={f} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
-                  <CheckCircle2 className="h-4 w-4 text-success shrink-0" /> {f}
-                </li>
+                <li key={f} className="flex items-center gap-2.5 text-[13px] text-text-secondary"><CheckCircle2 className="h-4 w-4 text-success shrink-0" /> {f}</li>
               ))}
             </ul>
-            <Link href="/register?role=BUSINESS">
-              <Button className="w-full h-11 text-[14px] glow-accent gap-2 hover:scale-[1.01] active:scale-[0.99] transition-transform">
-                Start Free Trial <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Link href="/register?role=BUSINESS"><Button className="w-full h-11 text-[14px] glow-accent gap-2 hover:scale-[1.01] active:scale-[0.99] transition-transform">Start Free Trial <ArrowRight className="h-4 w-4" /></Button></Link>
           </motion.div>
         </div>
       </div>
@@ -1534,7 +1953,6 @@ function PricingSection() {
 function FinalCTASection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
-
   return (
     <section ref={ref} className="py-24">
       <div className="max-w-4xl mx-auto px-6">
@@ -1548,18 +1966,14 @@ function FinalCTASection() {
           <div className="absolute inset-0 dot-grid opacity-[0.07] pointer-events-none" />
           <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full bg-white/[0.04] blur-2xl pointer-events-none" />
           <div className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-white/[0.04] blur-2xl pointer-events-none" />
-
           <div className="relative px-10 py-16 text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 text-[12px] font-medium text-white/80 mb-6">
               <Sparkles className="h-3.5 w-3.5" /> Join 850+ active creators and brands
             </div>
             <h2 className="text-[36px] sm:text-[48px] font-bold text-white tracking-tight leading-[1.1] mb-4">
-              Stop managing collabs in DMs.
-              <br />Start using SYNQ.
+              Stop managing collabs in DMs.<br />Start using SYNQ.
             </h2>
-            <p className="text-white/70 text-[16px] mb-10 max-w-sm mx-auto">
-              Your first collab is free. Set up in under 5 minutes. No credit card.
-            </p>
+            <p className="text-white/70 text-[16px] mb-10 max-w-sm mx-auto">Your first collab is free. Set up in under 5 minutes. No credit card.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/register?role=CREATOR">
                 <Button size="lg" className="bg-white text-accent hover:bg-white/90 gap-2 text-[15px] h-12 px-8 font-semibold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform">
@@ -1627,9 +2041,11 @@ export default function LandingPage() {
       <HeroSection />
       <TrustBar />
       <ProblemSection />
+      <LiveDemoSection />
       <DifferentiationSection />
       <HowItWorksSection />
       <SYNQTimeline />
+      <CaseStudySection />
       <CreatorSection />
       <DualAudienceSection />
       <SocialProofSection />
