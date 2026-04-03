@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
-  ArrowRight, Moon, Sun, Star, CheckCircle2, Shield,
+  ArrowRight, Moon, Sun, Star, CheckCircle2, Shield, Bell,
   TrendingUp, IndianRupee, Lock, ChevronRight,
   MessageSquare, FileText, CreditCard, Flag, Camera, Send,
   Briefcase, Zap, CheckCheck, RefreshCw, Circle,
@@ -185,7 +185,7 @@ function HeroSection() {
             <motion.div {...fu(0)}>
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/[0.08] border border-accent/[0.15] px-3.5 py-1.5 text-[12px] font-medium text-accent mb-8">
                 <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-                2,400+ deals closed — average payment in 24h
+                Built for the Indian creator economy
               </div>
             </motion.div>
 
@@ -209,7 +209,11 @@ function HeroSection() {
               <span className="text-text-primary font-medium">No DMs. No spreadsheets. No chasing.</span>
             </motion.p>
 
-            <motion.div {...fu(0.23)} className="flex flex-col sm:flex-row items-start gap-3 mt-10">
+            <motion.p {...fu(0.2)} className="mt-3 text-[13px] text-text-secondary/70 pl-3.5 border-l-2 border-accent/25 leading-relaxed max-w-[440px]">
+              For D2C brands spending ₹50K+ on influencers. For creators tired of waiting 12 days to get paid.
+            </motion.p>
+
+            <motion.div {...fu(0.26)} className="flex flex-col sm:flex-row items-start gap-3 mt-10">
               <Link href="/register?role=CREATOR">
                 <Button size="lg" className="glow-accent gap-2 text-[15px] h-12 px-7 font-semibold hover:scale-[1.02] active:scale-[0.98] transition-transform duration-150">
                   <Camera className="h-4 w-4" /> I&apos;m a Creator
@@ -1047,6 +1051,219 @@ function LiveDemoSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   REAL USE CASE — A real deal, minute by minute
+═══════════════════════════════════════════════════════ */
+function RealUseCaseSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const timeline: {
+    time: string;
+    icon: React.ElementType;
+    event: string;
+    detail: string;
+    color: string;
+    highlight: boolean;
+  }[] = [
+    {
+      time: "Tue · 9:03 AM",
+      icon: Bell,
+      event: "3 new briefs matched your profile",
+      detail: "Bloom Skincare · TrailCo Outdoors · EcoWear India",
+      color: "text-accent bg-accent/[0.08]",
+      highlight: false,
+    },
+    {
+      time: "9:47 AM",
+      icon: CheckCircle2,
+      event: "Brief accepted: Bloom Skincare · Spring Glow",
+      detail: "AI match score 94% · ₹54,000 budget · 14-day timeline",
+      color: "text-success bg-success/[0.08]",
+      highlight: false,
+    },
+    {
+      time: "10:12 AM",
+      icon: FileText,
+      event: "Contract reviewed: scope locked in writing",
+      detail: "3 Reels · ₹12,000 each · 2 revisions allowed · 14-day deadline",
+      color: "text-[#00B8D9] bg-[#00B8D9]/[0.08]",
+      highlight: false,
+    },
+    {
+      time: "10:14 AM",
+      icon: Lock,
+      event: "✓ Contract signed · ₹54,000 locked in escrow",
+      detail: "E-sign complete · Contract #SC-2024-0388 · Funds held by SYNQ",
+      color: "text-accent bg-accent/[0.08]",
+      highlight: true,
+    },
+    {
+      time: "Day 3 · 2:15 PM",
+      icon: Camera,
+      event: "Reel_01_SpringGlow_v1.mp4 submitted for review",
+      detail: "74.2 MB · 0:32 runtime · Caption and cover frame included",
+      color: "text-text-secondary bg-surface-elevated",
+      highlight: false,
+    },
+    {
+      time: "Day 3 · 4:30 PM",
+      icon: CheckCheck,
+      event: "Reel #1 approved by Bloom Skincare ✓",
+      detail: '"Looks great — love the energy. Approve." — Rahul M., Brand Manager',
+      color: "text-success bg-success/[0.08]",
+      highlight: false,
+    },
+    {
+      time: "Day 3 · 4:31 PM",
+      icon: IndianRupee,
+      event: "₹12,000 released to UPI — 38 seconds after approval",
+      detail: "Ref: TXN-SYNQ-9847 · Milestone 1 of 3 · ₹42,000 remaining in escrow",
+      color: "text-success bg-success/[0.08]",
+      highlight: true,
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-24 bg-surface-elevated/15 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.02] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="mb-12">
+          <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Real workflow</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary max-w-2xl">
+            A real Tuesday for @priyacreates.
+          </h2>
+          <p className="mt-4 text-[16px] text-text-secondary max-w-xl">
+            Brief to signed contract in{" "}
+            <span className="font-semibold text-text-primary">71 minutes</span>.
+            Approval to payment in{" "}
+            <span className="font-semibold text-success">38 seconds</span>.
+            Every step logged, timestamped, auditable.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-[320px_1fr] gap-10 items-start">
+
+          {/* Left — creator card + before-SYNQ callout */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="lg:sticky lg:top-24 space-y-4"
+          >
+            <div className="rounded-2xl border border-border/50 bg-surface p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <img src={creators[0].avatar} alt="" className="h-12 w-12 rounded-xl object-cover border-2 border-accent/20" />
+                <div>
+                  <p className="text-[14px] font-semibold text-text-primary">Priya Sharma</p>
+                  <p className="text-[11px] text-text-secondary">@priyacreates · Fashion & Lifestyle</p>
+                  <p className="text-[10px] text-accent mt-0.5">Mumbai · 2.1L followers · 4.8% engagement</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "On-time rate", value: "100%", c: "text-success" },
+                  { label: "Active deals", value: "3 this month", c: "text-accent" },
+                  { label: "Avg payout time", value: "18 hours", c: "text-text-primary" },
+                  { label: "Earned this month", value: "₹54,000", c: "text-text-primary" },
+                ].map(s => (
+                  <div key={s.label} className="rounded-xl bg-surface-elevated/60 p-2.5">
+                    <p className="text-[9px] text-text-secondary mb-0.5">{s.label}</p>
+                    <p className={`text-[14px] font-bold ${s.c}`}>{s.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-error/15 bg-error/[0.03] p-4">
+              <p className="text-[10px] font-semibold text-error uppercase tracking-wider mb-3">
+                The same deal without SYNQ
+              </p>
+              <div className="space-y-2 text-[12px] text-text-secondary">
+                {[
+                  "Brief arrived as a 4-minute voice note on WhatsApp.",
+                  "Scope changed twice. Nothing was written down.",
+                  "Payment landed 12 days after approval. No reference number.",
+                  "Revision feedback: 11 screenshots in Instagram DMs.",
+                ].map((t, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <XCircle className="h-3.5 w-3.5 text-error/60 shrink-0 mt-0.5" />
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right — timestamped deal log */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="rounded-2xl bg-surface border border-border/50 shadow-xl overflow-hidden"
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border/40 bg-surface-elevated/40">
+              <div className="flex items-center gap-2.5">
+                <div className="h-7 w-7 rounded-lg bg-accent/[0.1] flex items-center justify-center">
+                  <Clock className="h-3.5 w-3.5 text-accent" />
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold text-text-primary">Deal log</p>
+                  <p className="text-[10px] text-text-secondary">Bloom Skincare × @priyacreates · Spring Glow Campaign</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                <span className="text-[10px] text-success font-medium">In progress</span>
+              </div>
+            </div>
+
+            <div className="p-5 space-y-0">
+              {timeline.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 12 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.2 + i * 0.09 }}
+                  className="flex gap-3 group"
+                >
+                  <div className="flex flex-col items-center shrink-0">
+                    <div className={`h-7 w-7 rounded-lg flex items-center justify-center mt-2 shrink-0 ${item.color}`}>
+                      <item.icon className="h-3.5 w-3.5" />
+                    </div>
+                    {i < timeline.length - 1 && (
+                      <div className="w-px flex-1 my-1 bg-border/25 min-h-[16px]" />
+                    )}
+                  </div>
+                  <div className={`flex-1 rounded-xl border p-3.5 mb-2 transition-all duration-200 hover:shadow-sm ${item.highlight ? "border-accent/20 bg-accent/[0.03]" : "border-border/25 bg-surface"}`}>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className={`text-[12px] font-semibold leading-snug ${item.highlight ? "text-accent" : "text-text-primary"}`}>{item.event}</p>
+                        <p className="text-[10px] text-text-secondary mt-0.5 leading-relaxed">{item.detail}</p>
+                      </div>
+                      <span className="text-[9px] text-text-secondary whitespace-nowrap shrink-0 mt-0.5 font-mono">{item.time}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="border-t border-border/30 px-5 py-3 bg-surface-elevated/20 flex items-center justify-between">
+              <div className="flex items-center gap-5 text-[10px] text-text-secondary">
+                <span>Brief → Contract: <span className="font-semibold text-text-primary">71 min</span></span>
+                <span>Approval → Payment: <span className="font-semibold text-success">38 sec</span></span>
+                <span className="hidden sm:inline">Disputes: <span className="font-semibold text-success">0</span></span>
+              </div>
+              <Link href="/register" className="text-[11px] text-accent hover:underline transition-colors">Start your deal log →</Link>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    DIFFERENTIATION TABLE
 ═══════════════════════════════════════════════════════ */
 function DifferentiationSection() {
@@ -1068,14 +1285,14 @@ function DifferentiationSection() {
 
   const cols: { label: string; sub: string; status: ColStatus[]; highlight: boolean }[] = [
     {
-      label: "DMs + Spreadsheets",
-      sub: "How most deals work today",
+      label: "Slack + WhatsApp",
+      sub: "Great for chat. Terrible for deals.",
       status: ["no","no","no","no","no","no","no","no"],
       highlight: false,
     },
     {
-      label: "Discovery Platforms",
-      sub: "Find creators, but then what?",
+      label: "Notion + Airtable",
+      sub: "Flexible docs. Zero enforcement.",
       status: ["partial","partial","no","no","no","no","partial","no"],
       highlight: false,
     },
@@ -1100,10 +1317,13 @@ function DifferentiationSection() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
           <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Why SYNQ</p>
           <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
-            Built for influencer deals.
+            Why not Slack, Notion,
             <br />
-            <span className="text-text-secondary font-medium">Not adapted from something else.</span>
+            <span className="text-text-secondary font-medium">or a spreadsheet?</span>
           </h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-xl mx-auto">
+            Fair question. Those tools are great — but they weren&apos;t built for influencer deal structure. Here&apos;s the honest difference.
+          </p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.15 }} className="rounded-2xl overflow-hidden border border-border/50 shadow-lg">
@@ -1144,9 +1364,9 @@ function DifferentiationSection() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.6 }} className="flex items-center justify-center gap-6 mt-6 text-[12px] text-text-secondary">
-          <span className="flex items-center gap-1.5"><Minus className="h-3.5 w-3.5 text-warning" /> Partial</span>
+          <span className="flex items-center gap-1.5"><Minus className="h-3.5 w-3.5 text-warning" /> Partial / workaround</span>
           <span className="flex items-center gap-1.5"><XCircle className="h-3.5 w-3.5 text-error/40" /> Not available</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-accent" /> Fully built in</span>
+          <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-accent" /> Purpose-built in SYNQ</span>
         </motion.div>
       </div>
     </section>
@@ -1948,11 +2168,28 @@ function PricingSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   FINAL CTA
+   FINAL CTA — live activity ticker + conviction-driven
 ═══════════════════════════════════════════════════════ */
+const LIVE_TICKER = [
+  { icon: IndianRupee, text: "₹18,000 released to @marcustech — TrailCo campaign", time: "2 min ago", c: "text-success" },
+  { icon: FileText, text: "Contract signed: EcoWear India × @snehafit", time: "9 min ago", c: "text-[#00B8D9]" },
+  { icon: Send, text: "New campaign posted: Zudio India · 22 creators matched", time: "14 min ago", c: "text-accent" },
+  { icon: CheckCheck, text: "Reel approved + ₹12,000 auto-released: Bloom Skincare", time: "21 min ago", c: "text-success" },
+  { icon: Star, text: "94% AI match found: Arjun Nair × WildTrail Co.", time: "28 min ago", c: "text-warning" },
+];
+
 function FinalCTASection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [tickerIdx, setTickerIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setTickerIdx(p => (p + 1) % LIVE_TICKER.length), 3200);
+    return () => clearInterval(t);
+  }, []);
+
+  const tick = LIVE_TICKER[tickerIdx];
+
   return (
     <section ref={ref} className="py-24">
       <div className="max-w-4xl mx-auto px-6">
@@ -1966,27 +2203,64 @@ function FinalCTASection() {
           <div className="absolute inset-0 dot-grid opacity-[0.07] pointer-events-none" />
           <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full bg-white/[0.04] blur-2xl pointer-events-none" />
           <div className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-white/[0.04] blur-2xl pointer-events-none" />
-          <div className="relative px-10 py-16 text-center">
+
+          {/* Live activity ticker strip */}
+          <div className="relative border-b border-white/10 bg-black/10 px-6 py-2.5">
+            <div className="flex items-center justify-center gap-2.5">
+              <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse shrink-0" />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={tickerIdx}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center gap-2 text-[12px] text-white/75"
+                >
+                  <tick.icon className={`h-3 w-3 shrink-0 ${tick.c}`} />
+                  <span>{tick.text}</span>
+                  <span className="text-white/30 hidden sm:inline">·</span>
+                  <span className="text-white/40 hidden sm:inline">{tick.time}</span>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          <div className="relative px-10 py-14 text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 text-[12px] font-medium text-white/80 mb-6">
-              <Sparkles className="h-3.5 w-3.5" /> Join 850+ active creators and brands
+              <Sparkles className="h-3.5 w-3.5" /> 850+ creators and brands active right now
             </div>
             <h2 className="text-[36px] sm:text-[48px] font-bold text-white tracking-tight leading-[1.1] mb-4">
               Stop managing collabs in DMs.<br />Start using SYNQ.
             </h2>
-            <p className="text-white/70 text-[16px] mb-10 max-w-sm mx-auto">Your first collab is free. Set up in under 5 minutes. No credit card.</p>
+            <p className="text-white/70 text-[16px] mb-8 max-w-sm mx-auto">
+              Your first collab is free. Set up in under 5 minutes. No credit card.
+            </p>
+
+            {/* Trust signals row */}
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-10 text-[12px] text-white/55">
+              <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Escrow-protected payments</span>
+              <span className="hidden sm:block text-white/20">·</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> 2,400+ deals closed</span>
+              <span className="hidden sm:block text-white/20">·</span>
+              <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Signed contracts</span>
+              <span className="hidden sm:block text-white/20">·</span>
+              <span className="flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> 98% on-time payments</span>
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/register?role=CREATOR">
                 <Button size="lg" className="bg-white text-accent hover:bg-white/90 gap-2 text-[15px] h-12 px-8 font-semibold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform">
-                  <Camera className="h-4 w-4" /> Join as Creator
+                  <Camera className="h-4 w-4" /> Join as Creator — Free
                 </Button>
               </Link>
               <Link href="/register?role=BUSINESS">
                 <Button size="lg" variant="ghost" className="text-white/85 hover:text-white hover:bg-white/10 gap-2 text-[15px] h-12 border border-white/20 hover:border-white/30 transition-all">
-                  <Briefcase className="h-4 w-4" /> Find Creators
+                  <Briefcase className="h-4 w-4" /> Find Creators — 14-day trial
                 </Button>
               </Link>
             </div>
-            <p className="text-white/40 text-[12px] mt-6">Free for creators · 14-day trial for brands · No credit card</p>
+            <p className="text-white/35 text-[12px] mt-6">No credit card · Cancel anytime · Made for India 🇮🇳</p>
           </div>
         </motion.div>
       </div>
@@ -2042,6 +2316,7 @@ export default function LandingPage() {
       <TrustBar />
       <ProblemSection />
       <LiveDemoSection />
+      <RealUseCaseSection />
       <DifferentiationSection />
       <HowItWorksSection />
       <SYNQTimeline />
