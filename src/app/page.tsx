@@ -185,15 +185,8 @@ function HeroSection() {
             <motion.div {...fu(0)}>
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/[0.08] border border-accent/[0.15] px-3.5 py-1.5 text-[12px] font-medium text-accent mb-8">
                 <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-                Built for the Indian creator economy
+                Influencer deal management · Built for India
               </div>
-            </motion.div>
-
-            {/* ── Positioning line — one sentence, zero jargon ── */}
-            <motion.div {...fu(0.04)}>
-              <p className="text-[14px] text-text-secondary leading-snug mb-5 max-w-[460px]">
-                <span className="font-semibold text-text-primary">SYNQ</span> helps Indian brands and creators run influencer deals end-to-end — brief, contract, delivery, and payment — in one structured workspace.
-              </p>
             </motion.div>
 
             {/* ── HERO HEADLINE ── */}
@@ -476,11 +469,11 @@ function ProblemSection() {
   ];
 
   const synqItems = [
-    { icon: CheckCheck, text: "Brief delivered. Creator accepted in 2h.", sub: "AI match score: 94%" },
-    { icon: Lock, text: "₹54,000 locked in escrow on contract sign", sub: "Auto-released on approval" },
-    { icon: FileText, text: "Scope locked. 3 Reels, 2 Stories, 2 revisions.", sub: "E-signed contract, immutable" },
-    { icon: BarChart3, text: "All files versioned in one workspace.", sub: "No lost assets, ever" },
-    { icon: CheckCircle2, text: "Revision #2 approved. ₹12K released in 24h.", sub: "Full audit trail" },
+    { icon: CheckCheck, text: "Brief accepted in 1h 47m — not 3 days.", sub: "You stop waiting. You start working." },
+    { icon: Lock, text: "₹54,000 in escrow before a single frame is shot.", sub: "The money is there. Non-negotiable." },
+    { icon: FileText, text: "Scope signed. Brand can't add a 4th deliverable.", sub: "Changes require mutual consent. Always." },
+    { icon: BarChart3, text: "Final file available to both parties. Forever.", sub: "No 'can you resend that?' ever again." },
+    { icon: CheckCircle2, text: "Approved at 2:15 PM. ₹12,000 credited at 2:15:38 PM.", sub: "38 seconds. Not 12 days." },
   ];
 
   return (
@@ -2033,16 +2026,19 @@ function DualAudienceSection() {
             <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">You built your audience. You shouldn&apos;t spend 30% of your time chasing payments and managing chaotic brand DMs.</p>
             <ul className="space-y-4 mb-8">
               {[
-                { title: "Never chase an invoice again", desc: "Funds auto-release the moment a deliverable is approved. Average payout: 24h." },
-                { title: "Know who you're working with", desc: "See brand reliability scores, response time, and past creator reviews before saying yes." },
-                { title: "Protect yourself from scope creep", desc: "Everything agreed upfront. Signed digitally. Changes require mutual consent." },
-                { title: "Your content. Your analytics.", desc: "Engagement benchmarks, save rates, and format performance — all in one dashboard." },
-              ].map(({ title, desc }) => (
+                { title: "Never chase an invoice again", desc: "You submit. Brand approves. Money moves — automatically, no follow-up, no bank transfer wait.", result: "Avg payout: 24h after approval" },
+                { title: "Know who you're working with first", desc: "See brand reliability score, response rate, and reviews from creators they've worked with before.", result: "Avoid bad-pay brands before you start" },
+                { title: "Your scope, legally protected", desc: "3 Reels, 2 revisions, 14 days. It's signed. If the brand asks for more, you can say no with a contract behind you.", result: "Zero scope creep on 100% of signed deals" },
+                { title: "Know what content performs", desc: "See your save rate, reach, and CPE across every deal — so you can charge more for what works.", result: "Data to negotiate your next rate card" },
+              ].map(({ title, desc, result }) => (
                 <li key={title} className="flex items-start gap-3">
                   <div className="h-5 w-5 rounded-full bg-accent/[0.08] flex items-center justify-center shrink-0 mt-0.5"><CheckCircle2 className="h-3 w-3 text-accent" /></div>
                   <div>
                     <p className="text-[13px] font-semibold text-text-primary">{title}</p>
-                    <p className="text-[12px] text-text-secondary mt-0.5">{desc}</p>
+                    <p className="text-[12px] text-text-secondary mt-0.5 mb-1.5">{desc}</p>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-accent/[0.06] border border-accent/[0.10] px-2 py-0.5 text-[10px] font-medium text-accent">
+                      <Zap className="h-2.5 w-2.5" /> {result}
+                    </span>
                   </div>
                 </li>
               ))}
@@ -2059,16 +2055,19 @@ function DualAudienceSection() {
             <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">You&apos;re spending budget on influencer marketing but don&apos;t know if it&apos;s working. SYNQ makes campaigns run like a product team.</p>
             <ul className="space-y-4 mb-8">
               {[
-                { title: "Find creators who actually fit", desc: "AI matches on audience overlap, not just follower count. 92% accuracy vs manual search." },
-                { title: "Run campaigns with clarity", desc: "Deliverables, timelines, revision limits, and budget locked from day one. No surprises." },
-                { title: "Know what you're getting", desc: "Creator reliability scores, on-time delivery rates, and past brand reviews — before you commit." },
-                { title: "Measure real ROI", desc: "Cost-per-engagement vs category benchmarks. AI recommendations on what to do next." },
-              ].map(({ title, desc }) => (
+                { title: "Find creators who actually match your audience", desc: "AI matches on audience overlap and content fit, not just follower count. You see why each creator was matched before inviting.", result: "92% accuracy vs manual shortlisting" },
+                { title: "Run campaigns like a product sprint", desc: "Deliverables, timelines, revision limits, and budget locked in the brief. Both sides see the same source of truth from day one.", result: "67% fewer mid-campaign scope changes" },
+                { title: "Know what you're getting before you commit", desc: "Creator on-time rate, brand reviews, and past engagement performance visible on every profile — before you send the brief.", result: "Reduce bad-fit hirings before they happen" },
+                { title: "See what's actually working", desc: "Cost-per-engagement tracked against category benchmarks. Know which format and which creator drove real GMV impact.", result: "2.4× better CPE vs industry average" },
+              ].map(({ title, desc, result }) => (
                 <li key={title} className="flex items-start gap-3">
                   <div className="h-5 w-5 rounded-full bg-[#00B8D9]/[0.08] flex items-center justify-center shrink-0 mt-0.5"><CheckCircle2 className="h-3 w-3 text-[#00B8D9]" /></div>
                   <div>
                     <p className="text-[13px] font-semibold text-text-primary">{title}</p>
-                    <p className="text-[12px] text-text-secondary mt-0.5">{desc}</p>
+                    <p className="text-[12px] text-text-secondary mt-0.5 mb-1.5">{desc}</p>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#00B8D9]/[0.06] border border-[#00B8D9]/[0.10] px-2 py-0.5 text-[10px] font-medium text-[#00B8D9]">
+                      <Zap className="h-2.5 w-2.5" /> {result}
+                    </span>
                   </div>
                 </li>
               ))}
