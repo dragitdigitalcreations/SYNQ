@@ -189,7 +189,14 @@ function HeroSection() {
               </div>
             </motion.div>
 
-            {/* ── FINAL HERO COPY: specific, plain, benefit-first ── */}
+            {/* ── Positioning line — one sentence, zero jargon ── */}
+            <motion.div {...fu(0.04)}>
+              <p className="text-[14px] text-text-secondary leading-snug mb-5 max-w-[460px]">
+                <span className="font-semibold text-text-primary">SYNQ</span> helps Indian brands and creators run influencer deals end-to-end — brief, contract, delivery, and payment — in one structured workspace.
+              </p>
+            </motion.div>
+
+            {/* ── HERO HEADLINE ── */}
             <motion.h1
               {...fu(0.07)}
               className="text-[46px] sm:text-[58px] lg:text-[64px] font-bold tracking-[-0.03em] leading-[1.04] text-text-primary"
@@ -547,6 +554,12 @@ function LiveDemoSection() {
   const [role, setRole] = useState<"creator" | "brand">("creator");
   const [nav, setNav] = useState("dashboard");
   const [loading, setLoading] = useState(false);
+  const [liveIdx, setLiveIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setLiveIdx(p => p + 1), 3800);
+    return () => clearInterval(t);
+  }, []);
 
   const switchRole = (r: "creator" | "brand") => {
     if (r === role) return;
@@ -1008,10 +1021,47 @@ function LiveDemoSection() {
 
               {/* Activity sidebar — only on dashboard */}
               {!loading && nav === "dashboard" && (
-                <div className="absolute right-0 top-0 bottom-0 w-52 border-l border-border/30 bg-surface-elevated/10 p-3 hidden lg:block">
-                  <p className="text-[10px] font-semibold text-text-secondary uppercase tracking-wider mb-3">Recent Activity</p>
+                <div className="absolute right-0 top-0 bottom-0 w-52 border-l border-border/30 bg-surface-elevated/10 p-3 hidden lg:block overflow-hidden">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] font-semibold text-text-secondary uppercase tracking-wider">Live Activity</p>
+                    <div className="flex items-center gap-1">
+                      <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                      <span className="text-[9px] text-success">live</span>
+                    </div>
+                  </div>
                   <div className="space-y-2">
-                    {activity.map((a, i) => (
+                    {/* pinned newest item — cycles in */}
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={liveIdx}
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.35 }}
+                        className="flex items-start gap-2 rounded-xl bg-accent/[0.06] border border-accent/[0.1] px-2 py-2"
+                      >
+                        {(() => {
+                          const all = [...creatorActivity, ...brandActivity];
+                          const a = all[liveIdx % all.length];
+                          return (
+                            <>
+                              <div className={`h-6 w-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${a.c}`}>
+                                <a.icon className="h-3 w-3" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1 mb-0.5">
+                                  <p className="text-[10px] font-semibold text-accent">just now</p>
+                                </div>
+                                <p className="text-[10px] font-medium text-text-primary leading-snug">{a.text}</p>
+                                <p className="text-[9px] text-text-secondary truncate">{a.detail}</p>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </motion.div>
+                    </AnimatePresence>
+                    {/* static older items below */}
+                    {activity.slice(0, 3).map((a, i) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, x: 8 }}
@@ -1023,7 +1073,7 @@ function LiveDemoSection() {
                           <a.icon className="h-3 w-3" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[11px] font-medium text-text-primary leading-snug">{a.text}</p>
+                          <p className="text-[10px] font-medium text-text-primary leading-snug">{a.text}</p>
                           <p className="text-[9px] text-text-secondary truncate">{a.detail}</p>
                           <p className="text-[9px] text-text-secondary/60">{a.time}</p>
                         </div>
@@ -1381,16 +1431,138 @@ function HowItWorksSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [activeRole, setActiveRole] = useState<"creator" | "brand">("creator");
 
-  const flows = {
+  type StepData = {
+    n: string;
+    title: string;
+    desc: string;
+    outcome: string;
+    preview: React.ReactNode;
+  };
+
+  const flows: Record<"creator" | "brand", StepData[]> = {
     creator: [
-      { n: "01", title: "Build your creator profile", desc: "Connect Instagram/YouTube. Set your rate card — Reels, Stories, YouTube. Define what you won't work with. Brands see everything upfront.", outcome: "Get 3× more qualified inbound briefs" },
-      { n: "02", title: "Match with the right brands", desc: "AI scores every opportunity on audience overlap, content fit, and budget. See the brand's reliability score before accepting.", outcome: "94% match accuracy — no more random DMs" },
-      { n: "03", title: "Deliver work, get paid automatically", desc: "Submit drafts in your workspace. Get structured feedback. Payment auto-releases the moment a milestone is approved.", outcome: "Average payment within 24h of approval" },
+      {
+        n: "01", title: "Build your creator profile",
+        desc: "Set your rate card, niche, and platforms. Brands see your engagement, on-time rate, and past reviews — before they DM you.",
+        outcome: "3× more qualified inbound briefs",
+        preview: (
+          <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
+            <div className="flex items-center gap-2.5 mb-3">
+              <img src={creators[0].avatar} alt="" className="h-8 w-8 rounded-lg object-cover border border-accent/20" />
+              <div>
+                <p className="text-[11px] font-semibold text-text-primary">@priyacreates</p>
+                <p className="text-[9px] text-accent">Fashion · 2.1L · 4.8%</p>
+              </div>
+              <div className="ml-auto rounded-full bg-success/10 border border-success/20 px-2 py-0.5 text-[9px] font-semibold text-success flex items-center gap-1">
+                <div className="h-1 w-1 rounded-full bg-success" /> Available
+              </div>
+            </div>
+            {[["Reel rate", "₹12,000"], ["Story rate", "₹4,500"], ["On-time", "100%"]].map(([l, v]) => (
+              <div key={l} className="flex justify-between text-[10px]">
+                <span className="text-text-secondary">{l}</span>
+                <span className="font-semibold text-text-primary">{v}</span>
+              </div>
+            ))}
+          </div>
+        ),
+      },
+      {
+        n: "02", title: "Match with the right brands",
+        desc: "AI scores every opportunity on audience overlap, content fit, and brand reliability. No more random cold DMs.",
+        outcome: "94% match accuracy",
+        preview: (
+          <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3">
+            <p className="text-[9px] text-text-secondary uppercase tracking-wider mb-2">New brief matched for you</p>
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <p className="text-[11px] font-semibold text-text-primary">Bloom Skincare</p>
+                <p className="text-[9px] text-text-secondary">Spring Glow · 3 Reels · ₹54K</p>
+              </div>
+              <span className="rounded-full bg-accent/10 text-accent text-[9px] font-bold px-2 py-0.5">94% match</span>
+            </div>
+            <div className="h-1 rounded-full bg-surface-elevated overflow-hidden mb-2">
+              <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-accent to-[#00B8D9]" />
+            </div>
+            <div className="flex items-center gap-1 text-[9px] text-success"><Shield className="h-2.5 w-2.5" /> Brand reliability: 98%</div>
+          </div>
+        ),
+      },
+      {
+        n: "03", title: "Deliver, get feedback, get paid",
+        desc: "Submit drafts directly in your workspace. Feedback is pinned to the draft. Payment auto-releases the moment a milestone is approved.",
+        outcome: "Avg payment in 24h of approval",
+        preview: (
+          <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
+            <div className="flex justify-between items-center mb-1">
+              <p className="text-[10px] font-semibold text-text-primary">Reel #1</p>
+              <span className="rounded-full bg-success/10 text-success text-[9px] px-2 py-0.5 font-semibold">Approved ✓</span>
+            </div>
+            <div className="rounded-lg bg-surface border border-border/30 p-2 text-[9px] text-text-secondary">
+              &ldquo;Great energy — approved!&rdquo; — Rahul M., Bloom
+            </div>
+            <div className="flex items-center gap-1.5 rounded-lg bg-success/[0.08] border border-success/15 px-2.5 py-2">
+              <IndianRupee className="h-3 w-3 text-success" />
+              <p className="text-[10px] font-semibold text-success">₹12,000 released · 38 seconds ago</p>
+            </div>
+          </div>
+        ),
+      },
     ],
     brand: [
-      { n: "01", title: "Set up your campaign brief", desc: "Define your audience, deliverables, and budget. Brief goes live instantly. Creators who match your audience see it first.", outcome: "First creator response within 4h average" },
-      { n: "02", title: "Find & invite verified creators", desc: "Browse 850+ creators. Filter by niche, engagement rate, location. Every creator shows their on-time delivery rate.", outcome: "92% of brand-matched collabs deliver on time" },
-      { n: "03", title: "Review, approve, measure ROI", desc: "Approve drafts with pinpoint feedback. Release milestone payments. Get analytics — save rates, cost-per-engagement, AI insights.", outcome: "2.4× better engagement vs industry average" },
+      {
+        n: "01", title: "Set up your campaign brief",
+        desc: "Define audience, deliverables, budget, and timeline in one form. The brief goes live instantly — matched creators see it first.",
+        outcome: "First response within 4h average",
+        preview: (
+          <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
+            <p className="text-[9px] text-text-secondary uppercase tracking-wider mb-2">Campaign brief</p>
+            {[["Campaign", "Spring Glow 2024"], ["Deliverable", "3 Reels · 2 Stories"], ["Budget", "₹54,000"], ["Timeline", "14 days"]].map(([l, v]) => (
+              <div key={l} className="flex justify-between text-[10px]">
+                <span className="text-text-secondary">{l}</span>
+                <span className="font-semibold text-text-primary">{v}</span>
+              </div>
+            ))}
+            <div className="flex items-center gap-1 mt-1 text-[9px] text-accent"><Zap className="h-2.5 w-2.5" /> 12 creators matched instantly</div>
+          </div>
+        ),
+      },
+      {
+        n: "02", title: "Find & invite verified creators",
+        desc: "Browse 850+ creators with real engagement rates, on-time delivery scores, and verified reviews from past brands.",
+        outcome: "92% on-time delivery rate",
+        preview: (
+          <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
+            {[creators[0], creators[1]].map((c, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <img src={c.avatar} alt="" className="h-7 w-7 rounded-lg object-cover shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-semibold text-text-primary">{c.name}</p>
+                  <p className="text-[9px] text-text-secondary">{c.engagement} eng · {c.followers}</p>
+                </div>
+                <span className={`text-[9px] font-bold rounded-full px-1.5 py-0.5 ${i === 0 ? "bg-accent/10 text-accent" : "bg-[#00B8D9]/10 text-[#00B8D9]"}`}>{i === 0 ? "94%" : "91%"}</span>
+              </div>
+            ))}
+          </div>
+        ),
+      },
+      {
+        n: "03", title: "Review, approve, measure ROI",
+        desc: "Approve drafts with pinpoint feedback. Payments auto-release per milestone. Analytics show real CPE vs benchmarks.",
+        outcome: "2.4× better engagement",
+        preview: (
+          <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
+            <div className="grid grid-cols-3 gap-1.5">
+              {[["CPE", "₹2.84", "text-success"], ["Save rate", "8.2%", "text-success"], ["On-time", "100%", "text-success"]].map(([l, v, c]) => (
+                <div key={l} className="rounded-lg bg-surface border border-border/20 p-2 text-center">
+                  <p className={`text-[12px] font-bold ${c}`}>{v}</p>
+                  <p className="text-[8px] text-text-secondary">{l}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center gap-1 text-[9px] text-accent"><TrendingUp className="h-2.5 w-2.5" /> 2.4× above category avg</div>
+          </div>
+        ),
+      },
     ],
   };
 
@@ -1402,8 +1574,8 @@ function HowItWorksSection() {
       <div className="max-w-6xl mx-auto px-6 relative">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-10">
           <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">How it works</p>
-          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">A clear path to your first collab</h2>
-          <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">Pick your role. See exactly what happens next.</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">Three steps, zero chaos</h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-md mx-auto">Pick your role. See exactly what happens next — with real UI, not just bullet points.</p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="flex justify-center mb-12">
@@ -1427,13 +1599,19 @@ function HowItWorksSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
-                className="rounded-2xl bg-surface border border-border/50 p-6 hover:border-accent/20 hover:shadow-lg transition-all duration-300 group"
+                className="rounded-2xl bg-surface border border-border/50 p-5 hover:border-accent/20 hover:shadow-lg transition-all duration-300 group flex flex-col"
               >
-                <div className={`h-11 w-11 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 ${activeRole === "creator" ? "bg-accent/[0.08] group-hover:bg-accent/[0.14]" : "bg-[#00B8D9]/[0.08] group-hover:bg-[#00B8D9]/[0.14]"}`}>
+                <div className={`h-11 w-11 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 ${activeRole === "creator" ? "bg-accent/[0.08] group-hover:bg-accent/[0.14]" : "bg-[#00B8D9]/[0.08] group-hover:bg-[#00B8D9]/[0.14]"}`}>
                   <span className={`text-[15px] font-bold font-mono ${activeRole === "creator" ? "text-accent" : "text-[#00B8D9]"}`}>{step.n}</span>
                 </div>
                 <h3 className="text-[15px] font-semibold text-text-primary mb-2 leading-snug">{step.title}</h3>
-                <p className="text-[13px] text-text-secondary leading-relaxed mb-4">{step.desc}</p>
+                <p className="text-[12px] text-text-secondary leading-relaxed mb-4">{step.desc}</p>
+
+                {/* Mini UI preview */}
+                <div className="mb-4 flex-1">
+                  {step.preview}
+                </div>
+
                 <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${activeRole === "creator" ? "bg-accent/[0.07] text-accent" : "bg-[#00B8D9]/[0.07] text-[#00B8D9]"}`}>
                   <Zap className="h-3 w-3" /> {step.outcome}
                 </div>
@@ -2231,10 +2409,13 @@ function FinalCTASection() {
               <Sparkles className="h-3.5 w-3.5" /> 850+ creators and brands active right now
             </div>
             <h2 className="text-[36px] sm:text-[48px] font-bold text-white tracking-tight leading-[1.1] mb-4">
-              Stop managing collabs in DMs.<br />Start using SYNQ.
+              Your next brand deal,<br />fully structured from day one.
             </h2>
-            <p className="text-white/70 text-[16px] mb-8 max-w-sm mx-auto">
-              Your first collab is free. Set up in under 5 minutes. No credit card.
+            <p className="text-white/70 text-[16px] mb-4 max-w-sm mx-auto">
+              Brief locked. Contract signed. Payment protected. You focus on the work.
+            </p>
+            <p className="text-white/45 text-[13px] mb-8 max-w-xs mx-auto">
+              Average time from signup to first deal accepted: <span className="text-white/70 font-semibold">4 hours 12 minutes</span>
             </p>
 
             {/* Trust signals row */}
