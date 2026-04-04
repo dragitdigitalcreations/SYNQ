@@ -81,6 +81,27 @@ function Sk({ className }: { className: string }) {
   return <div className={`rounded-lg bg-surface-elevated/70 animate-pulse ${className}`} />;
 }
 
+/* ─── Lazy-loaded creator photo with shimmer placeholder ─── */
+function CreatorImage({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <div
+        className={`absolute inset-0 bg-gradient-to-br from-surface-elevated to-accent/[0.06] transition-opacity duration-500 ${loaded ? "opacity-0 pointer-events-none" : "opacity-100 animate-pulse"}`}
+      />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+        className={`object-cover transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
+        onLoad={() => setLoaded(true)}
+        loading="lazy"
+      />
+    </div>
+  );
+}
+
 /* ─── Trust signal with hover tooltip ─── */
 function TrustSignal({
   icon: Icon, label, tooltip, className = "",
@@ -106,9 +127,13 @@ function TrustSignal({
 }
 
 /* ─── Creator profiles ─── */
+const UNS = (id: string) =>
+  `https://images.unsplash.com/${id}?w=480&h=480&fit=crop&auto=format&q=80&fm=webp`;
+
 const creators = [
   {
     name: "Priya Sharma", handle: "@priyacreates", niche: "Fashion & Lifestyle",
+    image: UNS("photo-1534528741775-53994a69daeb"),
     location: "Mumbai", followers: "2.1L", engagement: "4.8%", reel: "₹12,000",
     story: "₹4,500", rating: 4.9, collabs: 38, available: true,
     platforms: ["Instagram", "YouTube"],
@@ -116,6 +141,7 @@ const creators = [
   },
   {
     name: "Marcus Chen", handle: "@marcustech", niche: "Tech & Gadgets",
+    image: UNS("photo-1507003211169-0a1dd7228f2d"),
     location: "Bangalore", followers: "3.4L", engagement: "5.2%", reel: "₹18,000",
     story: "₹6,000", rating: 4.8, collabs: 52, available: true,
     platforms: ["YouTube", "Instagram"],
@@ -123,6 +149,7 @@ const creators = [
   },
   {
     name: "Sneha Rao", handle: "@snehafit", niche: "Fitness & Wellness",
+    image: UNS("photo-1571019613454-1cb2f99b2d8b"),
     location: "Hyderabad", followers: "85K", engagement: "7.1%", reel: "₹8,000",
     story: "₹3,000", rating: 5.0, collabs: 24, available: false,
     platforms: ["Instagram"],
@@ -130,10 +157,117 @@ const creators = [
   },
   {
     name: "Arjun Nair", handle: "@arjunwanders", niche: "Travel & Adventure",
+    image: UNS("photo-1539571696357-5a69c17a67c6"),
     location: "Delhi NCR", followers: "1.2L", engagement: "6.3%", reel: "₹10,000",
     story: "₹3,500", rating: 4.7, collabs: 31, available: true,
     platforms: ["Instagram", "YouTube"],
     tags: ["Travel", "Photography", "Adventure"],
+  },
+  {
+    name: "Riya Kapoor", handle: "@riyabeauty", niche: "Beauty & Skincare",
+    image: UNS("photo-1531746020798-e6953c6e8e04"),
+    location: "Pune", followers: "1.8L", engagement: "5.9%", reel: "₹14,000",
+    story: "₹5,000", rating: 4.8, collabs: 44, available: true,
+    platforms: ["Instagram", "YouTube"],
+    tags: ["Beauty", "Skincare", "Makeup"],
+  },
+  {
+    name: "Devraj Menon", handle: "@devfoods", niche: "Food & Cooking",
+    image: UNS("photo-1552374196-c4e7ffc6e126"),
+    location: "Chennai", followers: "97K", engagement: "8.4%", reel: "₹9,000",
+    story: "₹3,200", rating: 4.9, collabs: 19, available: true,
+    platforms: ["Instagram", "YouTube"],
+    tags: ["Food", "Cooking", "Recipes"],
+  },
+];
+
+/* ─── Top creators this week ─── */
+const topCreators = [
+  {
+    rank: 1, name: "Priya Sharma", handle: "@priyacreates", niche: "Fashion & Lifestyle",
+    image: UNS("photo-1534528741775-53994a69daeb"),
+    followers: "2.1L", engagement: "4.8%", rateRange: "₹12K – ₹45K",
+    rating: 4.9, collabs: 38, available: true, trending: true,
+    badge: "Top Fashion", badgeC: "bg-pink-500/10 text-pink-500 border-pink-500/20",
+  },
+  {
+    rank: 2, name: "Sneha Rao", handle: "@snehafit", niche: "Fitness & Wellness",
+    image: UNS("photo-1571019613454-1cb2f99b2d8b"),
+    followers: "85K", engagement: "7.1%", rateRange: "₹8K – ₹22K",
+    rating: 5.0, collabs: 24, available: false, trending: true,
+    badge: "Rising Star", badgeC: "bg-success/10 text-success border-success/20",
+  },
+  {
+    rank: 3, name: "Marcus Chen", handle: "@marcustech", niche: "Tech & Gadgets",
+    image: UNS("photo-1507003211169-0a1dd7228f2d"),
+    followers: "3.4L", engagement: "5.2%", rateRange: "₹18K – ₹72K",
+    rating: 4.8, collabs: 52, available: true, trending: false,
+    badge: "Top Tech", badgeC: "bg-[#00B8D9]/10 text-[#00B8D9] border-[#00B8D9]/20",
+  },
+  {
+    rank: 4, name: "Riya Kapoor", handle: "@riyabeauty", niche: "Beauty & Skincare",
+    image: UNS("photo-1531746020798-e6953c6e8e04"),
+    followers: "1.8L", engagement: "5.9%", rateRange: "₹14K – ₹50K",
+    rating: 4.8, collabs: 44, available: true, trending: true,
+    badge: "Trending", badgeC: "bg-accent/10 text-accent border-accent/20",
+  },
+  {
+    rank: 5, name: "Arjun Nair", handle: "@arjunwanders", niche: "Travel & Adventure",
+    image: UNS("photo-1539571696357-5a69c17a67c6"),
+    followers: "1.2L", engagement: "6.3%", rateRange: "₹10K – ₹38K",
+    rating: 4.7, collabs: 31, available: true, trending: false,
+    badge: "Top Travel", badgeC: "bg-orange-500/10 text-orange-500 border-orange-500/20",
+  },
+  {
+    rank: 6, name: "Devraj Menon", handle: "@devfoods", niche: "Food & Cooking",
+    image: UNS("photo-1552374196-c4e7ffc6e126"),
+    followers: "97K", engagement: "8.4%", rateRange: "₹9K – ₹28K",
+    rating: 4.9, collabs: 19, available: true, trending: true,
+    badge: "High Engage", badgeC: "bg-success/10 text-success border-success/20",
+  },
+];
+
+/* ─── Featured campaigns ─── */
+const featuredCampaigns = [
+  {
+    brand: "Bloom Skincare", brandInitials: "BS", brandColor: "from-pink-500/20 to-rose-400/20",
+    title: "Spring Glow — Skincare Routine Series",
+    budget: "₹15,000 – ₹30,000 per creator",
+    creatorsNeeded: 4, spotsLeft: 2,
+    formats: ["Reel", "Story"], niche: "Beauty", platform: "Instagram",
+    deadline: "Apr 20, 2025", matchScore: 92, urgent: true,
+    desc: "Authentic before/after content for our Vitamin C serum launch.",
+    tags: ["Beauty", "Skincare", "Lifestyle"],
+  },
+  {
+    brand: "TrailCo Outdoors", brandInitials: "TC", brandColor: "from-green-500/20 to-emerald-400/20",
+    title: "Summer Adventure — Gear Review Series",
+    budget: "₹18,000 – ₹45,000 per creator",
+    creatorsNeeded: 3, spotsLeft: 3,
+    formats: ["Reel", "Long-form"], niche: "Travel", platform: "YouTube",
+    deadline: "May 5, 2025", matchScore: 88, urgent: false,
+    desc: "Show our gear in real outdoor scenarios. Authenticity over production value.",
+    tags: ["Travel", "Adventure", "Outdoors"],
+  },
+  {
+    brand: "NutriPro India", brandInitials: "NP", brandColor: "from-[#00B8D9]/20 to-teal-400/20",
+    title: "Wellness Series — Protein & Recovery",
+    budget: "₹10,000 – ₹22,000 per creator",
+    creatorsNeeded: 6, spotsLeft: 4,
+    formats: ["Reel", "Story", "Post"], niche: "Fitness", platform: "Instagram",
+    deadline: "Apr 28, 2025", matchScore: 85, urgent: false,
+    desc: "Workout & nutrition integration content. We want real gym-goers, not models.",
+    tags: ["Fitness", "Wellness", "Nutrition"],
+  },
+  {
+    brand: "EcoWear India", brandInitials: "EW", brandColor: "from-lime-500/20 to-green-400/20",
+    title: "Conscious Fashion — Sustainable Capsule",
+    budget: "₹20,000 – ₹55,000 per creator",
+    creatorsNeeded: 5, spotsLeft: 5,
+    formats: ["Reel", "Try-on"], niche: "Fashion", platform: "Instagram",
+    deadline: "May 12, 2025", matchScore: 79, urgent: false,
+    desc: "Style our sustainable collection. We value ethical creators who walk the talk.",
+    tags: ["Fashion", "Sustainability", "Lifestyle"],
   },
 ];
 
@@ -2050,9 +2184,10 @@ function CaseStudySection() {
 function CreatorSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const niches = ["All", "Fashion", "Tech", "Fitness", "Travel"];
+  const niches = ["All", "Fashion", "Tech", "Fitness", "Travel", "Beauty", "Food"];
   const [active, setActive] = useState("All");
   const filtered = active === "All" ? creators : creators.filter(c => c.tags.includes(active));
+  const display = filtered.length > 0 ? filtered : creators;
 
   return (
     <section ref={ref} id="creators" className="py-24 bg-surface-elevated/20">
@@ -2076,34 +2211,43 @@ function CreatorSection() {
           {niches.map(n => <Pill key={n} label={n} active={active === n} onClick={() => setActive(n)} />)}
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence>
-            {(filtered.length > 0 ? filtered : creators).map((c, i) => (
+            {display.map((c, i) => (
               <motion.div
                 key={c.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
+                transition={{ delay: i * 0.07, duration: 0.4 }}
                 className="rounded-2xl bg-surface border border-border/50 overflow-hidden hover:border-accent/30 hover:shadow-xl transition-all duration-300 group cursor-pointer"
               >
-                <div className="relative h-28 overflow-hidden">
-                  <PortfolioTile niche={c.niche} className="w-full h-full !rounded-none group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface/80 to-transparent" />
-                  <div className={`absolute top-2.5 right-2.5 flex items-center gap-1 rounded-full px-2 py-0.5 ${c.available ? "bg-success/15 border border-success/25" : "bg-surface-elevated/80 border border-border/40"}`}>
+                {/* Photo header — full bleed real image */}
+                <div className="relative h-40 overflow-hidden">
+                  <CreatorImage src={c.image} alt={c.name} className="w-full h-full group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent" />
+                  {/* Availability badge */}
+                  <div className={`absolute top-2.5 right-2.5 flex items-center gap-1 rounded-full px-2 py-0.5 backdrop-blur-sm ${c.available ? "bg-success/20 border border-success/30" : "bg-black/40 border border-white/10"}`}>
                     {c.available && <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />}
-                    <span className={`text-[9px] font-semibold ${c.available ? "text-success" : "text-text-secondary"}`}>{c.available ? "Available" : "Busy"}</span>
+                    <span className={`text-[9px] font-semibold ${c.available ? "text-success" : "text-white/70"}`}>{c.available ? "Available" : "Busy"}</span>
                   </div>
                 </div>
+
                 <div className="p-4">
-                  <div className="flex items-center gap-3 -mt-9 mb-3">
-                    <CreatorAvatar name={c.name} size="lg" className="border-2 border-surface shadow-md" />
-                    <div className="pt-6">
-                      <p className="text-[13px] font-semibold text-text-primary">{c.name}</p>
+                  {/* Avatar + name — avatar overlaps the photo */}
+                  <div className="flex items-end gap-3 -mt-10 mb-3">
+                    <div className="relative h-14 w-14 rounded-xl overflow-hidden border-2 border-surface shadow-lg shrink-0">
+                      <CreatorImage src={c.image} alt={c.name} className="w-full h-full" />
+                    </div>
+                    <div className="pb-0.5">
+                      <p className="text-[13px] font-bold text-text-primary leading-tight">{c.name}</p>
                       <p className="text-[10px] text-text-secondary">{c.handle}</p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-text-secondary mb-2">{c.niche} · {c.location}</p>
+
+                  <p className="text-[11px] text-text-secondary mb-3">{c.niche} · {c.location}</p>
+
+                  {/* Key metrics — decision-making data */}
                   <div className="grid grid-cols-2 gap-2 mb-3">
                     <div className="rounded-lg bg-surface-elevated/60 p-2 text-center group-hover:bg-surface-elevated/80 transition-colors">
                       <p className="text-[13px] font-bold text-text-primary">{c.followers}</p>
@@ -2114,18 +2258,23 @@ function CreatorSection() {
                       <p className="text-[9px] text-text-secondary">engagement</p>
                     </div>
                   </div>
+
+                  {/* Price range */}
                   <div className="flex items-center gap-2 text-[11px] text-text-secondary mb-3">
                     <IndianRupee className="h-3 w-3 shrink-0 text-accent/60" />
                     <span>Reel <span className="font-semibold text-text-primary">{c.reel}</span></span>
                     <span className="text-border">·</span>
                     <span>Story <span className="font-semibold text-text-primary">{c.story}</span></span>
                   </div>
+
+                  {/* Rating */}
                   <div className="flex items-center gap-2 text-[11px] text-text-secondary mb-4">
                     <Star className="h-3 w-3 fill-warning text-warning" />
                     <span className="font-medium text-text-primary">{c.rating}</span>
                     <span className="text-border">·</span>
                     <span>{c.collabs} collabs · on-time</span>
                   </div>
+
                   <Link href="/register?role=BUSINESS">
                     <button className="w-full rounded-xl bg-accent/[0.07] border border-accent/[0.12] hover:bg-accent hover:text-white hover:border-accent hover:shadow-md text-accent text-[12px] font-semibold py-2.5 transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.98]">
                       <Send className="h-3.5 w-3.5" /> Send Brief
@@ -2597,6 +2746,280 @@ function FinalCTASection() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   TOP CREATORS THIS WEEK
+═══════════════════════════════════════════════════════ */
+function TopCreatorsSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section ref={ref} className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.02] to-transparent pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+              <p className="text-[12px] font-semibold text-success uppercase tracking-widest">Live on SYNQ</p>
+            </div>
+            <h2 className="text-[36px] sm:text-[42px] font-bold tracking-tight text-text-primary">
+              Top creators this week
+            </h2>
+            <p className="mt-3 text-[15px] text-text-secondary max-w-lg">
+              Ranked by deal completion rate, engagement, and brand satisfaction scores. Updated every Monday.
+            </p>
+          </div>
+          <Link href="/register?role=BUSINESS">
+            <Button variant="outline" className="gap-2 shrink-0 hover:border-accent/30 hover:text-accent transition-all duration-200">
+              View all creators <ChevronRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </motion.div>
+
+        {/* Creator leaderboard grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {topCreators.map((c, i) => (
+            <motion.div
+              key={c.handle}
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.07, duration: 0.45 }}
+              className="group rounded-2xl bg-surface border border-border/50 overflow-hidden hover:border-accent/25 hover:shadow-xl transition-all duration-300 cursor-pointer"
+            >
+              {/* Full-bleed photo */}
+              <div className="relative h-44 overflow-hidden">
+                <CreatorImage src={c.image} alt={c.name} className="w-full h-full group-hover:scale-105 transition-transform duration-600" />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                {/* Rank badge */}
+                <div className="absolute top-3 left-3 h-7 w-7 rounded-xl flex items-center justify-center text-[11px] font-bold shadow-lg"
+                  style={{ background: i === 0 ? "linear-gradient(135deg,#f9ca24,#f0932b)" : i === 1 ? "linear-gradient(135deg,#dfe6e9,#b2bec3)" : i === 2 ? "linear-gradient(135deg,#cd853f,#a0522d)" : "var(--color-surface-elevated)", color: i < 3 ? "#000" : "var(--color-text-secondary)" }}>
+                  #{c.rank}
+                </div>
+
+                {/* Trending badge */}
+                {c.trending && (
+                  <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 px-2 py-0.5">
+                    <TrendingUp className="h-2.5 w-2.5 text-success" />
+                    <span className="text-[9px] font-semibold text-white/90">Trending</span>
+                  </div>
+                )}
+
+                {/* Name over photo (bottom) */}
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <p className="text-[14px] font-bold text-white leading-tight">{c.name}</p>
+                  <p className="text-[11px] text-white/65">{c.handle}</p>
+                </div>
+              </div>
+
+              <div className="p-4">
+                {/* Niche badge */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold ${c.badgeC}`}>
+                    {c.badge}
+                  </span>
+                  <div className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-semibold ${c.available ? "bg-success/10 text-success border border-success/20" : "bg-surface-elevated text-text-secondary border border-border/40"}`}>
+                    {c.available && <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />}
+                    {c.available ? "Available now" : "Busy"}
+                  </div>
+                </div>
+
+                {/* Key metrics — what brands need to decide */}
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div className="rounded-lg bg-surface-elevated/50 p-2 text-center">
+                    <p className="text-[12px] font-bold text-text-primary">{c.followers}</p>
+                    <p className="text-[9px] text-text-secondary">followers</p>
+                  </div>
+                  <div className="rounded-lg bg-accent/[0.06] p-2 text-center">
+                    <p className="text-[12px] font-bold text-accent">{c.engagement}</p>
+                    <p className="text-[9px] text-text-secondary">engage</p>
+                  </div>
+                  <div className="rounded-lg bg-surface-elevated/50 p-2 text-center">
+                    <p className="text-[12px] font-bold text-text-primary">{c.rating}</p>
+                    <p className="text-[9px] text-text-secondary">rating</p>
+                  </div>
+                </div>
+
+                {/* Price range */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1.5 text-[11px] text-text-secondary">
+                    <IndianRupee className="h-3 w-3 text-accent/60" />
+                    <span className="font-semibold text-text-primary">{c.rateRange}</span>
+                    <span className="text-text-secondary/50">/ deal</span>
+                  </div>
+                  <span className="text-[10px] text-text-secondary">{c.collabs} collabs</span>
+                </div>
+
+                <Link href="/register?role=BUSINESS">
+                  <button className="w-full rounded-xl bg-accent/[0.07] border border-accent/[0.12] hover:bg-accent hover:text-white hover:border-accent hover:shadow-md text-accent text-[12px] font-semibold py-2.5 transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.98]">
+                    <Send className="h-3.5 w-3.5" /> Send Brief
+                  </button>
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bottom trust strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.6 }}
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-10 pt-10 border-t border-border/30"
+        >
+          {[
+            { icon: CheckCircle2, label: "All creators SYNQ-verified", c: "text-success" },
+            { icon: Star, label: "Min. 4.5 rating to appear", c: "text-warning" },
+            { icon: Shield, label: "Escrow on every deal", c: "text-accent" },
+            { icon: TrendingUp, label: "Metrics updated weekly", c: "text-[#00B8D9]" },
+          ].map(({ icon: Icon, label, c }) => (
+            <div key={label} className="flex items-center gap-2 text-[12px] text-text-secondary">
+              <Icon className={`h-3.5 w-3.5 ${c}`} />
+              <span>{label}</span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   FEATURED CAMPAIGNS — Open deals for creators to apply
+═══════════════════════════════════════════════════════ */
+function FeaturedCampaignsSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section ref={ref} className="py-24 bg-surface-elevated/15 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.025] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="h-3.5 w-3.5 text-accent" />
+              <p className="text-[12px] font-semibold text-accent uppercase tracking-widest">Open Campaigns</p>
+            </div>
+            <h2 className="text-[36px] sm:text-[42px] font-bold tracking-tight text-text-primary">
+              Featured campaigns
+            </h2>
+            <p className="mt-3 text-[15px] text-text-secondary max-w-lg">
+              Brands looking for creators right now. Apply via SYNQ — brief, contract, and escrow all set up in minutes.
+            </p>
+          </div>
+          <Link href="/register?role=CREATOR">
+            <Button className="glow-accent gap-2 shrink-0 hover:scale-[1.02] transition-transform">
+              Apply as Creator <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-5">
+          {featuredCampaigns.map((camp, i) => (
+            <motion.div
+              key={camp.brand}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.1, duration: 0.45 }}
+              className={`rounded-2xl bg-surface border overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer ${camp.urgent ? "border-warning/25 hover:border-warning/40" : "border-border/50 hover:border-accent/25"}`}
+            >
+              {/* Campaign header */}
+              <div className={`bg-gradient-to-r ${camp.brandColor} px-5 py-4 border-b border-border/20`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    {/* Brand initials avatar */}
+                    <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${camp.brandColor} flex items-center justify-center text-[12px] font-bold text-text-primary border border-border/30 shrink-0`}>
+                      {camp.brandInitials}
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-text-secondary">{camp.brand}</p>
+                      <p className="text-[14px] font-bold text-text-primary leading-snug">{camp.title}</p>
+                    </div>
+                  </div>
+                  {camp.urgent && (
+                    <div className="flex items-center gap-1 rounded-full bg-warning/10 border border-warning/20 px-2 py-0.5 shrink-0">
+                      <div className="h-1.5 w-1.5 rounded-full bg-warning animate-pulse" />
+                      <span className="text-[9px] font-semibold text-warning">{camp.spotsLeft} spots left</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-5">
+                {/* Description */}
+                <p className="text-[12px] text-text-secondary mb-4 leading-relaxed">{camp.desc}</p>
+
+                {/* Campaign stats */}
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="rounded-xl bg-surface-elevated/50 p-3">
+                    <p className="text-[9px] text-text-secondary mb-1 uppercase tracking-wider">Budget</p>
+                    <p className="text-[13px] font-bold text-text-primary">{camp.budget}</p>
+                  </div>
+                  <div className="rounded-xl bg-surface-elevated/50 p-3">
+                    <p className="text-[9px] text-text-secondary mb-1 uppercase tracking-wider">Deadline</p>
+                    <p className="text-[13px] font-bold text-text-primary">{camp.deadline}</p>
+                  </div>
+                </div>
+
+                {/* Tags row */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  {camp.formats.map(f => (
+                    <span key={f} className="rounded-full bg-accent/[0.07] border border-accent/[0.12] text-accent text-[10px] font-medium px-2 py-0.5">{f}</span>
+                  ))}
+                  {camp.tags.map(t => (
+                    <span key={t} className="rounded-full bg-surface-elevated border border-border/40 text-text-secondary text-[10px] px-2 py-0.5">{t}</span>
+                  ))}
+                </div>
+
+                {/* Match score + CTA */}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 flex-1 w-24 rounded-full bg-surface-elevated overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-accent to-[#00B8D9]"
+                        style={{ width: `${camp.matchScore}%` }}
+                      />
+                    </div>
+                    <span className="text-[11px] font-semibold text-accent">{camp.matchScore}% match</span>
+                  </div>
+                  <Link href="/register?role=CREATOR">
+                    <button className="rounded-xl bg-accent text-white text-[12px] font-semibold px-4 py-2 hover:bg-accent/90 hover:shadow-md active:scale-[0.97] transition-all duration-200 flex items-center gap-1.5">
+                      Apply Now <ArrowRight className="h-3 w-3" />
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bottom CTA banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5 }}
+          className="mt-8 rounded-2xl border border-accent/15 bg-accent/[0.03] p-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+        >
+          <div>
+            <p className="text-[14px] font-semibold text-text-primary mb-1">Are you a brand with a live campaign?</p>
+            <p className="text-[13px] text-text-secondary">Post it on SYNQ and get matched with verified creators in under 4 hours.</p>
+          </div>
+          <Link href="/register?role=BUSINESS">
+            <Button variant="outline" className="gap-2 shrink-0 hover:border-accent/30 hover:text-accent transition-all whitespace-nowrap">
+              Post a Campaign <Briefcase className="h-3.5 w-3.5" />
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════════════════ */
 function Footer() {
@@ -2650,6 +3073,8 @@ export default function LandingPage() {
       <SYNQTimeline />
       <CaseStudySection />
       <CreatorSection />
+      <TopCreatorsSection />
+      <FeaturedCampaignsSection />
       <DualAudienceSection />
       <SocialProofSection />
       <OnboardingPreviewSection />
