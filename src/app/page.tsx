@@ -38,9 +38,43 @@ const fu = (delay = 0) => ({
   transition: { duration: 0.5, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
 });
 
-/* ─── Unsplash helper ─── */
-const img = (id: string, w = 300, h = 300) =>
-  `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
+/* ─── CSS-only avatar initials ─── */
+function CreatorAvatar({
+  name, className = "", size = "md",
+}: { name: string; className?: string; size?: "sm" | "md" | "lg" }) {
+  const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+  const palette = [
+    "from-[#6C5CE7] to-[#a29bfe]",
+    "from-[#00B8D9] to-[#74b9ff]",
+    "from-[#00b894] to-[#55efc4]",
+    "from-[#e17055] to-[#fab1a0]",
+    "from-[#fd79a8] to-[#fdcb6e]",
+    "from-[#6c5ce7] to-[#00cec9]",
+  ];
+  const gradient = palette[initials.charCodeAt(0) % palette.length];
+  const sz = size === "sm" ? "h-7 w-7 text-[10px]" : size === "lg" ? "h-12 w-12 text-[16px]" : "h-9 w-9 text-[12px]";
+  return (
+    <div className={`rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-white shrink-0 ${sz} ${className}`}>
+      {initials}
+    </div>
+  );
+}
+
+/* ─── CSS-only portfolio tile ─── */
+function PortfolioTile({ niche, className = "" }: { niche: string; className?: string }) {
+  const configs: Record<string, { gradient: string; label: string }> = {
+    "Fashion & Lifestyle": { gradient: "from-pink-500/20 via-purple-500/10 to-accent/20", label: "Fashion" },
+    "Tech & Gadgets": { gradient: "from-[#00B8D9]/20 via-accent/10 to-blue-500/20", label: "Tech" },
+    "Fitness & Wellness": { gradient: "from-green-500/20 via-emerald-500/10 to-teal-500/20", label: "Fitness" },
+    "Travel & Adventure": { gradient: "from-orange-500/20 via-amber-500/10 to-yellow-500/20", label: "Travel" },
+  };
+  const c = configs[niche] ?? { gradient: "from-accent/20 to-[#00B8D9]/20", label: niche };
+  return (
+    <div className={`bg-gradient-to-br ${c.gradient} flex items-end p-3 rounded-xl border border-border/20 ${className}`}>
+      <span className="text-[10px] font-medium text-text-secondary">{c.label}</span>
+    </div>
+  );
+}
 
 /* ─── Skeleton loading block ─── */
 function Sk({ className }: { className: string }) {
@@ -54,8 +88,6 @@ const creators = [
     location: "Mumbai", followers: "2.1L", engagement: "4.8%", reel: "₹12,000",
     story: "₹4,500", rating: 4.9, collabs: 38, available: true,
     platforms: ["Instagram", "YouTube"],
-    avatar: img("1494790108377-be9c29b29330", 120, 120),
-    portfolio: img("1611162617474-5b21e879e113", 400, 300),
     tags: ["Fashion", "Beauty", "Lifestyle"],
   },
   {
@@ -63,8 +95,6 @@ const creators = [
     location: "Bangalore", followers: "3.4L", engagement: "5.2%", reel: "₹18,000",
     story: "₹6,000", rating: 4.8, collabs: 52, available: true,
     platforms: ["YouTube", "Instagram"],
-    avatar: img("1507003211169-0a1dd7228f2d", 120, 120),
-    portfolio: img("1550439062-609e1531270e", 400, 300),
     tags: ["Tech", "Unboxing", "Reviews"],
   },
   {
@@ -72,8 +102,6 @@ const creators = [
     location: "Hyderabad", followers: "85K", engagement: "7.1%", reel: "₹8,000",
     story: "₹3,000", rating: 5.0, collabs: 24, available: false,
     platforms: ["Instagram"],
-    avatar: img("1534528741775-53994a69daeb", 120, 120),
-    portfolio: img("1526170375885-4d8ecf77b99f", 400, 300),
     tags: ["Fitness", "Wellness", "Nutrition"],
   },
   {
@@ -81,8 +109,6 @@ const creators = [
     location: "Delhi NCR", followers: "1.2L", engagement: "6.3%", reel: "₹10,000",
     story: "₹3,500", rating: 4.7, collabs: 31, available: true,
     platforms: ["Instagram", "YouTube"],
-    avatar: img("1539571696357-5a69c17a67c6", 120, 120),
-    portfolio: img("1469474968028-56623f02e42e", 400, 300),
     tags: ["Travel", "Photography", "Adventure"],
   },
 ];
@@ -233,12 +259,12 @@ function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Workspace preview */}
+          {/* Workspace preview — hidden on small screens to keep hero clean */}
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.65 }}
-            className="relative"
+            className="relative hidden lg:block"
           >
             <div className="rounded-2xl bg-surface border border-border/50 shadow-2xl overflow-hidden">
               <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/40 bg-surface-elevated/40">
@@ -261,8 +287,10 @@ function HeroSection() {
                   </div>
                 </div>
                 <div className="flex -space-x-1.5">
-                  {[creators[0].avatar, creators[1].avatar].map((src, i) => (
-                    <img key={i} src={src} alt="" className="h-5 w-5 rounded-full border-2 border-surface object-cover" />
+                  {["Priya Sharma", "Marcus Chen"].map((name, i) => (
+                    <div key={i} className="h-5 w-5 rounded-full border-2 border-surface overflow-hidden">
+                      <CreatorAvatar name={name} size="sm" className="!rounded-full h-full w-full" />
+                    </div>
                   ))}
                   <div className="h-5 w-5 rounded-full bg-accent/20 border-2 border-surface flex items-center justify-center text-[7px] font-bold text-accent">+2</div>
                 </div>
@@ -399,7 +427,7 @@ function HeroSection() {
               className="absolute -bottom-4 -left-4 rounded-xl bg-surface border border-border/50 shadow-xl px-3.5 py-2.5 hidden sm:block"
             >
               <div className="flex items-center gap-2.5">
-                <img src={creators[1].avatar} alt="" className="h-8 w-8 rounded-lg object-cover shrink-0" />
+                <CreatorAvatar name="Marcus Chen" size="md" />
                 <div>
                   <p className="text-[11px] font-semibold text-text-primary">New collab invite</p>
                   <p className="text-[10px] text-text-secondary">TrailCo × Marcus Chen</p>
@@ -593,9 +621,9 @@ function LiveDemoSection() {
     { label: "Avg delivery time", value: "4.2 days", badge: "vs 9.3 industry", up: true },
   ];
   const brandCampaigns = [
-    { creator: "Priya Sharma", handle: "@priyacreates", campaign: "Spring Glow", status: "Reel #2 waiting review", badge: "Review now", badgeC: "bg-warning/10 text-warning border border-warning/20", budget: "₹54,000", match: "94%", urgent: true, avatar: creators[0].avatar },
-    { creator: "Marcus Chen", handle: "@marcustech", campaign: "Tech Week Series", status: "Contract pending sign", badge: "Pending", badgeC: "bg-accent/10 text-accent border border-accent/20", budget: "₹72,000", match: "91%", urgent: false, avatar: creators[1].avatar },
-    { creator: "Arjun Nair", handle: "@arjunwanders", campaign: "Summer Launch", status: "Brief accepted · Active", badge: "On track", badgeC: "bg-success/10 text-success border border-success/20", budget: "₹38,000", match: "88%", urgent: false, avatar: creators[3].avatar },
+    { creator: "Priya Sharma", handle: "@priyacreates", campaign: "Spring Glow", status: "Reel #2 waiting review", badge: "Review now", badgeC: "bg-warning/10 text-warning border border-warning/20", budget: "₹54,000", match: "94%", urgent: true },
+    { creator: "Marcus Chen", handle: "@marcustech", campaign: "Tech Week Series", status: "Contract pending sign", badge: "Pending", badgeC: "bg-accent/10 text-accent border border-accent/20", budget: "₹72,000", match: "91%", urgent: false },
+    { creator: "Arjun Nair", handle: "@arjunwanders", campaign: "Summer Launch", status: "Brief accepted · Active", badge: "On track", badgeC: "bg-success/10 text-success border border-success/20", budget: "₹38,000", match: "88%", urgent: false },
   ];
   const brandActivity = [
     { icon: Camera, text: "Reel #2 submitted", detail: "Priya Sharma · Spring Glow", time: "Just now", c: "text-accent bg-accent/[0.08]" },
@@ -685,13 +713,13 @@ function LiveDemoSection() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <img src={role === "creator" ? creators[0].avatar : creators[1].avatar} alt="" className="h-6 w-6 rounded-full object-cover border border-border/50" />
+              <CreatorAvatar name={role === "creator" ? "Priya Sharma" : "Bloom Skincare"} size="sm" className="!rounded-full border border-border/50" />
               <span className="text-[11px] text-text-secondary hidden sm:block">{role === "creator" ? "Priya Sharma" : "Bloom Skincare"}</span>
             </div>
           </div>
 
           {/* App body */}
-          <div className="flex min-h-[520px]">
+          <div className="flex min-h-[380px] sm:min-h-[520px]">
             {/* Sidebar nav */}
             <div className="w-44 border-r border-border/40 bg-surface-elevated/20 p-3 hidden sm:block shrink-0">
               <div className="space-y-0.5">
@@ -811,7 +839,7 @@ function LiveDemoSection() {
                             transition={{ delay: 0.1 + i * 0.07 }}
                             className={`rounded-xl border p-3.5 flex items-center gap-3 hover:shadow-sm transition-all duration-200 ${c.urgent ? "border-warning/20 bg-warning/[0.02]" : "border-border/30 bg-surface"}`}
                           >
-                            <img src={c.avatar} alt="" className="h-8 w-8 rounded-full object-cover shrink-0" />
+                            <CreatorAvatar name={c.creator} size="sm" className="!rounded-full" />
                             <div className="flex-1 min-w-0">
                               <p className="text-[12px] font-semibold text-text-primary">{c.creator} <span className="font-normal text-text-secondary">{c.handle}</span></p>
                               <p className="text-[10px] text-text-secondary">{c.status}</p>
@@ -850,7 +878,7 @@ function LiveDemoSection() {
                             <div className="flex items-start justify-between gap-3">
                               <div className="flex items-start gap-3">
                                 {role === "brand"
-                                  ? <img src={b.avatar} alt="" className="h-9 w-9 rounded-full object-cover shrink-0 mt-0.5" />
+                                  ? <CreatorAvatar name={b.creator} size="md" className="!rounded-full mt-0.5" />
                                   : <div className="h-9 w-9 rounded-lg bg-accent/[0.08] flex items-center justify-center text-[12px] font-bold text-accent shrink-0 mt-0.5">{d.brand?.charAt(0)}</div>
                                 }
                                 <div>
@@ -1185,7 +1213,7 @@ function RealUseCaseSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-[320px_1fr] gap-10 items-start">
+        <div className="grid lg:grid-cols-[300px_1fr] gap-8 lg:gap-10 items-start">
 
           {/* Left — creator card + before-SYNQ callout */}
           <motion.div
@@ -1196,7 +1224,7 @@ function RealUseCaseSection() {
           >
             <div className="rounded-2xl border border-border/50 bg-surface p-5">
               <div className="flex items-center gap-3 mb-4">
-                <img src={creators[0].avatar} alt="" className="h-12 w-12 rounded-xl object-cover border-2 border-accent/20" />
+                <CreatorAvatar name="Priya Sharma" size="lg" className="border-2 border-accent/20" />
                 <div>
                   <p className="text-[14px] font-semibold text-text-primary">Priya Sharma</p>
                   <p className="text-[11px] text-text-secondary">@priyacreates · Fashion & Lifestyle</p>
@@ -1441,7 +1469,7 @@ function HowItWorksSection() {
         preview: (
           <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
             <div className="flex items-center gap-2.5 mb-3">
-              <img src={creators[0].avatar} alt="" className="h-8 w-8 rounded-lg object-cover border border-accent/20" />
+              <CreatorAvatar name="Priya Sharma" size="md" className="border border-accent/20" />
               <div>
                 <p className="text-[11px] font-semibold text-text-primary">@priyacreates</p>
                 <p className="text-[9px] text-accent">Fashion · 2.1L · 4.8%</p>
@@ -1527,7 +1555,7 @@ function HowItWorksSection() {
           <div className="rounded-xl bg-surface-elevated/50 border border-border/30 p-3 space-y-2">
             {[creators[0], creators[1]].map((c, i) => (
               <div key={i} className="flex items-center gap-2">
-                <img src={c.avatar} alt="" className="h-7 w-7 rounded-lg object-cover shrink-0" />
+                <CreatorAvatar name={c.name} size="sm" />
                 <div className="flex-1 min-w-0">
                   <p className="text-[10px] font-semibold text-text-primary">{c.name}</p>
                   <p className="text-[9px] text-text-secondary">{c.engagement} eng · {c.followers}</p>
@@ -1950,7 +1978,7 @@ function CreatorSection() {
                 className="rounded-2xl bg-surface border border-border/50 overflow-hidden hover:border-accent/30 hover:shadow-xl transition-all duration-300 group cursor-pointer"
               >
                 <div className="relative h-28 overflow-hidden">
-                  <img src={c.portfolio} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <PortfolioTile niche={c.niche} className="w-full h-full !rounded-none group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-surface/80 to-transparent" />
                   <div className={`absolute top-2.5 right-2.5 flex items-center gap-1 rounded-full px-2 py-0.5 ${c.available ? "bg-success/15 border border-success/25" : "bg-surface-elevated/80 border border-border/40"}`}>
                     {c.available && <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />}
@@ -1959,7 +1987,7 @@ function CreatorSection() {
                 </div>
                 <div className="p-4">
                   <div className="flex items-center gap-3 -mt-9 mb-3">
-                    <img src={c.avatar} alt={c.name} className="h-12 w-12 rounded-xl border-2 border-surface object-cover shadow-md" />
+                    <CreatorAvatar name={c.name} size="lg" className="border-2 border-surface shadow-md" />
                     <div className="pt-6">
                       <p className="text-[13px] font-semibold text-text-primary">{c.name}</p>
                       <p className="text-[10px] text-text-secondary">{c.handle}</p>
@@ -2091,17 +2119,17 @@ const testimonials = [
   {
     quote: "Before SYNQ, I spent 2 hours chasing a brand for a revision buried in their DMs. Now my entire collab — scope, feedback, payment — is in one place. Got paid within 24h of approval.",
     author: "Priya Sharma", role: "Fashion Creator · 2.1L followers · Mumbai",
-    outcome: "₹54,000 earned — zero invoice chasing", avatar: creators[0].avatar,
+    outcome: "₹54,000 earned — zero invoice chasing",
   },
   {
     quote: "We ran 12 influencer campaigns last quarter. SYNQ's analytics showed Reels had 2.4× better save rates than Stories. We doubled down and hit our GMV target 3 weeks early.",
     author: "Rahul Mehta", role: "Brand Manager · Bloom Skincare",
-    outcome: "3× faster campaign delivery", avatar: creators[1].avatar,
+    outcome: "3× faster campaign delivery",
   },
   {
     quote: "A brand tried to change scope mid-project. I pointed to the signed contract on SYNQ. Dispute settled in 48 hours. I got paid in full. Never going back to DM-based deals.",
     author: "Sneha Rao", role: "Fitness Creator · Hyderabad",
-    outcome: "Dispute resolved in 48h, full payment received", avatar: creators[2].avatar,
+    outcome: "Dispute resolved in 48h, full payment received",
   },
 ];
 
@@ -2124,7 +2152,7 @@ function SocialProofSection() {
                 <TrendingUp className="h-3 w-3" /> {t.outcome}
               </div>
               <div className="flex items-center gap-3 pt-3 border-t border-border/40">
-                <img src={t.avatar} alt={t.author} className="h-9 w-9 rounded-full object-cover" />
+                <CreatorAvatar name={t.author} size="md" className="!rounded-full" />
                 <div>
                   <p className="text-[12px] font-semibold text-text-primary">{t.author}</p>
                   <p className="text-[11px] text-text-secondary">{t.role}</p>
@@ -2176,7 +2204,7 @@ function OnboardingPreviewSection() {
         <div className="space-y-3">
           <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-4">Creator profile</p>
           <div className="flex items-center gap-3 mb-4">
-            <img src={creators[0].avatar} alt="" className="h-11 w-11 rounded-xl object-cover border-2 border-accent/30" />
+            <CreatorAvatar name="Priya Sharma" size="lg" className="border-2 border-accent/30" />
             <div>
               <p className="text-[13px] font-semibold text-text-primary">Priya Sharma</p>
               <p className="text-[11px] text-accent">@priyacreates · Fashion & Lifestyle</p>
