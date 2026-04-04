@@ -138,6 +138,9 @@ const creators = [
     story: "₹4,500", rating: 4.9, collabs: 38, available: true,
     platforms: ["Instagram", "YouTube"],
     tags: ["Fashion", "Beauty", "Lifestyle"],
+    responseRate: "94%", avgReachPerReel: "1.8L", saveRate: "8.2%",
+    cpe: "₹2.84", estRoi: "3.1×",
+    lastResult: { campaign: "Bloom Skincare", reach: "1.9L", sales: "+₹1.2L GMV" },
   },
   {
     name: "Marcus Chen", handle: "@marcustech", niche: "Tech & Gadgets",
@@ -146,6 +149,9 @@ const creators = [
     story: "₹6,000", rating: 4.8, collabs: 52, available: true,
     platforms: ["YouTube", "Instagram"],
     tags: ["Tech", "Unboxing", "Reviews"],
+    responseRate: "88%", avgReachPerReel: "2.6L", saveRate: "6.4%",
+    cpe: "₹3.10", estRoi: "2.7×",
+    lastResult: { campaign: "Boat Audio", reach: "3.1L", sales: "+₹2.8L GMV" },
   },
   {
     name: "Sneha Rao", handle: "@snehafit", niche: "Fitness & Wellness",
@@ -154,6 +160,9 @@ const creators = [
     story: "₹3,000", rating: 5.0, collabs: 24, available: false,
     platforms: ["Instagram"],
     tags: ["Fitness", "Wellness", "Nutrition"],
+    responseRate: "98%", avgReachPerReel: "72K", saveRate: "11.3%",
+    cpe: "₹2.10", estRoi: "4.2×",
+    lastResult: { campaign: "NutriPro India", reach: "78K", sales: "+₹84K GMV" },
   },
   {
     name: "Arjun Nair", handle: "@arjunwanders", niche: "Travel & Adventure",
@@ -162,6 +171,9 @@ const creators = [
     story: "₹3,500", rating: 4.7, collabs: 31, available: true,
     platforms: ["Instagram", "YouTube"],
     tags: ["Travel", "Photography", "Adventure"],
+    responseRate: "82%", avgReachPerReel: "98K", saveRate: "7.8%",
+    cpe: "₹3.50", estRoi: "2.4×",
+    lastResult: { campaign: "TrailCo Outdoors", reach: "1.1L", sales: "+₹96K GMV" },
   },
   {
     name: "Riya Kapoor", handle: "@riyabeauty", niche: "Beauty & Skincare",
@@ -170,6 +182,9 @@ const creators = [
     story: "₹5,000", rating: 4.8, collabs: 44, available: true,
     platforms: ["Instagram", "YouTube"],
     tags: ["Beauty", "Skincare", "Makeup"],
+    responseRate: "91%", avgReachPerReel: "1.5L", saveRate: "9.1%",
+    cpe: "₹2.65", estRoi: "3.4×",
+    lastResult: { campaign: "Minimalist India", reach: "1.7L", sales: "+₹1.5L GMV" },
   },
   {
     name: "Devraj Menon", handle: "@devfoods", niche: "Food & Cooking",
@@ -178,6 +193,9 @@ const creators = [
     story: "₹3,200", rating: 4.9, collabs: 19, available: true,
     platforms: ["Instagram", "YouTube"],
     tags: ["Food", "Cooking", "Recipes"],
+    responseRate: "96%", avgReachPerReel: "83K", saveRate: "12.7%",
+    cpe: "₹1.98", estRoi: "4.8×",
+    lastResult: { campaign: "Swiggy Instamart", reach: "91K", sales: "+₹1.1L GMV" },
   },
 ];
 
@@ -2251,7 +2269,7 @@ function CreatorSection() {
 
                   <p className="text-[11px] text-text-secondary mb-3">{c.niche} · {c.location}</p>
 
-                  {/* Key metrics — decision-making data */}
+                  {/* 4-metric grid — decision data */}
                   <div className="grid grid-cols-2 gap-2 mb-3">
                     <div className="rounded-lg bg-surface-elevated/60 p-2 text-center group-hover:bg-surface-elevated/80 transition-colors">
                       <p className="text-[13px] font-bold text-text-primary">{c.followers}</p>
@@ -2261,22 +2279,39 @@ function CreatorSection() {
                       <p className="text-[13px] font-bold text-accent">{c.engagement}</p>
                       <p className="text-[9px] text-text-secondary">engagement</p>
                     </div>
+                    <div className="rounded-lg bg-success/[0.06] p-2 text-center">
+                      <p className="text-[13px] font-bold text-success">{c.estRoi}</p>
+                      <p className="text-[9px] text-text-secondary">est. ROI</p>
+                    </div>
+                    <div className="rounded-lg bg-surface-elevated/60 p-2 text-center">
+                      <p className="text-[13px] font-bold text-text-primary">{c.responseRate}</p>
+                      <p className="text-[9px] text-text-secondary">response rate</p>
+                    </div>
                   </div>
 
-                  {/* Price range */}
-                  <div className="flex items-center gap-2 text-[11px] text-text-secondary mb-3">
-                    <IndianRupee className="h-3 w-3 shrink-0 text-accent/60" />
-                    <span>Reel <span className="font-semibold text-text-primary">{c.reel}</span></span>
-                    <span className="text-border">·</span>
-                    <span>Story <span className="font-semibold text-text-primary">{c.story}</span></span>
+                  {/* Last campaign result */}
+                  <div className="rounded-lg bg-surface-elevated/40 border border-border/25 px-3 py-2 mb-3">
+                    <p className="text-[9px] text-text-secondary mb-0.5 uppercase tracking-wider">Last campaign</p>
+                    <p className="text-[11px] font-medium text-text-primary">{c.lastResult.campaign}</p>
+                    <div className="flex items-center gap-2 mt-0.5 text-[10px] text-text-secondary">
+                      <span>{c.lastResult.reach} reach</span>
+                      <span className="text-border">·</span>
+                      <span className="font-semibold text-success">{c.lastResult.sales}</span>
+                    </div>
                   </div>
 
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 text-[11px] text-text-secondary mb-4">
-                    <Star className="h-3 w-3 fill-warning text-warning" />
-                    <span className="font-medium text-text-primary">{c.rating}</span>
-                    <span className="text-border">·</span>
-                    <span>{c.collabs} collabs · on-time</span>
+                  {/* Price + rating */}
+                  <div className="flex items-center justify-between text-[11px] text-text-secondary mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <IndianRupee className="h-3 w-3 text-accent/60" />
+                      <span>Reel <span className="font-semibold text-text-primary">{c.reel}</span></span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-3 w-3 fill-warning text-warning" />
+                      <span className="font-medium text-text-primary">{c.rating}</span>
+                      <span className="text-border ml-1">·</span>
+                      <span className="ml-1">{c.cpe}/engage</span>
+                    </div>
                   </div>
 
                   <Link href="/register?role=BUSINESS">
@@ -3676,6 +3711,596 @@ function PaymentEscrowSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   MARKET PROBLEM — Fake followers, ghosting, scope creep
+═══════════════════════════════════════════════════════ */
+function MarketProblemSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const problems = [
+    {
+      icon: AlertTriangle,
+      title: "Fake followers are everywhere",
+      stat: "61% of Indian influencers",
+      statSub: "have detectable follower inflation (HypeAuditor 2024)",
+      detail: "A creator with 500K followers might only reach 12K real humans. Brands have no way to tell — until the campaign is over and the numbers don't add up.",
+      iconC: "text-error", bgC: "bg-error/[0.06] border-error/[0.12]",
+      fix: "SYNQ shows real engagement rate, save rate, and past campaign reach — not just follower count. Every creator is verified before listing.",
+    },
+    {
+      icon: XCircle,
+      title: "Deals fall through mid-campaign",
+      stat: "1 in 3 influencer deals",
+      statSub: "end in scope disputes or ghosting (Creator IQ 2023)",
+      detail: "Brand sent a voice note brief on WhatsApp. Creator delivered something completely different. No written scope. No recourse. Budget wasted.",
+      iconC: "text-error", bgC: "bg-error/[0.06] border-error/[0.12]",
+      fix: "SYNQ contracts lock deliverables, revision limits, and deadlines before escrow funds. If scope changes, both parties must consent in writing.",
+    },
+    {
+      icon: Clock,
+      title: "Creators wait 12–45 days to get paid",
+      stat: "Avg payment delay: 18 days",
+      statSub: "with no tracking, no reference, no recourse",
+      detail: "Creator submitted the reel on Day 3. Brand said \"processing.\" Then silence. Then a half-payment 3 weeks later. With no contract, there's nothing to enforce.",
+      iconC: "text-warning", bgC: "bg-warning/[0.06] border-warning/[0.12]",
+      fix: "Escrow means the money is already there before work starts. Approval triggers instant release — 38 seconds on average. No follow-up needed.",
+    },
+    {
+      icon: MessageSquare,
+      title: "No structured workflow exists",
+      stat: "4.3 tools per campaign",
+      statSub: "WhatsApp + Drive + Gmail + Notion + spreadsheets",
+      detail: "Briefs in DMs. Files on Drive. Feedback in emails. Approvals on Instagram comments. Every campaign is a custom mess that breaks differently every time.",
+      iconC: "text-warning", bgC: "bg-warning/[0.06] border-warning/[0.12]",
+      fix: "One workspace. Brief, contract, delivery, revision, payment — all in one place. Both parties see the same source of truth from day one.",
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-error/[0.02] to-transparent pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
+          <p className="text-[12px] font-semibold text-error uppercase tracking-widest mb-3">The real problem</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
+            Why influencer deals are{" "}
+            <span className="text-error">broken</span> today
+          </h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-lg mx-auto">
+            These aren&apos;t edge cases. Every brand and creator who&apos;s run more than 3 campaigns has hit at least two of these.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-5">
+          {problems.map((p, i) => (
+            <motion.div
+              key={p.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.1, duration: 0.45 }}
+              className="rounded-2xl bg-surface border border-border/40 overflow-hidden hover:shadow-lg transition-all duration-300"
+            >
+              {/* Problem panel */}
+              <div className={`p-5 border-b border-border/20 ${p.bgC} bg-opacity-50`}>
+                <div className="flex items-start gap-3 mb-3">
+                  <div className={`h-9 w-9 rounded-xl ${p.bgC} flex items-center justify-center shrink-0`}>
+                    <p.icon className={`h-4.5 w-4.5 ${p.iconC}`} />
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-bold text-text-primary leading-snug">{p.title}</p>
+                    <p className={`text-[11px] font-semibold mt-0.5 ${p.iconC}`}>{p.stat}</p>
+                    <p className="text-[10px] text-text-secondary">{p.statSub}</p>
+                  </div>
+                </div>
+                <p className="text-[12px] text-text-secondary leading-relaxed">{p.detail}</p>
+              </div>
+              {/* SYNQ fix */}
+              <div className="p-4 bg-accent/[0.02]">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-accent shrink-0 mt-0.5" />
+                  <p className="text-[12px] text-text-primary leading-relaxed">
+                    <span className="font-semibold text-accent">SYNQ: </span>{p.fix}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bottom callout */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5 }}
+          className="mt-8 rounded-2xl border border-accent/15 bg-accent/[0.03] p-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+        >
+          <div>
+            <p className="text-[15px] font-bold text-text-primary mb-1">
+              The industry has a structure problem. SYNQ is the structure.
+            </p>
+            <p className="text-[13px] text-text-secondary">
+              Every deal on SYNQ has a written brief, signed contract, and escrow-protected payment. Not optional. Built in.
+            </p>
+          </div>
+          <Link href="/register">
+            <Button className="glow-accent gap-2 shrink-0 whitespace-nowrap hover:scale-[1.02] transition-transform">
+              See how it works <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   DEAL NEGOTIATION — Offer → Counter → Accept
+═══════════════════════════════════════════════════════ */
+function DealNegotiationSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [phase, setPhase] = useState(0); // 0=offer, 1=counter, 2=accepted
+  const PHASES = 3;
+
+  useEffect(() => {
+    if (!isInView) return;
+    const t = setInterval(() => setPhase(p => (p + 1) % PHASES), 3500);
+    return () => clearInterval(t);
+  }, [isInView]);
+
+  const offerThread = [
+    /* Offer */
+    [
+      { from: "brand", name: "Rahul · Bloom Skincare", avatar: "BS", time: "10:03 AM", type: "offer",
+        body: "Hi Priya! We'd love to work with you on our Spring Glow campaign.",
+        offer: { deliverables: "3 Reels · 2 Stories", budget: "₹36,000", deadline: "14 days", revisions: "2 per deliverable" },
+      },
+      { from: "creator", name: "Priya Sharma", avatar: "PS", time: "10:41 AM", type: "read",
+        body: "Thanks for the brief — I reviewed it. The scope and timeline look good. I'd like to discuss the rate a bit.",
+      },
+    ],
+    /* Counter */
+    [
+      { from: "brand", name: "Rahul · Bloom Skincare", avatar: "BS", time: "10:03 AM", type: "offer",
+        body: "Hi Priya! We'd love to work with you on our Spring Glow campaign.",
+        offer: { deliverables: "3 Reels · 2 Stories", budget: "₹36,000", deadline: "14 days", revisions: "2 per deliverable" },
+      },
+      { from: "creator", name: "Priya Sharma", avatar: "PS", time: "10:41 AM", type: "counter",
+        body: "Great brief! My Reels average 1.8L reach and 4.8% engagement for skincare content. For this scope I'd need:",
+        counter: { deliverables: "3 Reels · 2 Stories", budget: "₹45,000", deadline: "14 days", revisions: "2 per deliverable" },
+        note: "Previous skincare campaign drove ₹1.2L GMV — happy to share the analytics.",
+      },
+      { from: "brand", name: "Rahul · Bloom Skincare", avatar: "BS", time: "11:02 AM", type: "thinking",
+        body: "Let me check with my manager on the budget — your numbers look strong.",
+      },
+    ],
+    /* Accepted */
+    [
+      { from: "creator", name: "Priya Sharma", avatar: "PS", time: "10:41 AM", type: "counter",
+        body: "Based on my reach and past results, I'd need ₹45,000 for this scope.",
+        counter: { deliverables: "3 Reels · 2 Stories", budget: "₹45,000", deadline: "14 days", revisions: "2 per deliverable" },
+      },
+      { from: "brand", name: "Rahul · Bloom Skincare", avatar: "BS", time: "11:24 AM", type: "accept",
+        body: "We're in! ₹45,000 works. The ROI you shared from Minimalist India convinced us.",
+        accepted: { budget: "₹45,000", next: "Contract → Escrow → Brief" },
+      },
+      { from: "system", name: "SYNQ", avatar: "SQ", time: "11:24 AM", type: "system",
+        body: "Deal terms agreed. Generating contract #SC-2024-0389 — ready for e-signature.",
+      },
+    ],
+  ];
+
+  const thread = offerThread[phase];
+
+  const msgBubble = (msg: typeof thread[0]) => {
+    const isCreator = msg.from === "creator";
+    const isBrand = msg.from === "brand";
+    const isSystem = msg.from === "system";
+
+    return (
+      <motion.div
+        key={`${phase}-${msg.time}`}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`flex items-start gap-2.5 ${isCreator ? "flex-row-reverse" : ""}`}
+      >
+        {/* Avatar */}
+        {isSystem ? (
+          <div className="h-7 w-7 rounded-full bg-accent/[0.1] flex items-center justify-center text-[8px] font-bold text-accent shrink-0 mt-0.5">SQ</div>
+        ) : isBrand ? (
+          <div className="h-7 w-7 rounded-full bg-pink-500/10 flex items-center justify-center text-[8px] font-bold text-pink-500 shrink-0 mt-0.5">BS</div>
+        ) : (
+          <CreatorAvatar name="Priya Sharma" size="sm" className="!rounded-full mt-0.5" />
+        )}
+
+        <div className={`max-w-[82%] ${isCreator ? "items-end" : "items-start"} flex flex-col gap-1.5`}>
+          <div className="flex items-center gap-1.5">
+            <p className="text-[10px] font-semibold text-text-secondary">{msg.name}</p>
+            <span className="text-[9px] text-text-secondary/50">{msg.time}</span>
+          </div>
+
+          {/* Message body */}
+          <div className={`rounded-2xl px-3.5 py-2.5 text-[12px] leading-relaxed ${
+            isSystem ? "bg-accent/[0.07] border border-accent/[0.15] text-accent rounded-xl" :
+            isCreator ? "bg-accent/[0.09] text-text-primary rounded-tr-sm" :
+            "bg-surface-elevated/70 border border-border/30 text-text-primary rounded-tl-sm"
+          }`}>
+            {msg.body}
+          </div>
+
+          {/* Offer card */}
+          {"offer" in msg && msg.offer && (
+            <div className="rounded-xl border border-[#00B8D9]/25 bg-[#00B8D9]/[0.04] p-3 w-full text-[11px] space-y-1.5">
+              <p className="text-[10px] font-bold text-[#00B8D9] uppercase tracking-wider mb-2">Offer from Bloom Skincare</p>
+              {Object.entries(msg.offer).map(([k, v]) => (
+                <div key={k} className="flex justify-between">
+                  <span className="text-text-secondary capitalize">{k}:</span>
+                  <span className="font-semibold text-text-primary">{v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Counter card */}
+          {"counter" in msg && msg.counter && (
+            <div className="rounded-xl border border-accent/25 bg-accent/[0.04] p-3 w-full text-[11px] space-y-1.5">
+              <p className="text-[10px] font-bold text-accent uppercase tracking-wider mb-2">Counter from Priya</p>
+              {Object.entries(msg.counter).map(([k, v]) => (
+                <div key={k} className="flex justify-between">
+                  <span className="text-text-secondary capitalize">{k}:</span>
+                  <span className={`font-semibold ${k === "budget" ? "text-accent" : "text-text-primary"}`}>{v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Accepted card */}
+          {"accepted" in msg && msg.accepted && (
+            <div className="rounded-xl border border-success/25 bg-success/[0.04] p-3 w-full text-[11px] space-y-1.5">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-success" />
+                <p className="text-[10px] font-bold text-success uppercase tracking-wider">Deal accepted</p>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-text-secondary">Final budget:</span>
+                <span className="font-bold text-success">{msg.accepted.budget}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-text-secondary">Next step:</span>
+                <span className="font-semibold text-text-primary">{msg.accepted.next}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    );
+  };
+
+  const phaseLabels = ["Offer sent", "Creator counters", "Deal accepted"];
+  const phaseColors = ["text-[#00B8D9]", "text-warning", "text-success"];
+  const phaseBg = ["bg-[#00B8D9]/[0.08]", "bg-warning/[0.08]", "bg-success/[0.08]"];
+
+  return (
+    <section ref={ref} className="py-24 bg-surface-elevated/15 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.02] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-12">
+          <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Real deal flow</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
+            Negotiate like pros.{" "}
+            <span className="text-text-secondary font-medium">Not over DMs.</span>
+          </h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-lg mx-auto">
+            Structured offer and counter-offer built into the platform. All terms logged, timestamped, and ready for contract the moment both sides agree.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-[240px_1fr] gap-8 items-start">
+
+          {/* Phase selector */}
+          <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
+            {phaseLabels.map((label, i) => (
+              <button
+                key={label}
+                onClick={() => setPhase(i)}
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 shrink-0 lg:w-full ${phase === i ? `${phaseBg[i]} border border-current/20` : "hover:bg-surface-elevated/50"}`}
+              >
+                <div className={`h-2 w-2 rounded-full ${phase === i ? (i === 2 ? "bg-success" : i === 1 ? "bg-warning" : "bg-[#00B8D9]") : "bg-border"} ${phase === i ? "animate-pulse" : ""}`} />
+                <span className={`text-[12px] font-semibold ${phase === i ? phaseColors[i] : "text-text-secondary"}`}>{label}</span>
+              </button>
+            ))}
+
+            {/* What SYNQ adds */}
+            <div className="hidden lg:block mt-6 pt-6 border-t border-border/30 space-y-3">
+              <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider">What SYNQ adds</p>
+              {[
+                "All terms in writing",
+                "Timestamped messages",
+                "Auto-generates contract",
+                "No ambiguous DMs",
+              ].map(item => (
+                <div key={item} className="flex items-center gap-2 text-[11px] text-text-secondary">
+                  <CheckCircle2 className="h-3 w-3 text-success shrink-0" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Chat window */}
+          <div className="rounded-2xl bg-surface border border-border/50 overflow-hidden shadow-lg">
+            {/* Window chrome */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border/30 bg-surface-elevated/40">
+              <div className="flex items-center gap-2.5">
+                <div className="flex gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-full bg-error/50" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-warning/50" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-success/50" />
+                </div>
+                <span className="text-[11px] text-text-secondary ml-2">Negotiation — Spring Glow Campaign</span>
+              </div>
+              <div className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold ${phaseBg[phase]} ${phaseColors[phase]}`}>
+                <div className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
+                {phaseLabels[phase]}
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div className="p-4 space-y-4 min-h-[320px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={phase}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-4"
+                >
+                  {thread.map((msg, i) => (
+                    <motion.div key={i} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.12 }}>
+                      {msgBubble(msg)}
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Input bar — disabled, shows next action */}
+            <div className="px-4 py-3 border-t border-border/30 bg-surface-elevated/20">
+              {phase === 2 ? (
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
+                  <p className="text-[12px] text-success font-medium">Terms agreed — contract auto-generated and ready to sign</p>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 rounded-xl bg-surface-elevated/50 border border-border/30 px-3 py-2 opacity-50">
+                  <p className="text-[11px] text-text-secondary flex-1">{phase === 0 ? "Creator reviewing offer…" : "Brand reviewing counter…"}</p>
+                  <Send className="h-3.5 w-3.5 text-text-secondary shrink-0" />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   CAMPAIGN RESULTS — Reach, engagement, conversions, ROI
+═══════════════════════════════════════════════════════ */
+function CampaignResultsSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const campaigns = [
+    {
+      brand: "Bloom Skincare", campaign: "Spring Glow",
+      brandInitials: "BS", brandColor: "bg-pink-500/10 text-pink-500",
+      budget: "₹54,000", status: "Completed",
+      creators: [
+        { name: "Priya Sharma", handle: "@priyacreates", reach: "1.9L", engagement: "4.8%", saves: "8,200", cpe: "₹2.84", gmv: "₹1.2L", score: 94 },
+        { name: "Riya Kapoor", handle: "@riyabeauty", reach: "1.7L", engagement: "5.9%", saves: "7,400", cpe: "₹2.65", gmv: "₹1.5L", score: 89 },
+      ],
+      totals: { reach: "3.6L", engagement: "5.3%", saves: "15,600", gmv: "₹2.7L", roi: "5.0×" },
+    },
+    {
+      brand: "NutriPro India", campaign: "Wellness Series",
+      brandInitials: "NP", brandColor: "bg-[#00B8D9]/10 text-[#00B8D9]",
+      budget: "₹38,500", status: "Completed",
+      creators: [
+        { name: "Sneha Rao", handle: "@snehafit", reach: "78K", engagement: "7.1%", saves: "5,100", cpe: "₹2.10", gmv: "₹84K", score: 97 },
+        { name: "Devraj Menon", handle: "@devfoods", reach: "91K", engagement: "8.4%", saves: "6,800", cpe: "₹1.98", gmv: "₹1.1L", score: 95 },
+      ],
+      totals: { reach: "1.7L", engagement: "7.8%", saves: "11,900", gmv: "₹1.94L", roi: "5.0×" },
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.02] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">Real results</p>
+            <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
+              What good campaigns look like.
+            </h2>
+            <p className="mt-3 text-[15px] text-text-secondary max-w-xl">
+              After every campaign on SYNQ, brands get a full analytics report — reach, engagement, CPE, and GMV impact — broken down per creator.
+            </p>
+          </div>
+          <Link href="/register?role=BUSINESS">
+            <Button variant="outline" className="gap-2 shrink-0 hover:border-accent/30 hover:text-accent transition-all duration-200">
+              Run your first campaign <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </motion.div>
+
+        <div className="space-y-6">
+          {campaigns.map((camp, ci) => (
+            <motion.div
+              key={camp.campaign}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: ci * 0.15, duration: 0.45 }}
+              className="rounded-2xl bg-surface border border-border/40 overflow-hidden shadow-sm"
+            >
+              {/* Campaign header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-border/30 bg-surface-elevated/30">
+                <div className="flex items-center gap-3">
+                  <div className={`h-9 w-9 rounded-xl ${camp.brandColor} flex items-center justify-center text-[11px] font-bold shrink-0`}>
+                    {camp.brandInitials}
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-bold text-text-primary">{camp.brand} · {camp.campaign}</p>
+                    <p className="text-[10px] text-text-secondary">Budget: {camp.budget} · {camp.creators.length} creators</p>
+                  </div>
+                </div>
+                <span className="rounded-full bg-success/10 border border-success/20 text-success text-[10px] font-semibold px-3 py-1">{camp.status}</span>
+              </div>
+
+              {/* Per-creator table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-[11px]">
+                  <thead>
+                    <tr className="border-b border-border/20 bg-surface-elevated/20">
+                      <th className="text-left px-5 py-2.5 text-text-secondary font-medium">Creator</th>
+                      <th className="text-right px-4 py-2.5 text-text-secondary font-medium">Reach</th>
+                      <th className="text-right px-4 py-2.5 text-text-secondary font-medium">Engage</th>
+                      <th className="text-right px-4 py-2.5 text-text-secondary font-medium">Saves</th>
+                      <th className="text-right px-4 py-2.5 text-text-secondary font-medium">CPE</th>
+                      <th className="text-right px-4 py-2.5 text-text-secondary font-medium">GMV impact</th>
+                      <th className="text-right px-5 py-2.5 text-text-secondary font-medium">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {camp.creators.map((c, i) => (
+                      <motion.tr
+                        key={c.handle}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.2 + ci * 0.15 + i * 0.08 }}
+                        className="border-b border-border/15 hover:bg-surface-elevated/30 transition-colors"
+                      >
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-2">
+                            <CreatorAvatar name={c.name} size="sm" className="shrink-0" />
+                            <div>
+                              <p className="font-semibold text-text-primary">{c.name}</p>
+                              <p className="text-text-secondary text-[10px]">{c.handle}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-right font-semibold text-text-primary">{c.reach}</td>
+                        <td className="px-4 py-3 text-right font-bold text-accent">{c.engagement}</td>
+                        <td className="px-4 py-3 text-right text-text-secondary">{c.saves}</td>
+                        <td className="px-4 py-3 text-right text-success font-semibold">{c.cpe}</td>
+                        <td className="px-4 py-3 text-right font-bold text-success">{c.gmv}</td>
+                        <td className="px-5 py-3 text-right">
+                          <span className="inline-flex items-center justify-center rounded-full bg-accent/[0.08] text-accent font-bold text-[10px] px-2 py-0.5 min-w-[36px]">
+                            {c.score}
+                          </span>
+                        </td>
+                      </motion.tr>
+                    ))}
+                    {/* Totals row */}
+                    <tr className="bg-surface-elevated/40 font-semibold">
+                      <td className="px-5 py-3 text-[11px] font-bold text-text-primary">Campaign total</td>
+                      <td className="px-4 py-3 text-right text-[12px] font-bold text-text-primary">{camp.totals.reach}</td>
+                      <td className="px-4 py-3 text-right text-[12px] font-bold text-accent">{camp.totals.engagement}</td>
+                      <td className="px-4 py-3 text-right text-[11px] text-text-secondary">{camp.totals.saves}</td>
+                      <td className="px-4 py-3 text-right text-[11px] text-success">{camp.totals.saves}</td>
+                      <td className="px-4 py-3 text-right text-[12px] font-bold text-success">{camp.totals.gmv}</td>
+                      <td className="px-5 py-3 text-right">
+                        <span className="inline-flex items-center justify-center rounded-full bg-success/[0.1] text-success font-bold text-[10px] px-2.5 py-0.5">
+                          {camp.totals.roi} ROI
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Benchmark callout */}
+              <div className="px-5 py-3 bg-surface-elevated/10 border-t border-border/20 flex flex-wrap items-center gap-x-6 gap-y-1.5 text-[11px] text-text-secondary">
+                <span className="flex items-center gap-1.5"><TrendingUp className="h-3 w-3 text-success" /> Engagement <span className="font-semibold text-success">{camp.totals.engagement}</span> vs. <span>3.1% category avg</span></span>
+                <span className="flex items-center gap-1.5"><IndianRupee className="h-3 w-3 text-success" /> GMV <span className="font-semibold text-success">{camp.totals.gmv}</span> from <span>{camp.budget} spend</span></span>
+                <span className="flex items-center gap-1.5"><BarChart3 className="h-3 w-3 text-accent" /> <span className="font-semibold text-accent">{camp.totals.roi}</span> return on ad spend</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Creator dashboard teaser */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5 }}
+          className="mt-8 rounded-2xl border border-border/40 bg-surface overflow-hidden shadow-sm"
+        >
+          <div className="px-5 py-4 border-b border-border/30 bg-surface-elevated/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <CreatorAvatar name="Priya Sharma" size="sm" />
+                <div>
+                  <p className="text-[12px] font-bold text-text-primary">Priya Sharma — Creator Dashboard</p>
+                  <p className="text-[10px] text-text-secondary">April 2025 · 3 active deals</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                <span className="text-[10px] text-success font-medium">Live</span>
+              </div>
+            </div>
+          </div>
+          <div className="p-5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+              {[
+                { label: "Earned this month", value: "₹54,000", sub: "+₹12K today", c: "text-text-primary", subc: "text-success" },
+                { label: "Active deals", value: "3", sub: "1 needs action", c: "text-text-primary", subc: "text-warning" },
+                { label: "Pending invites", value: "4", sub: "2 brand-new", c: "text-accent", subc: "text-text-secondary" },
+                { label: "Avg CPE this month", value: "₹2.84", sub: "vs ₹6.20 industry", c: "text-success", subc: "text-text-secondary" },
+              ].map(s => (
+                <div key={s.label} className="rounded-xl border border-border/30 bg-surface-elevated/30 p-3">
+                  <p className="text-[10px] text-text-secondary mb-1">{s.label}</p>
+                  <p className={`text-[20px] font-bold ${s.c}`}>{s.value}</p>
+                  <p className={`text-[10px] ${s.subc}`}>{s.sub}</p>
+                </div>
+              ))}
+            </div>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {[
+                { brand: "Bloom Skincare", status: "Reel #2 in review", badge: "Action needed", badgeC: "bg-warning/10 text-warning border-warning/20", pay: "₹12,000", days: "2 days left" },
+                { brand: "TrailCo Outdoors", status: "Brief accepted · Day 3", badge: "Active", badgeC: "bg-success/10 text-success border-success/20", pay: "₹18,000", days: "8 days left" },
+                { brand: "NutriPro India", status: "Awaiting signature", badge: "Sign contract", badgeC: "bg-accent/10 text-accent border-accent/20", pay: "₹9,500", days: "Pending" },
+              ].map(d => (
+                <div key={d.brand} className="rounded-xl border border-border/30 bg-surface p-3 flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-lg bg-accent/[0.07] flex items-center justify-center text-[11px] font-bold text-accent shrink-0">
+                    {d.brand.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-semibold text-text-primary truncate">{d.brand}</p>
+                    <p className="text-[10px] text-text-secondary">{d.status}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className={`inline-block rounded-full px-1.5 py-0.5 text-[9px] font-semibold border ${d.badgeC}`}>{d.badge}</span>
+                    <p className="text-[10px] font-bold text-text-primary mt-0.5">{d.pay}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════════════════ */
 function Footer() {
@@ -3722,8 +4347,10 @@ export default function LandingPage() {
       <HeroSection />
       <TrustBar />
       <MarketplacePulseSection />
+      <MarketProblemSection />
       <ProblemSection />
       <LiveDemoSection />
+      <DealNegotiationSection />
       <RealUseCaseSection />
       <PaymentEscrowSection />
       <DifferentiationSection />
@@ -3731,6 +4358,7 @@ export default function LandingPage() {
       <SYNQTimeline />
       <MarketplaceInteractionSection />
       <CaseStudySection />
+      <CampaignResultsSection />
       <CreatorSection />
       <TopCreatorsSection />
       <FeaturedCampaignsSection />
