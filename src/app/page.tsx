@@ -8,7 +8,7 @@ import {
   MessageSquare, FileText, CreditCard, Flag, Camera, Send,
   Briefcase, Zap, CheckCheck, RefreshCw, Circle,
   XCircle, AlertTriangle, Sparkles, BarChart3, User,
-  Clock, Minus, Play,
+  Clock, Minus, Play, Users, Timer, Wallet, ArrowDown,
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -234,6 +234,7 @@ const featuredCampaigns = [
     title: "Spring Glow — Skincare Routine Series",
     budget: "₹15,000 – ₹30,000 per creator",
     creatorsNeeded: 4, spotsLeft: 2,
+    applicants: 14, lastApplied: "6m ago",
     formats: ["Reel", "Story"], niche: "Beauty", platform: "Instagram",
     deadline: "Apr 20, 2025", matchScore: 92, urgent: true,
     desc: "Authentic before/after content for our Vitamin C serum launch.",
@@ -244,6 +245,7 @@ const featuredCampaigns = [
     title: "Summer Adventure — Gear Review Series",
     budget: "₹18,000 – ₹45,000 per creator",
     creatorsNeeded: 3, spotsLeft: 3,
+    applicants: 9, lastApplied: "22m ago",
     formats: ["Reel", "Long-form"], niche: "Travel", platform: "YouTube",
     deadline: "May 5, 2025", matchScore: 88, urgent: false,
     desc: "Show our gear in real outdoor scenarios. Authenticity over production value.",
@@ -254,6 +256,7 @@ const featuredCampaigns = [
     title: "Wellness Series — Protein & Recovery",
     budget: "₹10,000 – ₹22,000 per creator",
     creatorsNeeded: 6, spotsLeft: 4,
+    applicants: 21, lastApplied: "2m ago",
     formats: ["Reel", "Story", "Post"], niche: "Fitness", platform: "Instagram",
     deadline: "Apr 28, 2025", matchScore: 85, urgent: false,
     desc: "Workout & nutrition integration content. We want real gym-goers, not models.",
@@ -264,6 +267,7 @@ const featuredCampaigns = [
     title: "Conscious Fashion — Sustainable Capsule",
     budget: "₹20,000 – ₹55,000 per creator",
     creatorsNeeded: 5, spotsLeft: 5,
+    applicants: 7, lastApplied: "1h ago",
     formats: ["Reel", "Try-on"], niche: "Fashion", platform: "Instagram",
     deadline: "May 12, 2025", matchScore: 79, urgent: false,
     desc: "Style our sustainable collection. We value ethical creators who walk the talk.",
@@ -2950,6 +2954,22 @@ function FeaturedCampaignsSection() {
               </div>
 
               <div className="p-5">
+                {/* Live activity signal */}
+                <div className="flex items-center gap-4 mb-3 text-[11px] text-text-secondary">
+                  <span className="flex items-center gap-1.5">
+                    <Users className="h-3 w-3 text-accent" />
+                    <span><span className="font-semibold text-text-primary">{camp.applicants}</span> creators applied</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="h-3 w-3 text-text-secondary" />
+                    <span>Last <span className="font-medium text-text-primary">{camp.lastApplied}</span></span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Timer className="h-3 w-3 text-warning" />
+                    <span className="text-warning font-medium">{camp.deadline}</span>
+                  </span>
+                </div>
+
                 {/* Description */}
                 <p className="text-[12px] text-text-secondary mb-4 leading-relaxed">{camp.desc}</p>
 
@@ -2960,8 +2980,8 @@ function FeaturedCampaignsSection() {
                     <p className="text-[13px] font-bold text-text-primary">{camp.budget}</p>
                   </div>
                   <div className="rounded-xl bg-surface-elevated/50 p-3">
-                    <p className="text-[9px] text-text-secondary mb-1 uppercase tracking-wider">Deadline</p>
-                    <p className="text-[13px] font-bold text-text-primary">{camp.deadline}</p>
+                    <p className="text-[9px] text-text-secondary mb-1 uppercase tracking-wider">Spots left</p>
+                    <p className={`text-[13px] font-bold ${camp.spotsLeft <= 2 ? "text-warning" : "text-text-primary"}`}>{camp.spotsLeft} of {camp.creatorsNeeded}</p>
                   </div>
                 </div>
 
@@ -3020,6 +3040,642 @@ function FeaturedCampaignsSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   MARKETPLACE PULSE — Live feed + animated stats
+   Placed between TrustBar and ProblemSection to establish
+   that SYNQ is a working, active platform from the start.
+═══════════════════════════════════════════════════════ */
+function MarketplacePulseSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [feedIdx, setFeedIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setFeedIdx(p => p + 1), 2600);
+    return () => clearInterval(t);
+  }, []);
+
+  const c1 = useCountUp(847, isInView, 2000);
+  const c2 = useCountUp(2847, isInView, 1800);
+  const c3 = useCountUp(127, isInView, 1400);
+  const c4 = useCountUp(99, isInView, 1500);
+
+  const liveFeed = [
+    { icon: IndianRupee, text: "₹18,000 released", detail: "TrailCo × @arjunwanders · Reel #2 approved", time: "just now", c: "text-success bg-success/[0.08]" },
+    { icon: FileText, text: "Contract signed", detail: "Bloom Skincare × @priyacreates · ₹54,000 in escrow", time: "1m ago", c: "text-accent bg-accent/[0.08]" },
+    { icon: Camera, text: "Reel submitted", detail: "@riyabeauty → NutriPro India · Review pending", time: "3m ago", c: "text-[#00B8D9] bg-[#00B8D9]/[0.08]" },
+    { icon: CheckCheck, text: "Deal completed", detail: "EcoWear × @devfoods · ₹28,000 paid in full", time: "5m ago", c: "text-success bg-success/[0.08]" },
+    { icon: Bell, text: "New match", detail: "@snehafit matched Mamaearth — 91% fit score", time: "8m ago", c: "text-accent bg-accent/[0.08]" },
+    { icon: Shield, text: "₹45,000 to escrow", detail: "NutriPro Series · @marcustech · Funds protected", time: "12m ago", c: "text-success bg-success/[0.08]" },
+    { icon: Star, text: "5★ review posted", detail: "Bloom Skincare rated @priyacreates · \"Exactly on brief\"", time: "18m ago", c: "text-warning bg-warning/[0.08]" },
+    { icon: IndianRupee, text: "₹9,500 released", detail: "EcoWear × @arjunwanders · Milestone 1 paid", time: "22m ago", c: "text-success bg-success/[0.08]" },
+  ];
+
+  const current = liveFeed[feedIdx % liveFeed.length];
+
+  return (
+    <section ref={ref} className="py-16 border-y border-border/40 bg-surface-elevated/10 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.02] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6">
+
+        <div className="grid lg:grid-cols-[1fr_420px] gap-8 items-start">
+
+          {/* Left — animated stats */}
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+              <p className="text-[12px] font-semibold text-success uppercase tracking-widest">Live platform activity</p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 mb-8">
+              {[
+                { value: c1, suffix: "+", prefix: "", label: "Verified creators", sub: "across India", icon: Users, c: "text-accent" },
+                { value: c2, suffix: "+", prefix: "", label: "Deals closed", sub: "with 98% satisfaction", icon: CheckCheck, c: "text-success" },
+                { value: c3, suffix: "", prefix: "", label: "Active right now", sub: "deals in progress", icon: Zap, c: "text-warning", live: true },
+                { value: c4, suffix: "%", prefix: "", label: "On-time payments", sub: "escrow-protected", icon: Shield, c: "text-[#00B8D9]" },
+              ].map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: i * 0.08 }}
+                  className="flex flex-col"
+                >
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <s.icon className={`h-3.5 w-3.5 ${s.c}`} />
+                    {s.live && <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />}
+                  </div>
+                  <div className={`text-[30px] sm:text-[34px] font-bold tracking-tight ${s.c}`}>
+                    {s.prefix}{s.value.toLocaleString()}{s.suffix}
+                  </div>
+                  <div className="text-[12px] font-medium text-text-primary mt-0.5">{s.label}</div>
+                  <div className="text-[11px] text-text-secondary">{s.sub}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Recent payout strip */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.4 }}
+              className="rounded-xl border border-border/40 bg-surface p-4"
+            >
+              <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-3">Recent payouts this week</p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { creator: "Priya S.", amount: "₹54,000", niche: "Fashion" },
+                  { creator: "Marcus C.", amount: "₹72,000", niche: "Tech" },
+                  { creator: "Sneha R.", amount: "₹22,000", niche: "Fitness" },
+                  { creator: "Arjun N.", amount: "₹38,000", niche: "Travel" },
+                  { creator: "Riya K.", amount: "₹45,000", niche: "Beauty" },
+                  { creator: "Devraj M.", amount: "₹19,500", niche: "Food" },
+                ].map(p => (
+                  <div key={p.creator} className="flex items-center gap-1.5 rounded-full bg-success/[0.06] border border-success/[0.12] px-3 py-1">
+                    <IndianRupee className="h-2.5 w-2.5 text-success" />
+                    <span className="text-[11px] font-semibold text-success">{p.amount}</span>
+                    <span className="text-[10px] text-text-secondary">· {p.creator}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right — live activity feed */}
+          <motion.div
+            initial={{ opacity: 0, x: 16 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="rounded-2xl border border-border/40 bg-surface overflow-hidden shadow-sm"
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border/30 bg-surface-elevated/30">
+              <div className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                <p className="text-[12px] font-semibold text-text-primary">Live on SYNQ</p>
+              </div>
+              <span className="text-[10px] text-text-secondary">Updated in real time</span>
+            </div>
+            <div className="divide-y divide-border/20">
+              {/* Cycling newest event */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={feedIdx}
+                  initial={{ opacity: 0, y: -10, backgroundColor: "rgba(0,184,89,0.04)" }}
+                  animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0,184,89,0)" }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.35 }}
+                  className="flex items-start gap-3 px-4 py-3"
+                >
+                  <div className={`h-7 w-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${current.c}`}>
+                    <current.icon className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[12px] font-semibold text-text-primary leading-snug">{current.text}</p>
+                    <p className="text-[10px] text-text-secondary leading-snug truncate">{current.detail}</p>
+                  </div>
+                  <span className="text-[9px] font-semibold text-success shrink-0 mt-0.5">just now</span>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Static older events */}
+              {liveFeed.slice(1, 6).map((a, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0 }}
+                  animate={isInView ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.25 + i * 0.06 }}
+                  className="flex items-start gap-3 px-4 py-3"
+                >
+                  <div className={`h-7 w-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${a.c}`}>
+                    <a.icon className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[12px] font-medium text-text-primary leading-snug">{a.text}</p>
+                    <p className="text-[10px] text-text-secondary leading-snug truncate">{a.detail}</p>
+                  </div>
+                  <span className="text-[10px] text-text-secondary/70 shrink-0 mt-0.5">{a.time}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   MARKETPLACE INTERACTION — Brand → Apply → Contract → Pay
+   Interactive 5-step flow auto-advancing every 3.5s
+═══════════════════════════════════════════════════════ */
+function MarketplaceInteractionSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [step, setStep] = useState(0);
+  const TOTAL = 5;
+
+  useEffect(() => {
+    if (!isInView) return;
+    const t = setInterval(() => setStep(p => (p + 1) % TOTAL), 3800);
+    return () => clearInterval(t);
+  }, [isInView]);
+
+  const steps = [
+    { label: "Brief Posted", icon: Send, color: "text-[#00B8D9]", bg: "bg-[#00B8D9]/[0.08]" },
+    { label: "Creators Matched", icon: Bell, color: "text-accent", bg: "bg-accent/[0.08]" },
+    { label: "Creator Applied", icon: Camera, color: "text-warning", bg: "bg-warning/[0.08]" },
+    { label: "Contract + Escrow", icon: Lock, color: "text-success", bg: "bg-success/[0.08]" },
+    { label: "Paid in 38 sec", icon: IndianRupee, color: "text-success", bg: "bg-success/[0.08]" },
+  ];
+
+  const panels = [
+    /* Step 0 — Brief Posted */
+    <div key="brief" className="space-y-3">
+      <div className="rounded-xl border border-[#00B8D9]/20 bg-[#00B8D9]/[0.03] p-4">
+        <div className="flex items-center gap-2.5 mb-3">
+          <div className="h-8 w-8 rounded-lg bg-pink-500/10 flex items-center justify-center text-[10px] font-bold text-pink-500 shrink-0">BS</div>
+          <div>
+            <p className="text-[12px] font-semibold text-text-primary">Bloom Skincare posted a campaign</p>
+            <p className="text-[10px] text-text-secondary">just now · 2 min ago</p>
+          </div>
+        </div>
+        <div className="space-y-2 text-[12px]">
+          {[
+            ["Campaign", "Spring Glow — Skincare Routine Series"],
+            ["Budget", "₹54,000 total · ₹18,000 per creator"],
+            ["Deliverables", "3 Reels · 2 Stories · 1 Post"],
+            ["Timeline", "14 days from contract sign"],
+            ["Niche", "Beauty · Skincare · Lifestyle"],
+          ].map(([k, v]) => (
+            <div key={k} className="flex gap-2">
+              <span className="text-text-secondary w-24 shrink-0">{k}:</span>
+              <span className="text-text-primary font-medium">{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center gap-2 text-[11px] text-success">
+        <CheckCircle2 className="h-3.5 w-3.5" />
+        <span>Brief structured and saved — no DMs needed</span>
+      </div>
+    </div>,
+
+    /* Step 1 — Creators Matched */
+    <div key="matched" className="space-y-3">
+      <p className="text-[11px] text-text-secondary mb-2">AI matched 3 verified creators in 4 minutes</p>
+      {[
+        { name: "Priya Sharma", handle: "@priyacreates", match: 94, niche: "Fashion & Lifestyle", followers: "2.1L", engage: "4.8%", color: "border-accent/30 bg-accent/[0.03]" },
+        { name: "Riya Kapoor", handle: "@riyabeauty", match: 89, niche: "Beauty & Skincare", followers: "1.8L", engage: "5.9%", color: "border-border/40" },
+        { name: "Ananya K.", handle: "@ananyalife", match: 81, niche: "Lifestyle", followers: "1.1L", engage: "5.2%", color: "border-border/40" },
+      ].map((c, i) => (
+        <motion.div
+          key={c.handle}
+          initial={{ opacity: 0, x: 12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: i * 0.15 }}
+          className={`rounded-xl border ${c.color} p-3 flex items-center gap-3`}
+        >
+          <CreatorAvatar name={c.name} size="sm" />
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-semibold text-text-primary">{c.name} <span className="text-text-secondary font-normal">{c.handle}</span></p>
+            <p className="text-[10px] text-text-secondary">{c.niche} · {c.followers} followers · {c.engage} engage</p>
+          </div>
+          <div className={`text-[10px] font-bold rounded-full px-2 py-0.5 ${i === 0 ? "text-accent bg-accent/[0.1]" : "text-text-secondary bg-surface-elevated"}`}>
+            {c.match}% match
+          </div>
+        </motion.div>
+      ))}
+      <div className="flex items-center gap-2 text-[11px] text-accent">
+        <Bell className="h-3.5 w-3.5" />
+        <span>All 3 creators notified — avg response time 1h 47m</span>
+      </div>
+    </div>,
+
+    /* Step 2 — Creator Applied */
+    <div key="applied" className="space-y-3">
+      <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="rounded-xl border border-accent/20 bg-accent/[0.03] p-4">
+        <div className="flex items-center gap-3 mb-3">
+          <CreatorAvatar name="Priya Sharma" size="md" />
+          <div>
+            <p className="text-[13px] font-semibold text-text-primary">Priya Sharma accepted</p>
+            <p className="text-[10px] text-text-secondary">@priyacreates · responded in 47 minutes</p>
+          </div>
+          <span className="ml-auto text-[10px] font-bold text-accent bg-accent/[0.1] rounded-full px-2 py-0.5">94% match</span>
+        </div>
+        <p className="text-[12px] text-text-secondary italic border-l-2 border-accent/20 pl-3">
+          "Love the brief — very clear scope. I've done 3 skincare collabs this year with great results. Can deliver all 3 reels in 10 days."
+        </p>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          {[["On-time rate","100%","text-success"],["Collabs done","38","text-text-primary"],["Avg rating","4.9★","text-warning"]].map(([l,v,c]) => (
+            <div key={l} className="rounded-lg bg-surface-elevated/60 p-2 text-center">
+              <p className={`text-[13px] font-bold ${c}`}>{v}</p>
+              <p className="text-[9px] text-text-secondary">{l}</p>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+      <div className="flex items-center gap-2 text-[11px] text-warning">
+        <CheckCheck className="h-3.5 w-3.5" />
+        <span>Brand shortlisted Priya — contract ready to send</span>
+      </div>
+    </div>,
+
+    /* Step 3 — Contract + Escrow */
+    <div key="contract" className="space-y-3">
+      <div className="rounded-xl border border-success/20 bg-success/[0.02] p-4 space-y-2.5">
+        <div className="flex items-center gap-2 mb-1">
+          <FileText className="h-4 w-4 text-success" />
+          <p className="text-[12px] font-semibold text-text-primary">Contract #SC-2024-0388 — signed by both parties</p>
+        </div>
+        {[
+          ["Deliverables", "3 Reels · 2 Stories · 1 Photo post"],
+          ["Revisions", "Max 2 per deliverable"],
+          ["Deadline", "14 days from today (Apr 28)"],
+          ["Scope change", "Requires mutual consent"],
+          ["Disputes", "Resolved within 24 hours by SYNQ"],
+        ].map(([k, v]) => (
+          <div key={k} className="flex gap-2 text-[11px]">
+            <span className="text-text-secondary w-24 shrink-0">{k}:</span>
+            <span className="text-text-primary">{v}</span>
+          </div>
+        ))}
+      </div>
+      <div className="rounded-xl border border-success/20 bg-success/[0.03] p-3 flex items-center gap-3">
+        <div className="h-9 w-9 rounded-xl bg-success/[0.12] flex items-center justify-center shrink-0">
+          <Lock className="h-4 w-4 text-success" />
+        </div>
+        <div>
+          <p className="text-[12px] font-semibold text-success">₹54,000 locked in escrow</p>
+          <p className="text-[10px] text-text-secondary">Funds held by SYNQ · Released on approval only</p>
+        </div>
+        <CheckCircle2 className="h-4 w-4 text-success ml-auto shrink-0" />
+      </div>
+      <div className="flex items-center gap-2 text-[11px] text-success">
+        <Shield className="h-3.5 w-3.5" />
+        <span>Scope is locked. No surprises for either party.</span>
+      </div>
+    </div>,
+
+    /* Step 4 — Payment Released */
+    <div key="paid" className="space-y-3">
+      <div className="rounded-xl border border-success/25 bg-success/[0.04] p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="h-8 w-8 rounded-xl bg-success/[0.12] flex items-center justify-center">
+            <IndianRupee className="h-4 w-4 text-success" />
+          </div>
+          <div>
+            <p className="text-[13px] font-bold text-success">₹12,000 released to Priya</p>
+            <p className="text-[10px] text-text-secondary font-mono">Ref: TXN-SYNQ-9847 · 38 seconds after approval</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          {[["Milestone","1 of 3"],["Remaining","₹42,000"],["Time","38 sec"]].map(([l,v]) => (
+            <div key={l} className="rounded-lg bg-surface-elevated/60 p-2">
+              <p className="text-[12px] font-bold text-text-primary">{v}</p>
+              <p className="text-[9px] text-text-secondary">{l}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="rounded-xl border border-border/30 bg-surface-elevated/30 p-3 space-y-1.5 text-[11px]">
+        <div className="flex justify-between text-text-secondary">
+          <span>Brief to contract:</span><span className="font-semibold text-text-primary">1h 47m</span>
+        </div>
+        <div className="flex justify-between text-text-secondary">
+          <span>Approval to payment:</span><span className="font-semibold text-success">38 seconds</span>
+        </div>
+        <div className="flex justify-between text-text-secondary">
+          <span>Disputes:</span><span className="font-semibold text-success">0</span>
+        </div>
+      </div>
+    </div>,
+  ];
+
+  return (
+    <section ref={ref} className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] via-transparent to-[#00B8D9]/[0.03] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="text-center mb-14">
+          <p className="text-[12px] font-semibold text-accent uppercase tracking-widest mb-3">How it actually works</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary">
+            From brief to payment —{" "}
+            <span className="bg-gradient-to-r from-accent to-[#00B8D9] bg-clip-text text-transparent">watch it happen</span>
+          </h2>
+          <p className="mt-4 text-[15px] text-text-secondary max-w-lg mx-auto">
+            This is a real deal lifecycle on SYNQ. Click any step or watch it auto-advance.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-[280px_1fr] gap-8 items-start">
+
+          {/* Left — step navigator */}
+          <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+            {steps.map((s, i) => (
+              <button
+                key={s.label}
+                onClick={() => setStep(i)}
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 shrink-0 lg:w-full ${step === i ? `${s.bg} border border-current/20 shadow-sm` : "hover:bg-surface-elevated/50"}`}
+              >
+                <div className={`h-8 w-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>
+                  <s.icon className={`h-4 w-4 ${s.color}`} />
+                </div>
+                <div className="hidden lg:block min-w-0">
+                  <p className={`text-[12px] font-semibold ${step === i ? s.color : "text-text-secondary"}`}>Step {i + 1}</p>
+                  <p className={`text-[11px] truncate ${step === i ? "text-text-primary" : "text-text-secondary"}`}>{s.label}</p>
+                </div>
+                {step === i && (
+                  <div className="hidden lg:block ml-auto">
+                    <div className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" style={{ color: "var(--color-accent)" }} />
+                  </div>
+                )}
+              </button>
+            ))}
+
+            {/* Progress bar on desktop */}
+            <div className="hidden lg:block mt-4 pt-4 border-t border-border/30">
+              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-2">
+                <span>Progress</span>
+                <span>{step + 1} / {TOTAL}</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-surface-elevated overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-accent to-[#00B8D9]"
+                  animate={{ width: `${((step + 1) / TOTAL) * 100}%` }}
+                  transition={{ duration: 0.4 }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right — step content */}
+          <div className="rounded-2xl border border-border/50 bg-surface shadow-lg overflow-hidden">
+            {/* Step header */}
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-border/30 bg-surface-elevated/40">
+              <div className={`h-8 w-8 rounded-lg ${steps[step].bg} flex items-center justify-center shrink-0`}>
+                {(() => { const SI = steps[step].icon; return <SI className={`h-4 w-4 ${steps[step].color}`} />; })()}
+              </div>
+              <div>
+                <p className="text-[11px] text-text-secondary">Step {step + 1} of {TOTAL}</p>
+                <p className={`text-[14px] font-bold ${steps[step].color}`}>{steps[step].label}</p>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5 text-[10px] text-text-secondary">
+                <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                <span>Live demo</span>
+              </div>
+            </div>
+
+            {/* Animated step content */}
+            <div className="p-5">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={step}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {panels[step]}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Navigation footer */}
+            <div className="px-5 pb-4 flex items-center justify-between">
+              <button
+                onClick={() => setStep(p => Math.max(0, p - 1))}
+                disabled={step === 0}
+                className="text-[12px] text-text-secondary hover:text-text-primary disabled:opacity-30 transition-colors px-3 py-1.5 rounded-lg hover:bg-surface-elevated/60"
+              >
+                ← Previous
+              </button>
+              <div className="flex gap-1.5">
+                {steps.map((_, i) => (
+                  <button key={i} onClick={() => setStep(i)} className={`h-1.5 rounded-full transition-all duration-300 ${step === i ? "w-5 bg-accent" : "w-1.5 bg-border"}`} />
+                ))}
+              </div>
+              <button
+                onClick={() => setStep(p => Math.min(TOTAL - 1, p + 1))}
+                disabled={step === TOTAL - 1}
+                className="text-[12px] text-accent hover:text-accent/80 disabled:opacity-30 transition-colors px-3 py-1.5 rounded-lg hover:bg-accent/[0.06]"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   PAYMENT ESCROW — Visual escrow flow
+═══════════════════════════════════════════════════════ */
+function PaymentEscrowSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const flowSteps = [
+    {
+      step: "01", icon: FileText, label: "Deal signed",
+      detail: "Both parties sign the scoped contract. Deliverables, deadlines, and revision limits are locked.",
+      color: "text-[#00B8D9]", bg: "bg-[#00B8D9]/[0.08]", border: "border-[#00B8D9]/20",
+    },
+    {
+      step: "02", icon: Lock, label: "₹54,000 to escrow",
+      detail: "Brand funds move to SYNQ-managed escrow instantly. Creator sees confirmation — work begins.",
+      color: "text-accent", bg: "bg-accent/[0.08]", border: "border-accent/20",
+    },
+    {
+      step: "03", icon: Camera, label: "Creator delivers",
+      detail: "Reel #1 submitted on Day 3. Uploaded directly to SYNQ — no Drive links, no WeTransfer.",
+      color: "text-text-secondary", bg: "bg-surface-elevated", border: "border-border/30",
+    },
+    {
+      step: "04", icon: CheckCheck, label: "Brand approves",
+      detail: "\"Looks great — approve.\" One click at 2:15 PM. SYNQ automatically triggers the release.",
+      color: "text-success", bg: "bg-success/[0.08]", border: "border-success/20",
+    },
+    {
+      step: "05", icon: IndianRupee, label: "₹12,000 in 38 sec",
+      detail: "Milestone 1 paid. Ref: TXN-SYNQ-9847. No bank transfer wait. No follow-up required.",
+      color: "text-success", bg: "bg-success/[0.08]", border: "border-success/20",
+      highlight: true,
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-24 bg-surface-elevated/15 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-[0.025] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-6 relative">
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={isInView ? { opacity: 1, y: 0 } : {}} className="mb-14">
+          <p className="text-[12px] font-semibold text-success uppercase tracking-widest mb-3">Payment protection</p>
+          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-tight text-text-primary max-w-2xl">
+            Your money is safe.{" "}
+            <span className="text-text-secondary font-medium">Every rupee. Every deal.</span>
+          </h2>
+          <p className="mt-4 text-[16px] text-text-secondary max-w-xl">
+            SYNQ escrow holds funds from the moment the contract is signed until the moment you approve. Creators never chase invoices. Brands never pay for bad work.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-[1fr_380px] gap-10 items-start">
+
+          {/* Left — escrow flow timeline */}
+          <div className="space-y-0">
+            {flowSteps.map((s, i) => (
+              <motion.div
+                key={s.step}
+                initial={{ opacity: 0, x: -16 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.1 + i * 0.1, duration: 0.45 }}
+                className="flex gap-4 group"
+              >
+                <div className="flex flex-col items-center shrink-0">
+                  <div className={`h-10 w-10 rounded-xl ${s.bg} border ${s.border} flex items-center justify-center mt-3 shrink-0 group-hover:scale-105 transition-transform`}>
+                    <s.icon className={`h-5 w-5 ${s.color}`} />
+                  </div>
+                  {i < flowSteps.length - 1 && (
+                    <div className="w-px flex-1 my-2 bg-gradient-to-b from-border/40 to-border/10 min-h-[24px]" />
+                  )}
+                </div>
+                <div className={`flex-1 rounded-xl border p-4 mb-3 transition-all duration-200 hover:shadow-sm ${s.highlight ? "border-success/25 bg-success/[0.03]" : "border-border/25 bg-surface"}`}>
+                  <div className="flex items-start gap-2">
+                    <span className="text-[10px] font-bold text-text-secondary/50 font-mono mt-0.5 shrink-0">{s.step}</span>
+                    <div>
+                      <p className={`text-[13px] font-semibold ${s.highlight ? "text-success" : "text-text-primary"}`}>{s.label}</p>
+                      <p className="text-[12px] text-text-secondary mt-0.5 leading-relaxed">{s.detail}</p>
+                    </div>
+                    {s.highlight && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={isInView ? { scale: 1 } : {}}
+                        transition={{ delay: 0.7, type: "spring" }}
+                        className="ml-auto shrink-0 rounded-full bg-success/[0.1] border border-success/20 px-2 py-0.5 text-[10px] font-bold text-success"
+                      >
+                        38 sec
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Right — escrow stats + trust panel */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="lg:sticky lg:top-24 space-y-4"
+          >
+            {/* Escrow status card */}
+            <div className="rounded-2xl border border-success/20 bg-surface overflow-hidden shadow-md">
+              <div className="bg-success/[0.04] border-b border-success/15 px-5 py-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-8 w-8 rounded-xl bg-success/[0.12] flex items-center justify-center">
+                    <Shield className="h-4 w-4 text-success" />
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-bold text-text-primary">SYNQ Escrow · Active</p>
+                    <p className="text-[10px] text-text-secondary">RBI-compliant · Regulated</p>
+                  </div>
+                  <div className="ml-auto flex items-center gap-1">
+                    <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+                    <span className="text-[10px] text-success font-medium">Live</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-5 space-y-3">
+                {[
+                  { label: "Total held in escrow today", value: "₹12.4L", c: "text-success" },
+                  { label: "Deals with funds protected", value: "127 active", c: "text-accent" },
+                  { label: "Avg release time", value: "41 seconds", c: "text-text-primary" },
+                  { label: "Disputes raised", value: "0 this week", c: "text-success" },
+                ].map(s => (
+                  <div key={s.label} className="flex items-center justify-between">
+                    <span className="text-[12px] text-text-secondary">{s.label}</span>
+                    <span className={`text-[12px] font-bold ${s.c}`}>{s.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Creator perspective */}
+            <div className="rounded-2xl border border-border/40 bg-surface p-4">
+              <div className="flex items-start gap-3 mb-3">
+                <CreatorAvatar name="Priya Sharma" size="sm" />
+                <div>
+                  <p className="text-[12px] font-semibold text-text-primary">Priya Sharma, @priyacreates</p>
+                  <p className="text-[10px] text-text-secondary">Fashion Creator · Mumbai</p>
+                </div>
+              </div>
+              <p className="text-[12px] text-text-secondary italic leading-relaxed">
+                &ldquo;I used to wait 12 days for payment. With SYNQ, I approved at 2:15 PM and had the money at 2:15:38. I check the escrow before I even start shooting now.&rdquo;
+              </p>
+            </div>
+
+            {/* Brand perspective */}
+            <div className="rounded-2xl border border-border/40 bg-surface p-4">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="h-7 w-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-[10px] font-bold text-pink-500 shrink-0">BS</div>
+                <div>
+                  <p className="text-[12px] font-semibold text-text-primary">Rahul Mehta, Bloom Skincare</p>
+                  <p className="text-[10px] text-text-secondary">Brand Manager</p>
+                </div>
+              </div>
+              <p className="text-[12px] text-text-secondary italic leading-relaxed">
+                &ldquo;Scope disputes were our biggest headache. Once we signed contracts on SYNQ, they stopped completely. The escrow means creators actually deliver on brief.&rdquo;
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════════════════ */
 function Footer() {
@@ -3065,12 +3721,15 @@ export default function LandingPage() {
       <Navbar />
       <HeroSection />
       <TrustBar />
+      <MarketplacePulseSection />
       <ProblemSection />
       <LiveDemoSection />
       <RealUseCaseSection />
+      <PaymentEscrowSection />
       <DifferentiationSection />
       <HowItWorksSection />
       <SYNQTimeline />
+      <MarketplaceInteractionSection />
       <CaseStudySection />
       <CreatorSection />
       <TopCreatorsSection />
