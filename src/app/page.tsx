@@ -81,6 +81,30 @@ function Sk({ className }: { className: string }) {
   return <div className={`rounded-lg bg-surface-elevated/70 animate-pulse ${className}`} />;
 }
 
+/* ─── Trust signal with hover tooltip ─── */
+function TrustSignal({
+  icon: Icon, label, tooltip, className = "",
+}: {
+  icon: React.ElementType; label: string; tooltip: string; className?: string;
+}) {
+  return (
+    <span className={`group relative inline-flex items-center gap-1.5 cursor-default ${className}`}>
+      <Icon
+        className="h-3.5 w-3.5 transition-all duration-200 group-hover:scale-110 group-hover:text-emerald-500"
+        aria-hidden="true"
+      />
+      <span>{label}</span>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-56 rounded-xl bg-surface border border-border/50 px-3 py-2.5 text-[11px] text-text-primary leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-xl z-30 whitespace-normal text-left"
+      >
+        {tooltip}
+        <span className="absolute top-full left-1/2 -translate-x-1/2 h-0 w-0 border-x-[5px] border-x-transparent border-t-[5px] border-t-border/50" />
+      </span>
+    </span>
+  );
+}
+
 /* ─── Creator profiles ─── */
 const creators = [
   {
@@ -254,8 +278,16 @@ function HeroSection() {
 
             <motion.div {...fu(0.31)} className="flex flex-wrap items-center gap-5 mt-8 text-[13px] text-text-secondary">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-success" /> Free for creators</span>
-              <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-success" /> Escrow-protected</span>
-              <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 text-success" /> Signed contracts</span>
+              <TrustSignal
+                icon={Shield}
+                label="Escrow-protected"
+                tooltip="Payments are held in a regulated escrow account and released only when you approve the deliverable. SYNQ follows RBI-compliant payment rails."
+              />
+              <TrustSignal
+                icon={Lock}
+                label="Signed contracts"
+                tooltip="Every deal is backed by an e-signed contract with locked scope, revision limits, and payment terms. No verbal agreements. No chasing."
+              />
             </motion.div>
           </div>
 
@@ -519,7 +551,60 @@ function ProblemSection() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Mobile: each problem paired directly above its solution */}
+        <div className="flex flex-col gap-5 md:hidden">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-error" />
+              <p className="text-[11px] font-semibold text-error uppercase tracking-wider">Without SYNQ</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+              <p className="text-[11px] font-semibold text-accent uppercase tracking-wider">With SYNQ</p>
+            </div>
+          </div>
+          {chaos.map((item, i) => (
+            <div key={i} className="flex flex-col gap-2">
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.1 + i * 0.07 }}
+                className="flex items-start gap-3 rounded-xl bg-error/[0.04] border border-error/[0.08] p-3"
+              >
+                <div className="h-7 w-7 rounded-lg bg-error/[0.08] flex items-center justify-center shrink-0 mt-0.5">
+                  <item.icon className="h-3.5 w-3.5 text-error/70" />
+                </div>
+                <div>
+                  <p className="text-[12px] font-medium text-text-primary leading-snug">{item.text}</p>
+                  <p className="text-[10px] text-text-secondary mt-0.5">{item.sub}</p>
+                </div>
+              </motion.div>
+              {(() => {
+                const si = synqItems[i];
+                const SIcon = si.icon;
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.15 + i * 0.07 }}
+                    className="flex items-start gap-3 rounded-xl bg-accent/[0.04] border border-accent/[0.08] p-3 ml-4"
+                  >
+                    <div className="h-7 w-7 rounded-lg bg-accent/[0.1] flex items-center justify-center shrink-0 mt-0.5">
+                      <SIcon className="h-3.5 w-3.5 text-accent" />
+                    </div>
+                    <div>
+                      <p className="text-[12px] font-medium text-text-primary leading-snug">{si.text}</p>
+                      <p className="text-[10px] text-text-secondary mt-0.5">{si.sub}</p>
+                    </div>
+                  </motion.div>
+                );
+              })()}
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: two columns side by side */}
+        <div className="hidden md:grid md:grid-cols-2 gap-6">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }} className="rounded-2xl border border-error/15 bg-error/[0.03] p-6">
             <div className="flex items-center gap-2 mb-5">
               <div className="h-2 w-2 rounded-full bg-error" />
@@ -674,21 +759,34 @@ function LiveDemoSection() {
           </p>
         </motion.div>
 
-        {/* Role toggle */}
+        {/* Role toggle — sliding pill */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="flex justify-center mb-8">
-          <div className="inline-flex rounded-xl bg-surface-elevated/60 border border-border/40 p-1 gap-1">
-            <button
-              onClick={() => switchRole("creator")}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${role === "creator" ? "bg-surface shadow text-accent border border-accent/15" : "text-text-secondary hover:text-text-primary"}`}
-            >
-              <Camera className="h-3.5 w-3.5" /> Creator View
-            </button>
-            <button
-              onClick={() => switchRole("brand")}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${role === "brand" ? "bg-surface shadow text-[#00B8D9] border border-[#00B8D9]/15" : "text-text-secondary hover:text-text-primary"}`}
-            >
-              <Briefcase className="h-3.5 w-3.5" /> Brand View
-            </button>
+          <div className="inline-flex rounded-xl bg-surface-elevated/60 border border-border/40 p-1 relative">
+            {(["creator", "brand"] as const).map((r) => (
+              <button
+                key={r}
+                onClick={() => switchRole(r)}
+                aria-label={r === "creator" ? "Switch to Creator View" : "Switch to Brand View"}
+                aria-pressed={role === r}
+                className={`relative flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-semibold z-10 transition-colors duration-200 ${
+                  role === r
+                    ? r === "creator" ? "text-accent" : "text-[#00B8D9]"
+                    : "text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                {role === r && (
+                  <motion.div
+                    layoutId="role-pill"
+                    className="absolute inset-0 rounded-lg bg-surface shadow-sm"
+                    transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  {r === "creator" ? <Camera className="h-3.5 w-3.5" /> : <Briefcase className="h-3.5 w-3.5" />}
+                  {r === "creator" ? "Creator View" : "Brand View"}
+                </span>
+              </button>
+            ))}
           </div>
         </motion.div>
 
@@ -1801,18 +1899,11 @@ function CaseStudySection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
-  const before = [
-    { label: "Avg campaign delivery", value: "18 days", bad: true },
-    { label: "Payment disputes", value: "3 in Q3", bad: true },
-    { label: "Scope changes post-sign", value: "67%", bad: true },
-    { label: "Cost-per-engagement", value: "₹9.20", bad: true },
-  ];
-
-  const after = [
-    { label: "Avg campaign delivery", value: "6 days", bad: false },
-    { label: "Payment disputes", value: "0", bad: false },
-    { label: "Scope changes post-sign", value: "0%", bad: false },
-    { label: "Cost-per-engagement", value: "₹2.84", bad: false },
+  const metrics = [
+    { label: "Avg campaign delivery", beforeVal: "18 days", afterVal: "6 days", beforePct: 100, afterPct: 33, improvement: "3× faster" },
+    { label: "Payment disputes", beforeVal: "3 in Q3", afterVal: "0", beforePct: 100, afterPct: 0, improvement: "−100%" },
+    { label: "Scope changes post-sign", beforeVal: "67%", afterVal: "0%", beforePct: 100, afterPct: 0, improvement: "−100%" },
+    { label: "Cost per engagement", beforeVal: "₹9.20", afterVal: "₹2.84", beforePct: 100, afterPct: 31, improvement: "3.2× better" },
   ];
 
   return (
@@ -1888,30 +1979,49 @@ function CaseStudySection() {
                 </div>
               </div>
 
-              {/* Metric rows */}
-              {before.map((b, i) => (
+              {/* Bar chart metric rows */}
+              {metrics.map((m, i) => (
                 <motion.div
-                  key={b.label}
-                  initial={{ opacity: 0 }}
-                  animate={isInView ? { opacity: 1 } : {}}
+                  key={m.label}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.25 + i * 0.09 }}
-                  className={`grid grid-cols-2 border-b border-border/20 last:border-0 ${i % 2 === 0 ? "bg-surface" : "bg-surface-elevated/20"}`}
+                  className={`px-5 py-4 border-b border-border/20 last:border-0 ${i % 2 === 0 ? "bg-surface" : "bg-surface-elevated/20"}`}
                 >
-                  <div className="px-5 py-3.5 border-r border-border/20">
-                    <p className="text-[10px] text-text-secondary mb-1">{b.label}</p>
-                    <p className="text-[18px] font-bold text-error">{b.value}</p>
-                  </div>
-                  <div className="px-5 py-3.5">
-                    <p className="text-[10px] text-text-secondary mb-1">{after[i].label}</p>
-                    <div className="flex items-baseline gap-2">
-                      <p className="text-[18px] font-bold text-success">{after[i].value}</p>
+                  <p className="text-[11px] font-semibold text-text-secondary mb-3">{m.label}</p>
+                  <div className="space-y-2">
+                    {/* Before bar */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] text-error/80 w-16 shrink-0 text-right tabular-nums">{m.beforeVal}</span>
+                      <div className="flex-1 h-2 rounded-full bg-surface-elevated overflow-hidden">
+                        <motion.div
+                          className="h-full rounded-full bg-error/40"
+                          initial={{ width: 0 }}
+                          animate={isInView ? { width: `${m.beforePct}%` } : { width: 0 }}
+                          transition={{ delay: 0.3 + i * 0.09, duration: 0.55, ease: "easeOut" }}
+                        />
+                      </div>
+                      <span className="text-[9px] text-error/50 w-10 shrink-0">Before</span>
+                    </div>
+                    {/* After bar */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] text-success font-semibold w-16 shrink-0 text-right tabular-nums">{m.afterVal}</span>
+                      <div className="flex-1 h-2 rounded-full bg-surface-elevated overflow-hidden">
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{ background: "linear-gradient(to right, #00b894, #55efc4)" }}
+                          initial={{ width: 0 }}
+                          animate={isInView ? { width: m.afterPct === 0 ? "3px" : `${m.afterPct}%` } : { width: 0 }}
+                          transition={{ delay: 0.42 + i * 0.09, duration: 0.55, ease: "easeOut" }}
+                        />
+                      </div>
                       <motion.span
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ delay: 0.5 + i * 0.09 }}
-                        className="text-[9px] font-semibold text-success bg-success/[0.08] rounded-full px-1.5 py-0.5"
+                        initial={{ opacity: 0, x: -4 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.6 + i * 0.09 }}
+                        className="text-[9px] font-semibold text-success bg-success/[0.08] rounded-full px-1.5 py-0.5 w-10 shrink-0 text-center whitespace-nowrap"
                       >
-                        {i === 0 ? "3× faster" : i === 1 ? "−100%" : i === 2 ? "−100%" : "3.2× better"}
+                        {m.improvement}
                       </motion.span>
                     </div>
                   </div>
@@ -2447,11 +2557,21 @@ function FinalCTASection() {
 
             {/* Trust signals row */}
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-10 text-[12px] text-white/55">
-              <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Escrow-protected payments</span>
+              <TrustSignal
+                icon={Shield}
+                label="Escrow-protected payments"
+                tooltip="Payments are held in a regulated escrow account and released only when you approve the deliverable. SYNQ follows RBI-compliant payment rails."
+                className="text-white/55"
+              />
               <span className="hidden sm:block text-white/20">·</span>
               <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> 2,400+ deals closed</span>
               <span className="hidden sm:block text-white/20">·</span>
-              <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Signed contracts</span>
+              <TrustSignal
+                icon={Lock}
+                label="Signed contracts"
+                tooltip="Every deal is backed by an e-signed contract with locked scope, revision limits, and payment terms. No verbal agreements. No chasing."
+                className="text-white/55"
+              />
               <span className="hidden sm:block text-white/20">·</span>
               <span className="flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> 98% on-time payments</span>
             </div>
